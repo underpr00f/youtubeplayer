@@ -166,6 +166,21 @@
 
 
 
+    .users li::before {
+            content: "• ";
+            color: red; 
+    }
+
+
+
+
+    .users li.online::before {
+        content: "• ";
+        color: green; /* or whatever color you prefer */
+    }
+
+
+
 
 #chats {
 

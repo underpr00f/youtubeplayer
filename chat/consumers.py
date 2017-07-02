@@ -167,35 +167,18 @@ def chat_send(message):
 from channels.generic.websockets import JsonWebsocketConsumer
 
 
-'''
-@channel_session
+
+@channel_session_user_from_http
 def wsock_connect(message):
-    # Extract the room from the message. This expects message.path to be of the
-    # form /chat/{title}/, and finds a Room if the message path is applicable,
-    # and if the Room exists. Otherwise, bails (meaning this is a some othersort
-    # of websocket). So, this is effectively a version of _get_object_or_404.
-    try:
-        prefix, title = message['path'].decode('ascii').strip('/').split('/')
-        if prefix != 'list_rooms':
-            log.debug('invalid ws path=%s', message['path'])
-            return
-        room = Room.objects.get(title=title)
-    except ValueError:
-        log.debug('invalid ws path=%s', message['path'])
-        return
-    except Room.DoesNotExist:
-        log.debug('ws room does not exist title=%s', title)
-        return
+    Group('list_rooms').add(message.reply_channel)
+    Group('list_rooms').send({
+        'text': json.dumps({
+            'username': message.user.username,
+            'is_logged_in': True
+        })
+    })
 
-    log.debug('chat connect room=%s client=%s:%s', 
-        room.title, message['client'][0], message['client'][1])
-    
-    # Need to be explicit about the channel layer so that testability works
-    # This may be a FIXME?
-    Group('list_rooms-'+title, channel_layer=message.channel_layer).add(message.reply_channel)
-
-    message.channel_session['room'] = room.title
-
+'''
 @channel_session
 def wsock_receive(message):
     # Look up the room from the channel session, bailing if it doesn't exist
@@ -227,14 +210,14 @@ def wsock_receive(message):
         m = room.messages.create(**data)
 
         # See above for the note about Group
-        Group('list_rooms-'+title, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
-
-@channel_session
-def wsock_disconnect(message):
-    try:
-        title = message.channel_session['room']
-        room = Room.objects.get(title=title)
-        Group('list_rooms-'+title, channel_layer=message.channel_layer).discard(message.reply_channel)
-    except (KeyError, Room.DoesNotExist):
-        pass
+        Group('chat-'+title, channel_layer=message.channel_layer).send({'text': json.dumps(m)})
 '''
+@channel_session_user
+def wsock_disconnect(message, title):
+    Group('list_rooms').send({
+        'text': json.dumps({
+            'username': message.user.username,
+            'is_logged_in': False
+        })
+    })
+    Group('list_rooms').discard(message.reply_channel)

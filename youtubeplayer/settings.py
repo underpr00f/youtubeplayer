@@ -26,6 +26,7 @@ SECRET_KEY = 'a6587vu2uxg!zi3e*h!n!u%2t4=6hsrs38up7vwfc+-11w99g0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+#DEBUG = os.environ.get("DEBUG", False)
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'myyoutubeplayer.com',]
 
@@ -107,6 +108,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 
             ],
+            'debug': DEBUG,
         },
     },
 ]
@@ -249,6 +251,12 @@ LOGGING = {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': False,
+        },
+
+        'chat': {
+            'handlers': ['console'],
+            'propagate': False,
+            'level': 'DEBUG',
         },
     }
 }
