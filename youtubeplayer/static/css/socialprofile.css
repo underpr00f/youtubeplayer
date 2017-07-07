@@ -165,18 +165,24 @@
     }
 
 
+.us li {
+    color: black;
+    list-style-type: none;
 
-    .users li::before {
-            content: "• ";
-            color: red; 
     }
 
 
+    .us li.Offline {
 
 
-    .users li.online::before {
-        content: "• ";
-        color: green; /* or whatever color you prefer */
+    }
+
+
+    .us li.Online {
+        /*content: "\2022";
+        color: green;*/
+        list-style-image: url('../images/small-light-bulb.png');
+        
     }
 
 

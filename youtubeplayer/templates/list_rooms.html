@@ -19,11 +19,11 @@
     {% endfor %}
 </ul>
 
-  <ul class='users'>
+  <ul class="us">
     {% for user in users %}
       <!-- NOTE: We escape HTML to prevent XSS attacks. -->
-      <li data-username="{{ user.username|escape }}">
-        {{ user.username|escape }}: {{ user.status|default:'Offline' }}
+      <li data-username="{{ user.username|escape }}" class = "{{ user.status|default:'Offline' }}">
+        {{ user.username|escape }}
       </li>
     {% endfor %}
   </ul>
@@ -49,6 +49,20 @@ $(function() {
     socket.onopen = function open() {
       console.log('WebSockets connection created.');
     };
+    /*
+    if (data['is_logged_in']) {
+        user.html(username + ': Online');
+        //$user.find('.status').addClass('online').text('Online');
+        //$( '.us li' ).addClass("online");
+
+      }
+      else {
+        user.html(username + ': Offline');
+        //$user.find('.status').removeClass('online').text('Offline');
+        //$( '.us li' ).removeClass("online");
+      }
+    */
+
 
     socket.onmessage = function message(event) {
       var data = JSON.parse(event.data);
@@ -57,15 +71,19 @@ $(function() {
       var user = $('li').filter(function () {
         return $(this).data('username') == username;
       });
-
+      
       if (data['is_logged_in']) {
         user.html(username + ': Online');
-        //$(li.users).addClass("online");
+        //$user.find('.status').addClass('online').text('Online');
+        //$( '.us li' ).addClass("online");
+
       }
       else {
         user.html(username + ': Offline');
-        //$(li.users).removeClass("online");
+        //$user.find('.status').removeClass('online').text('Offline');
+        //$( '.us li' ).removeClass("online");
       }
+      
     };
 
     if (socket.readyState == WebSocket.OPEN) {
