@@ -213,5 +213,8 @@ post_save.connect(create_priv_room, sender=User)
                     continue
                 new_room = PrivRoom.objects.create(title=title)
 '''
+class LoggedInUser(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, related_name='logged_in_user')
 
 

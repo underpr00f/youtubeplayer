@@ -165,6 +165,27 @@
     }
 
 
+.us li {
+    color: black;
+    list-style-type: none;
+
+    }
+
+
+    .us li.Offline {
+
+
+    }
+
+
+    .us li.Online {
+        /*content: "\2022";
+        color: green;*/
+        list-style-image: url('../images/small-light-bulb.png');
+        
+    }
+
+
 
 
 #chats {

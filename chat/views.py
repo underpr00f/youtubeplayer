@@ -275,14 +275,20 @@ def chat_room(request, title, *args,**kwargs):
     room = Room.objects.get(title=title)
     # show id of required room
     roomobj = Room.objects.filter(title=title).values_list('id', flat=True).first()
-    
+  
     #get messages from this room
     messages = reversed(Message.objects.filter(room_id=roomobj).order_by('-timestamp')[:50])
+    
+
     return render(request, "room.html", {
         'room': room,
         'roomobj': roomobj,
         'messages': messages,
+        
     })    
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 @never_cache
 @login_required
@@ -291,8 +297,14 @@ def chat_list_rooms(request):
 
     # Get a list of rooms, ordered alphabetically
     rooms = Room.objects.order_by("title")
-    # Render that in the index template
+
+    #check for user status
+    users = User.objects.select_related('logged_in_user')
+    for user in users:
+        user.status = 'Online' if hasattr(user, 'logged_in_user') else 'Offline'
+    
     return render(request, "list_rooms.html", {
         "rooms": rooms,
+        'users': users,
     })
 

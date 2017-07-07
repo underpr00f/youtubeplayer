@@ -19,7 +19,14 @@
     {% endfor %}
 </ul>
 
-
+  <ul class="us">
+    {% for user in users %}
+      <!-- NOTE: We escape HTML to prevent XSS attacks. -->
+      <li data-username="{{ user.username|escape }}" class = "{{ user.status|default:'Offline' }}">
+        {{ user.username|escape }}
+      </li>
+    {% endfor %}
+  </ul>
 
 {% endblock content %}
 
@@ -29,8 +36,63 @@
 
 
 {% block afterbody %}
+<script type="text/javascript">
+$(function() {
+    // When we're using HTTPS, use WSS too.
+    var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+      
 
-    <script type="text/javascript" src='{% static "js/chat.js" %}'></script>
+    var ws_path = ws_scheme + '://' + window.location.host + '/chat/list_rooms/';
+    console.log("Connecting to " + ws_path);
+    var socket = new ReconnectingWebSocket(ws_path);
+        
+    socket.onopen = function open() {
+      console.log('WebSockets connection created.');
+    };
+    /*
+    if (data['is_logged_in']) {
+        user.html(username + ': Online');
+        //$user.find('.status').addClass('online').text('Online');
+        //$( '.us li' ).addClass("online");
 
+      }
+      else {
+        user.html(username + ': Offline');
+        //$user.find('.status').removeClass('online').text('Offline');
+        //$( '.us li' ).removeClass("online");
+      }
+    */
+
+
+    socket.onmessage = function message(event) {
+      var data = JSON.parse(event.data);
+      // NOTE: We escape JavaScript to prevent XSS attacks.
+      var username = encodeURI(data['username']);
+      var user = $('li').filter(function () {
+        return $(this).data('username') == username;
+      });
+      
+      if (data['is_logged_in']) {
+        user.html(username + ': Online');
+        //$user.find('.status').addClass('online').text('Online');
+        //$( '.us li' ).addClass("online");
+
+      }
+      else {
+        user.html(username + ': Offline');
+        //$user.find('.status').removeClass('online').text('Offline');
+        //$( '.us li' ).removeClass("online");
+      }
+      
+    };
+
+    if (socket.readyState == WebSocket.OPEN) {
+      socket.onopen();
+    }
+});
+</script>
+
+    <script type="text/javascript" src='{% static "js/jquery-1.12.2.min.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/reconnecting-websocket.min.js" %}'></script>
 
 {% endblock afterbody %}

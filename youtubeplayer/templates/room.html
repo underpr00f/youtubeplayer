@@ -15,6 +15,16 @@
     <div id = "username" type="text" placeholder="username"><h1><code>{{ user.username }}</code></h1></div>
     <!--<input id="username" type="text" placeholder="username">-->
   </p>
+
+  <ul>
+    {% for user in users %}
+      <!-- NOTE: We escape HTML to prevent XSS attacks. -->
+      <li data-username="{{ user.username|escape }}">
+        {{ user.username|escape }}: {{ user.status|default:'Offline' }}
+      </li>
+    {% endfor %}
+  </ul>
+
   <form id="chatform">
     <table id="chat">
       {% if messages %}
@@ -32,8 +42,8 @@
       <tr>
         <td>Скажи что-нибудь ({{ user.username }}):</td>
         <td colspan=2>
-          <input id="message" type="text" placeholder="message">
-          <button type="submit" id="go">Say it</button>
+          <input style='width: 400px'>
+          <button>Say it</button>
         </td>
       </tfoot>
     </table>
@@ -46,26 +56,49 @@
 $(function() {
     // When we're using HTTPS, use WSS too.
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    console.log("Got websocket message " + message.data);
-    
+      
 
-    var ws_path = ws_scheme + '://' + window.location.host + window.location.pathname;
+    var ws_path = ws_scheme + '://' + window.location.host + '/chat/list_rooms/{{ room }}/';
     console.log("Connecting to " + ws_path);
     var socket = new ReconnectingWebSocket(ws_path);
-            
+        
+    socket.onopen = function open() {
+      console.log('WebSockets connection created.');
+    };
 
+    socket.onmessage = function message(event) {
+      var data = JSON.parse(event.data);
+      // NOTE: We escape JavaScript to prevent XSS attacks.
+      var username = encodeURI(data['username']);
+      var user = $('li').filter(function () {
+        return $(this).data('username') == username;
+      });
 
+      if (data['is_logged_in']) {
+        user.html(username + ': Online');
+        
+      }
+      else {
 
-    // username incoming messages
+        user.html(username + ': Offline');
+        
+      }
+    };
+
+    if (socket.readyState == WebSocket.OPEN) {
+      socket.onopen();
+    }
+    /* username incoming messages
 
     socket.onmessage = function(message) {
 
         console.log("Got websocket message " + message.data);
         var data = JSON.parse(message.data);
-        
+        console.log(data);
 
         var chat = $("#chat")
         var ele = $('<tr></tr>')
+        
 
         if (data.error) {
             alert(data.error);
@@ -86,25 +119,30 @@ $(function() {
         
         chat.append(ele)
     };
+    
+    $("#chatform").on("submit", function () {
+      socket.send(JSON.stringify({
+          "command": "send",
+          "room": data.join,
 
-    $("#chatform").on("submit", function(event) {
-        var message = {
-            /*username: $('#username').val(),*/
-            "command": "send",
-            "room": data.join,
-            message: $('#message').val(),
-        }
-        socket.send(JSON.stringify(message));
-        $("#message").val('').focus();
+          "message": $("#message").find("input").val()
+        }));
+        $("#message").find("input").val("");
 
         return false;
     });
+
     socket.onopen = function () {
         console.log("Connected to chat socket");
     };
+
+    if (socket.readyState == WebSocket.OPEN) {
+      socket.onopen();
+    }
+
     socket.onclose = function () {
         console.log("Disconnected from chat socket");
-    }
+    }*/
 });
     
 </script>
