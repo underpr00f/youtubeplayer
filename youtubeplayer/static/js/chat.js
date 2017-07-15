@@ -1,19 +1,11 @@
 $(function() {
     // When we're using HTTPS, use WSS too.
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    //console.log("Got websocket message " + message.data);
     
-
-    var ws_path = ws_scheme + '://' + window.location.host + window.location.pathname;
-    console.log("Connecting to " + ws_path);
-    var socket = new ReconnectingWebSocket(ws_path);
-            
-
-
-
-    // Handle incoming messages
-
-    socket.onmessage = function(message) {
+    
+    var chatsock = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + window.location.pathname);
+    
+    chatsock.onmessage = function(message) {
 
         console.log("Got websocket message " + message.data);
         var data = JSON.parse(message.data);
@@ -31,7 +23,7 @@ $(function() {
             $("<td></td>").text(data.timestamp)
         )
         ele.append(
-            $("<td></td>").text(data.username)
+            $("<td></td>").text(data.handle)
         )
         ele.append(
             $("<td></td>").text(data.message)
@@ -42,18 +34,45 @@ $(function() {
 
     $("#chatform").on("submit", function(event) {
         var message = {
-            /*username: $('#username').val(),*/
+            /*handle: $('#handle').val(),*/
             message: $('#message').val(),
         }
-        socket.send(JSON.stringify(message));
+        chatsock.send(JSON.stringify(message));
         $("#message").val('').focus();
 
         return false;
     });
-    socket.onopen = function () {
+
+    // Says if we joined a room or not by if there's a div for it
+    inRoom = function (roomId) {
+        return $("#room-" + roomId).length > 0;
+    };
+
+    // Room join/leave
+    $("li.room-link").click(function () {
+        roomId = $(this).attr("data-room-id");
+        if (inRoom(roomId)) {
+            // Leave room
+            $(this).removeClass("joined");
+            chatsock.send(JSON.stringify({
+                "command": "leave",
+                "room": roomId
+            }));
+        } else {
+            // Join room
+            $(this).addClass("joined");
+            chatsock.send(JSON.stringify({
+                "command": "join",
+                "room": roomId
+            }));
+        }
+    });
+    // Helpful debugging
+    chatsock.onopen = function () {
         console.log("Connected to chat socket");
     };
-    socket.onclose = function () {
+    chatsock.onclose = function () {
         console.log("Disconnected from chat socket");
     }
+
 });

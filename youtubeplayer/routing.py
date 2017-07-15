@@ -6,12 +6,13 @@ from channels import include
 # on a path prefix, and then include routing from the chat module.
 channel_routing = [
     # Include sub-routing from an app.
-    include("chat.routing.websocket_routing", path=r"^/chat/"),
+    #include("chat.routing.websocket_routing", path=r"^/chat/"),
     #include("chat.routing.sub_routing", path=r"^/chat/list_rooms/(?P<title>[a-zA-Z0-9_]+)/$"),
-    include("chat.routing.sub_routing", path=r"^/chat/list_rooms/"),
+    #include("chat.routing.sub_routing", path=r"^/chat/list_rooms/"),
     # Custom handler for message sending (see Room.send_message).
     # Can't go in the include above as it's not got a `path` attribute to match on.
     include("chat.routing.custom_routing"),
+    include("chat.routing.channel_routing"), #, path=r"^/chat/list_rooms/(?P<title>[a-zA-Z0-9_]+)/$"),
 
     # A default "http.request" route is always inserted by Django at the end of the routing list
     # that routes all unmatched HTTP requests to the Django view system. If you want lower-level

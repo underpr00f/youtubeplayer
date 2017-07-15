@@ -42,8 +42,8 @@
       <tr>
         <td>Скажи что-нибудь ({{ user.username }}):</td>
         <td colspan=2>
-          <input style='width: 400px'>
-          <button>Say it</button>
+          <input id='message' type="text" placeholder="message" style='width: 400px'>
+          <button type="submit" id="go">Say it</button>
         </td>
       </tfoot>
     </table>
@@ -58,7 +58,8 @@ $(function() {
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
       
 
-    var ws_path = ws_scheme + '://' + window.location.host + '/chat/list_rooms/{{ room }}/';
+    //var ws_path = ws_scheme + '://' + window.location.host + '/chat/list_rooms/{{ room }}/';
+    var ws_path = ws_scheme + '://' + window.location.host + window.location.pathname
     console.log("Connecting to " + ws_path);
     var socket = new ReconnectingWebSocket(ws_path);
         
@@ -68,6 +69,7 @@ $(function() {
 
     socket.onmessage = function message(event) {
       var data = JSON.parse(event.data);
+      
       // NOTE: We escape JavaScript to prevent XSS attacks.
       var username = encodeURI(data['username']);
       var user = $('li').filter(function () {
@@ -88,7 +90,7 @@ $(function() {
     if (socket.readyState == WebSocket.OPEN) {
       socket.onopen();
     }
-    /* username incoming messages
+    // username incoming messages
 
     socket.onmessage = function(message) {
 
@@ -120,6 +122,17 @@ $(function() {
         chat.append(ele)
     };
     
+    $("#chatform").on("submit", function(event) {
+        var message = {
+            command: "send",
+            room: {{ roomobj }},
+            username: $('#username').val(),
+            message: $('#message').val(),
+        }
+        socket.send(JSON.stringify(message));
+        $("#message").val('').focus();
+        return false;
+    /*
     $("#chatform").on("submit", function () {
       socket.send(JSON.stringify({
           "command": "send",
@@ -130,6 +143,7 @@ $(function() {
         $("#message").find("input").val("");
 
         return false;
+    */
     });
 
     socket.onopen = function () {
@@ -142,7 +156,7 @@ $(function() {
 
     socket.onclose = function () {
         console.log("Disconnected from chat socket");
-    }*/
+    }
 });
     
 </script>

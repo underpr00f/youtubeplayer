@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Django Channels Example</h1>
+  <p class="deck">
+    ЧАТ
+  </p>
+  <p>
+    <a class="button button-primary" href="{% url 'chat_index:new_room' %}">Create new chat room</a>
+    
+  </p>
+  <p class="quiet">
+    Or, you can visit <code>{{ request.scheme }}://{{ request.get_host }}/chat/any-path-you-want</code> 
+    to create a arbitrary room or join one whose name you know.
+  </p>
+{% endblock content %}

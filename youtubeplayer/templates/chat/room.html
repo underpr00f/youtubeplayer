@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% load static %}
+  <p>Вернуться к <a href = "{% url 'chat_index:chat_list_rooms' %}">списку доступных каналов</a></p>
+  <h1>{{ room.label }}</h1>
+  <p class="quiet">
+    Каждый зарегистрированный пользователь может воспользоваться этой ссылкой для чата: 
+    <code>{{ request.scheme }}://{{ request.get_host }}/chat/{{ room.label }}</code> 
+  </p>
+  <p>
+    <label for="handle">Your name:</label>
+    <div id = "handle" type="text" placeholder="handle"><h1><code>{{ user.username }}</code></h1></div>
+    <!--<input id="handle" type="text" placeholder="handle">-->
+  </p>
+  <form id="chatform">
+    <table id="chat">
+      <tbody>
+        {% for message in messages %}
+          <tr>
+            <td>{{ message.formatted_timestamp }}</td>
+            <td>{{ message.handle }}</td>
+            <td>{{ message.message }}</td>
+          </tr> 
+        {% endfor %}
+      </tbody>
+      <tfoot>
+      <tr>
+        <td>Скажи что-нибудь ({{ user.username }}):</td>
+        <td colspan=2>
+          <input id="message" type="text" placeholder="message">
+          <button type="submit" id="go">Say it</button>
+        </td>
+      </tfoot>
+    </table>
+  </form>
+  <script type="text/javascript" src='{% static "js/jquery-1.12.1.min.js" %}'></script>
+  <script type="text/javascript" src='{% static "js/reconnecting-websocket.min.js" %}'></script>
+  <script type="text/javascript" src='{% static "js/chat.js" %}'></script>
+{% endblock content %}
+
+{% block afterbody %}
+
+{% endblock afterbody %}
