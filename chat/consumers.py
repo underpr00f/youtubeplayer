@@ -20,6 +20,7 @@ def ws_connect(message):
     # form /chat/{label}/, and finds a Room if the message path is applicable,
     # and if the Room exists. Otherwise, bails (meaning this is a some othersort
     # of websocket). So, this is effectively a version of _get_object_or_404.
+    '''
     message.reply_channel.send({'accept': True})
     try:
         prefix, label = message['path'].strip('/').split('/')
@@ -44,11 +45,15 @@ def ws_connect(message):
     Group('chat-'+room.label, channel_layer=message.channel_layer).add(message.reply_channel)
     
     message.channel_session['room'] = room.label
+    '''
+    message.reply_channel.send({'accept': True})
+    # Initialise their session
+    message.channel_session['rooms'] = []
 
 @channel_session
 @channel_session_user
 def ws_receive(message):
-    '''
+    
     payload = json.loads(message['text'])
     payload['reply_channel'] = message.content['reply_channel']
     Channel("chat.receive").send(payload)
@@ -71,9 +76,11 @@ def ws_receive(message):
         #handle = message.user
         
         dataS = json.loads(message.content['text'])
-        
-        handle = message.user.username
         dataS = dataS['message']
+
+
+        handle = message.user.username
+        
 
         data = {'message': dataS, 'handle': handle}
         #mess = Message.objects.get(handle=handle)
@@ -92,8 +99,8 @@ def ws_receive(message):
 
         # See above for the note about Group
         Group('chat-'+label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
-
-@channel_session
+    '''
+@channel_session_user
 def ws_disconnect(message):
     try:
         label = message.channel_session['room']
@@ -146,3 +153,38 @@ def chat_leave(message):
             "leave": str(room.id),
         }),
     })
+
+@channel_session_user
+@catch_client_error
+def chat_send(message):
+    # Check that the user in the room
+    if str(message['room']) not in message.channel_session['rooms']:
+        raise ClientError("ROOM_ACCESS_DENIED")
+    # Find the room they're sending to, check perms
+
+    room = get_room_or_error(message["room"], message.user)
+    # Send the message along
+    room.send_message(message["message"], message.user)
+    recent_msgs = Message.objects.filter(room=room.id).order_by('-timestamp')[:10]
+    # Send a message back that will prompt them to open the room
+    # Done server-side so that we could, for example, make people
+    # join rooms automatically.
+    history = []
+    for msg in recent_msgs:
+        history.append({
+            'message': msg.message,
+            'handle': msg.handle,
+            'messageid': msg.id,
+            #'now': msg.timestamp,
+            #'user': msg.user,
+            #'room': msg.room,
+            })
+    
+    message.reply_channel.send({
+        "text": json.dumps({
+            #"join": str(room.id),
+            #"title": room.title,
+            "history": history,
+        }),
+    })
+    
