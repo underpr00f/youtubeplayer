@@ -8,7 +8,7 @@
   <p>Вернуться к <a href = "{% url 'chat_index:chat_list_rooms' %}">списку доступных каналов</a></p>
   <h1>{{ room }}</h1>
   <div id = "chat-" class = "chat" data-room-id="{{ room.id }}"> 
-  <li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>
+  <!--<li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>-->
   </div>
   <p class="quiet">
     Каждый зарегистрированный пользователь может воспользоваться этой ссылкой для чата: 
@@ -98,8 +98,8 @@ $(function() {
                     
 
                     if (data.message) {
-                        if (data.username == "{{ user.username }}") {
-                            arr.unshift("<span class='selfmessages'>" + data.msgid + ') ' + data.message + "</span>" + "<br>" + "<span class='selfusername'>" + data.username + "</span>" + "<span class='selfdate'>[" + data.now + "]</span><br>");
+                        if (data.handle == "{{ user.username }}") {
+                            arr.unshift("<span class='selfmessages'>" + data.msgid + ') ' + data.message + "</span>" + "<br>" + "<span class='selfusername'>" + data.handle + "</span>" + "<span class='selfdate'>[" + data.now + "]</span><br>");
                         } else {
                             arr.unshift("<span class='message'>" + data.msgid + ') ' + data.message + "</span>" + "<br>" + "<span class='username'>" + data.handle + "</span>" + "<span class='udate'>[" + data.now + "]</span><br>" );
                         }
@@ -134,13 +134,13 @@ $(function() {
 
 
     $("#chatform").on("submit", function(event) {
-        var message2 = {
+        var message = {
             "command": "send",
             "room": $("div.chat").attr("data-room-id"),
             /*handle: $('#handle').val(),*/
             message: $('#message').val(),
         }
-        chatsock.send(JSON.stringify(message2));
+        chatsock.send(JSON.stringify(message));
         $("#message").val('').focus();
 
         return false;
@@ -148,7 +148,7 @@ $(function() {
 
 
     // Says if we joined a room or not by if there's a div for it
-            
+            /*
             inRoom = function (roomId) {
                 return $("#chat-" + roomId).length > 0;
             };
@@ -173,7 +173,7 @@ $(function() {
 
                     }));
                 }
-            });
+            });*/
 
     // Room join/leave
 

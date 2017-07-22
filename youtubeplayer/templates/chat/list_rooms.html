@@ -8,13 +8,14 @@
 
 <ul class="rooms">
     {% for room in rooms %}
-        <li class="room-link" name='q' data-room-id="{{ room.id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room }}/'>{{ room }}</a></li>
+        <li class="room-link" name='q' data-room-id="{{ room.id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room.id }}/'>{{ room }}</a></li>
     {% empty %}
         <p class="empty">No chat rooms defined</p>
     {% endfor %}
 </ul>
 
   <script type="text/javascript" src='{% static "js/jquery-1.12.1.min.js" %}'></script>
+
 
 {% endblock content %}
 

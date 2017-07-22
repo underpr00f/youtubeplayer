@@ -33,7 +33,7 @@ def new_room(request,*args,**kwargs):
 
 @never_cache
 @login_required
-def chat_room(request, label, *args,**kwargs):
+def chat_room(request, pk, *args,**kwargs):
     """
     Room view - show the room, with latest messages.
 
@@ -44,7 +44,7 @@ def chat_room(request, label, *args,**kwargs):
 
     # If the room with the given label doesn't exist, automatically create it
     # upon first visit (a la etherpad).
-    room, created = Room.objects.get_or_create(label=label)
+    room = Room.objects.get(pk=pk)
     # We want to show the last 50 messages, ordered most-recent-last
     messages = reversed(room.messages.order_by('-timestamp')[:10])
     return render(request, "chat/room.html", {

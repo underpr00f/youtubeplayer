@@ -7,12 +7,20 @@ from .models import Room, Message
 from channels.auth import channel_session_user_from_http, channel_session_user
 from django.contrib.auth.models import User
 
+
 from channels import Channel
 from .utils import get_room_or_error, catch_client_error
 from .settings import MSG_TYPE_LEAVE, MSG_TYPE_ENTER, NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS
 from .exceptions import ClientError
 
 log = logging.getLogger(__name__)
+
+#Serialize json
+def date_handler(obj):
+    if hasattr(obj, 'isoformat'):
+        return obj.isoformat().replace('T', ' ')
+    else:
+        raise TypeError
 
 @channel_session_user_from_http
 def ws_connect(message):
@@ -105,7 +113,7 @@ def ws_disconnect(message):
     try:
         label = message.channel_session['room']
         room = Room.objects.get(label=label)
-        Group('chat-'+label, channel_layer=message.channel_layer).discard(message.reply_channel)
+        Group('chat-'+room.id, channel_layer=message.channel_layer).discard(message.reply_channel)
     except (KeyError, Room.DoesNotExist):
         pass
 
@@ -131,7 +139,7 @@ def chat_join(message):
     message.reply_channel.send({
         "text": json.dumps({
             "join": str(room.id),
-            "lable": room.lable,
+            "label": room.label,
         }),
     })
 
@@ -158,8 +166,10 @@ def chat_leave(message):
 @catch_client_error
 def chat_send(message):
     # Check that the user in the room
-    if str(message['room']) not in message.channel_session['rooms']:
+    '''
+    if message['room'] not in message.channel_session['rooms']:
         raise ClientError("ROOM_ACCESS_DENIED")
+    '''
     # Find the room they're sending to, check perms
 
     room = get_room_or_error(message["room"], message.user)
@@ -175,7 +185,7 @@ def chat_send(message):
             'message': msg.message,
             'handle': msg.handle,
             'messageid': msg.id,
-            #'now': msg.timestamp,
+            'now': msg.timestamp,
             #'user': msg.user,
             #'room': msg.room,
             })
@@ -185,6 +195,7 @@ def chat_send(message):
             #"join": str(room.id),
             #"title": room.title,
             "history": history,
-        }),
+        },
+        default=date_handler),
     })
     
