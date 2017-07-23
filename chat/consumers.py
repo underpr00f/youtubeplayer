@@ -28,35 +28,36 @@ def ws_connect(message):
     # form /chat/{label}/, and finds a Room if the message path is applicable,
     # and if the Room exists. Otherwise, bails (meaning this is a some othersort
     # of websocket). So, this is effectively a version of _get_object_or_404.
-    '''
+    
     message.reply_channel.send({'accept': True})
     try:
-        prefix, label = message['path'].strip('/').split('/')
+        prefix, pk = message['path'].strip('/').split('/')
         #handle = Message.objects.get(handle)
         if prefix != 'chat':
             log.debug('invalid ws path=%s', message['path'])
             return
-        room = Room.objects.get(label=label)
+        room = Room.objects.get(id=pk)
         #handle = Message.objects.get(handle=handle)
     except ValueError:
         log.debug('invalid ws path=%s', message['path'])
         return
     except Room.DoesNotExist:
-        log.debug('ws room does not exist label=%s', label)
+        log.debug('ws room does not exist pk=%s', pk)
         return
 
     log.debug('chat connect room=%s client=%s:%s', 
-        room.label, message['client'][0], message['client'][1])
+        room.id, message['client'][0], message['client'][1])
     
     # Need to be explicit about the channel layer so that testability works
     # This may be a FIXME?
-    Group('chat-'+room.label, channel_layer=message.channel_layer).add(message.reply_channel)
+    Group('chat-'+str(room.id), channel_layer=message.channel_layer).add(message.reply_channel)
     
-    message.channel_session['room'] = room.label
-    '''
+    message.channel_session['room'] = room.id
+    '''#for multichat
     message.reply_channel.send({'accept': True})
     # Initialise their session
     message.channel_session['rooms'] = []
+    '''
 
 @channel_session
 @channel_session_user
@@ -110,12 +111,24 @@ def ws_receive(message):
     '''
 @channel_session_user
 def ws_disconnect(message):
+    
     try:
-        label = message.channel_session['room']
-        room = Room.objects.get(label=label)
-        Group('chat-'+room.id, channel_layer=message.channel_layer).discard(message.reply_channel)
+        pk = message.channel_session['room']
+        room = Room.objects.get(id=pk)
+        Group('chat-'+str(room.id), channel_layer=message.channel_layer).discard(message.reply_channel)
     except (KeyError, Room.DoesNotExist):
         pass
+    
+    '''#for multichat
+    for room_id in message.channel_session.get("rooms", set()):
+        try:
+            room = Room.objects.get(pk=room_id)
+            # Removes us from the room's send group. If this doesn't get run,
+            # we'll get removed once our first reply message expires.
+            room.websocket_group.discard(message.reply_channel)
+        except Room.DoesNotExist:
+            pass
+    '''
 
 @channel_session_user
 @catch_client_error

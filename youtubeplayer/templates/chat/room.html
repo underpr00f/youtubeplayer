@@ -7,43 +7,45 @@
 
   <p>Вернуться к <a href = "{% url 'chat_index:chat_list_rooms' %}">списку доступных каналов</a></p>
   <h1>{{ room }}</h1>
-  <div id = "chat-" class = "chat" data-room-id="{{ room.id }}"> 
-  <li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>
-  </div>
+
   <p class="quiet">
     Каждый зарегистрированный пользователь может воспользоваться этой ссылкой для чата: 
-    <code>{{ request.scheme }}://{{ request.get_host }}/chat/{{ room }}/</code> 
+    <code>{{ request.scheme }}://{{ request.get_host }}/chat/{{ room.id }}/</code> 
   </p>
   <p>
-    <label for="handle">Your name:</label>
     <div id = "handle" type="text" placeholder="handle"><h1><code>{{ user.username }}</code></h1></div>
     <!--<input id="handle" type="text" placeholder="handle">-->
   </p>
   <form id="chatform">
     
-    <table id="chat">
-      <tbody>
-        {% for message in messages %}
-          <tr>
-            <td>{{ message.formatted_timestamp }}</td>
-            <td>{{ message.handle }}</td>
-            <td>{{ message.message }}</td>
-          </tr> 
-        {% endfor %}
-      </tbody>
-      <tfoot>
-      <tr>
-        <td>Скажи что-нибудь ({{ user.username }}):</td>
-        <td colspan=2>
-          <input id="message" type="text" placeholder="message">
-          <button type="submit" id="go">Say it</button>
-        </td>
-      </tr>
-      </tfoot>
-    </table>
+
+
+
+    <input id="message" type="text"><button type="submit" id="go">Отправить в чат</button><br>
+
+
     
   </form>
-<div id="chats">
+<div id="chats" data-room-id="{{ room.id }}" class='chats'>
+        {% for message in messages %}
+            <div class='messages'>
+            {% if user.username == message.handle %}
+                <span class='selfmessages'>{{ message.id }}) {{ message.message }}</span>
+                <br>
+                <span class='selfusername'>{{ message.handle }}</span>
+                <span class='selfdate'>[{{ message.formatted_timestamp }}]</span>
+                <span class='clearing'></span>
+                <br>
+            {% else %}
+                <span class='message'>{{ message.id }}) {{ message.message }}</span>
+                <br>
+                <span class='username'>{{ message.handle }}</span>
+                <span class='udate'>[{{ message.formatted_timestamp }}]</span>
+                <span class='clearing'></span>
+                <br>
+            {% endif %}   
+            </div>
+        {% endfor %}
 </div>
 
 
@@ -57,12 +59,14 @@ $(function() {
     
     var chatsock = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + window.location.pathname);
     
+
+
     chatsock.onmessage = function(message) {
 
         console.log("Got websocket message " + message.data);
         var data = JSON.parse(message.data);
-        var chat = $("#chat")
-        var ele = $('<tr></tr>')
+        var chat = $("#chats")
+
         
         if (data.error) {
             alert(data.error);
@@ -101,7 +105,7 @@ $(function() {
                         if (data.username == "{{ user.username }}") {
                             arr.unshift("<span class='selfmessages'>" + data.msgid + ') ' + data.message + "</span>" + "<br>" + "<span class='selfusername'>" + data.username + "</span>" + "<span class='selfdate'>[" + data.now + "]</span><br>");
                         } else {
-                            arr.unshift("<span class='message'>" + data.msgid + ') ' + data.message + "</span>" + "<br>" + "<span class='username'>" + data.handle + "</span>" + "<span class='udate'>[" + data.now + "]</span><br>" );
+                            arr.unshift("<span class='message'>" + data.msgid + ') ' + data.message + "</span>" + "<br>" + "<span class='username'>" + data.username + "</span>" + "<span class='udate'>[" + data.now + "]</span><br>" );
                         }
                     
                     }
@@ -118,64 +122,23 @@ $(function() {
         roomdiv.scrollTop(roomdiv.prop("scrollHeight"));
         $("#chats").html(roomdiv);
 
-
-        ele.append(
-            $("<td></td>").text(data.timestamp)
-        )
-        ele.append(
-            $("<td></td>").text(data.handle)
-        )
-        ele.append(
-            $("<td></td>").text(data.message)
-        )
-        
-        chat.append(ele)
     };
 
 
     $("#chatform").on("submit", function(event) {
-        var message2 = {
+        var message = {
             "command": "send",
-            "room": $("div.chat").attr("data-room-id"),
+            "room": $("div.chats").attr("data-room-id"),
             /*handle: $('#handle').val(),*/
             message: $('#message').val(),
         }
-        chatsock.send(JSON.stringify(message2));
+        chatsock.send(JSON.stringify(message));
         $("#message").val('').focus();
 
         return false;
     });
 
 
-    // Says if we joined a room or not by if there's a div for it
-            
-            inRoom = function (roomId) {
-                return $("#chat-" + roomId).length > 0;
-            };
-
-            // Room join/leave
-            $("li.room-link").click(function () {
-                roomId = $(this).attr("data-room-id");
-                if (inRoom(roomId)) {
-                    // Leave room
-                    $(this).removeClass("joined");
-                    chatsock.send(JSON.stringify({
-                        "command": "leave",
-                        "room": roomId
-                    }));
-                } else {
-                    // Join room
-                    $(this).addClass("joined");
-
-                    chatsock.send(JSON.stringify({
-                        "command": "join",
-                        "room": roomId,
-
-                    }));
-                }
-            });
-
-    // Room join/leave
 
     // Helpful debugging
     chatsock.onopen = function () {

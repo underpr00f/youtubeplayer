@@ -20,7 +20,8 @@ custom_routing = [
     # Handling different chat commands (websocket.receive is decoded and put
     # onto this channel) - routed on the "command" attribute of the decoded
     # message.
-    route("chat.receive", consumers.chat_join, command="^join$"),
-    route("chat.receive", consumers.chat_leave, command="^leave$"),
+    #for multichat
+    #route("chat.receive", consumers.chat_join, command="^join$"),
+    #route("chat.receive", consumers.chat_leave, command="^leave$"),
     route("chat.receive", consumers.chat_send, command="^send$"),
 ]

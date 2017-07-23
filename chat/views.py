@@ -46,7 +46,7 @@ def chat_room(request, pk, *args,**kwargs):
     # upon first visit (a la etherpad).
     room = Room.objects.get(pk=pk)
     # We want to show the last 50 messages, ordered most-recent-last
-    messages = reversed(room.messages.order_by('-timestamp')[:10])
+    messages = room.messages.order_by('-timestamp')[:10]
     return render(request, "chat/room.html", {
         'room': room,
         'messages': messages,

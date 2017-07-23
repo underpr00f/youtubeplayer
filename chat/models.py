@@ -40,7 +40,7 @@ class Room(models.Model):
                 'message': msg.message,
                 'handle': msg.handle,
                 'messageid': msg.id,
-                'timestamp': str(msg.timestamp),
+                'now': str(msg.timestamp),
                 #'avatar': msg.image_url,
 
                 })
@@ -101,7 +101,7 @@ class Message(models.Model):
 
     @property
     def formatted_timestamp(self):
-        return self.timestamp.strftime('%d %m %Y %H:%M:%S')
+        return self.timestamp.strftime('%d-%m-%Y %H:%M:%S')
 
     def as_dict(self):
         return {'handle': self.handle, 'message': self.message, 'timestamp': self.formatted_timestamp}
