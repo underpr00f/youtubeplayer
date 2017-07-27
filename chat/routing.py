@@ -22,6 +22,6 @@ custom_routing = [
     # message.
     #for multichat
     #route("chat.receive", consumers.chat_join, command="^join$"),
-    #route("chat.receive", consumers.chat_leave, command="^leave$"),
+    route("chat.receive", consumers.chat_leave, command="^leave$"),
     route("chat.receive", consumers.chat_send, command="^send$"),
 ]

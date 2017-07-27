@@ -5,7 +5,7 @@
 
 {% block content %}
 
-  <p>Вернуться к <a href = "{% url 'chat_index:chat_list_rooms' %}">списку доступных каналов</a></p>
+  <p>Вернуться к <a class="roomlink" href = "{% url 'chat_index:chat_list_rooms' %}">списку доступных каналов</a></p>
   <h1>{{ room }}</h1>
 
   <p class="quiet">
@@ -19,9 +19,12 @@
   <form id="chatform">
     
 
+<div data-role="controlgroup" data-type="horizontal">
+    <input type="text" id="message" data-wrapper-class="controlgroup-textinput ui-btn">
+    <button type="submit" id="go" data-icon="check">Отправить</button>
+</div>
 
-
-    <input id="message" type="text"><button type="submit" id="go">Отправить в чат</button><br>
+<br>
 
 
     
@@ -138,8 +141,13 @@ $(function() {
         return false;
     });
 
-
-
+    
+    $("a.roomlink").click(function () {
+        chatsock.send(JSON.stringify({
+            "command": "leave",
+            "room": $("div.chats").attr("data-room-id"),
+        }));
+    });
     // Helpful debugging
     chatsock.onopen = function () {
         console.log("Connected to chat socket");

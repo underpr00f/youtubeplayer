@@ -111,7 +111,7 @@ def ws_receive(message):
     '''
 @channel_session_user
 def ws_disconnect(message):
-    
+    '''
     try:
         pk = message.channel_session['room']
         room = Room.objects.get(id=pk)
@@ -119,16 +119,18 @@ def ws_disconnect(message):
     except (KeyError, Room.DoesNotExist):
         pass
     
-    '''#for multichat
-    for room_id in message.channel_session.get("rooms", set()):
-        try:
-            room = Room.objects.get(pk=room_id)
-            # Removes us from the room's send group. If this doesn't get run,
-            # we'll get removed once our first reply message expires.
-            room.websocket_group.discard(message.reply_channel)
-        except Room.DoesNotExist:
-            pass
     '''
+    #for multichat
+    room_id = message.channel_session['room']
+    try:
+        room = Room.objects.get(pk=room_id)
+        # Removes us from the room's send group. If this doesn't get run,
+        # we'll get removed once our first reply message expires.
+        room.websocket_group.discard(message.reply_channel)
+    except Room.DoesNotExist:
+        log.debug('ws room does not exist pk=%s', room_id)
+        return
+
 
 @channel_session_user
 @catch_client_error
@@ -167,7 +169,7 @@ def chat_leave(message):
         room.send_message(None, message.user, MSG_TYPE_LEAVE)
 
     room.websocket_group.discard(message.reply_channel)
-    message.channel_session['rooms'] = list(set(message.channel_session['rooms']).difference([room.id]))
+    message.channel_session['room'] = room.id
     # Send a message back that will prompt them to close the room
     message.reply_channel.send({
         "text": json.dumps({

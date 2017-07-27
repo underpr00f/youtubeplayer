@@ -325,3 +325,9 @@
         font-weight: bold;
         font-style: italic;
     }
+
+.controlgroup-textinput{
+    padding-top:.22em;
+    padding-bottom:.22em;
+    width: 44em;
+}
