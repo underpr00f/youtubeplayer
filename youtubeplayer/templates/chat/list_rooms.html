@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load socialprofile_tags %}
+{% load static %}
+
 
 {% block content %}
-  {% load static %}
+  
 <p> Для выбора чата достаточно кликнуть один раз мышкой по группе</p>
 
 <ul class="rooms">
@@ -15,6 +17,7 @@
 </ul>
 
   <script type="text/javascript" src='{% static "js/jquery-1.12.1.min.js" %}'></script>
+
 
 
 {% endblock content %}

@@ -7,15 +7,12 @@
     <meta name="viewport" content="initial-scale=1.0"/>
     <link rel="icon" href="{% static 'images/favicon.ico' %}" />
     <link rel="stylesheet" href="{% static 'css/socialprofile.css' %}"/>
-    <!--<link href="{{ STATIC_URL }}css/socialprofile.css" rel="stylesheet" type="text/css" media="screen" />-->
+
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
-    <!--<script src="{% static "reconnecting-websocket.min.js" %}"></script>-->
-	<!--{% block headextra %}{% endblock %}-->
+
     <script type="text/javascript" src='{% static "js/jquery-1.12.2.min.js" %}'></script>
-
-    <!--<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>-->
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-
+         
     <title>{% block title %}{% endblock %}</title>
 
     {% block metatags %}
@@ -66,13 +63,7 @@
         </a>
 
     {% else %}
-    <!--
-    <div data-role="controlgroup" data-type="horizontal">
-        <a href="{% url 'auth_login' %}" data-inline="true" data-mini="true" data-role="button" data-icon="carat-u" data-theme="b">Вход</a> 
-        
-        <a href="{% url 'registration_register' %}" data-inline="true" data-mini="true" data-role="button" data-icon="action" data-theme="b">Регистрация</a>
-    </div>
-    -->
+
         <h4>Здравствуйте, Аноним</h4>
     {% endif %}
 
@@ -89,14 +80,14 @@
     {% block messages %}
 
 
-    <!--<script type="text/javascript" src='{% static "js/jquery-1.12.2.min.js" %}'></script>-->
-    <script type="text/javascript" src='{% static "js/reconnecting-websocket.min.js" %}'></script>
+    
+    
     {% endblock %}
 
 </section>
 
     {% block afterbody %}{% endblock afterbody %}
-	<!--{% block extra_body %}{% endblock %}-->
+	
 
 </body>
 </html>

@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-#from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from channels import Group
@@ -113,3 +113,13 @@ class Message(models.Model):
 
     def as_dict(self):
         return {'handle': self.handle, 'message': self.message, 'timestamp': self.formatted_timestamp}
+
+
+class Member(models.Model):
+    
+    users = models.ManyToManyField(User)
+    current_user = models.ForeignKey(User, related_name='ownergroup', null=True)
+  
+  
+ 
+  

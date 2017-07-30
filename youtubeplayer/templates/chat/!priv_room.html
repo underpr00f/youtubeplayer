@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load socialprofile_tags %}
+
+{% block content %}
+
+       
+ 
+<h1>Введите название чата и добавьте в него пользователей</h1>
+<div id="display"></div> 
+
+<form action="" method="post">
+    {% csrf_token %}
+    <input id="title" type="text" placeholder="Название чата" />
+    <input id="name" type="text" placeholder="Введите пользователя" />
+    <input type="button" value="Добавить" onclick="insert()" />
+    <button type="submit" data-theme="b">Создать</button>
+
+</form>
+
+
+  
+
+
+
+<script type="text/javascript">
+var title = "";
+var names   = [];
+
+var titleInput  = document.getElementById("title");
+var nameInput   = document.getElementById("name");
+
+var messageBox  = document.getElementById("display");
+
+//оставляем уникальные элементы
+function unique(arr) {
+  var obj = {};
+
+  for (var i = 0; i < arr.length; i++) {
+    var str = arr[i];
+    obj[str] = true; // запомнить строку в виде свойства объекта
+  }
+
+  return Object.keys(obj); // или собрать ключи перебором для IE8-
+}
+
+
+function insert ( ) {
+  title = titleInput.value
+  if ( nameInput.value ) {
+    names.push( nameInput.value );
+
+  } else {
+    alert("Вы ввели пустое имя");
+  }
+
+  console.log(unique(names));
+  uniqnames = unique(names);
+   
+  clearAndShow();
+}
+
+
+
+function clearAndShow () {
+  // Clear our fields
+  
+  nameInput.value = "";
+  
+  
+  // Show our output
+  messageBox.innerHTML = "";
+  messageBox.innerHTML += "Название: " + title + "<br/>";
+  messageBox.innerHTML += "Участники: " + uniqnames.join(", ") + "<br/>";
+
+}
+
+</script>
+
+{% endblock content %}
