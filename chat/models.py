@@ -35,13 +35,21 @@ class Room(models.Model):
 
         recent_msgs = Message.objects.filter(room=self.id).order_by('-timestamp')[:10]
         history = []
+
+        if user.social_profile.avatar:
+            img = settings.MEDIA_URL + str(user.social_profile.avatar)
+        elif user.social_profile.image_url:
+            img = user.social_profile.image_url
+        else:
+            img = 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm'
+
         for msg in recent_msgs:
             history.append({
                 'message': msg.message,
                 'handle': msg.handle,
                 'messageid': msg.id,
                 'now': str(msg.timestamp),
-                #'avatar': msg.image_url,
+                'avatar': msg.image_url,
 
                 })
 
@@ -50,7 +58,7 @@ class Room(models.Model):
                      'username': user.username, 'msg_type': msg_type, 
                      'now': now,
                      'user': user.id, 
-                     #'avatar': img, 
+                     'avatar': img, 
                      'history': history,
                      'msgid': 1,
                      }
@@ -59,7 +67,7 @@ class Room(models.Model):
                      'username': user.username, 'msg_type': msg_type, 
                      'now': now,
                      'user': user.id, 
-                     #'avatar': img, 
+                     'avatar': img, 
                      'history': history,
                      'msgid': history[0]["messageid"]+1,
                      }
@@ -84,7 +92,7 @@ class Room(models.Model):
                 com.message = final_msg['message']
                 com.handle = final_msg['username']
                 com.timestamp = final_msg['now']
-                #com.image_url = final_msg['avatar']
+                com.image_url = final_msg['avatar']
                 #com.user = final_msg['user']
                 com.save()
     
@@ -94,7 +102,7 @@ class Message(models.Model):
     #user = models.OneToOneField(User)
     message = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
-
+    image_url = models.URLField(blank=True, null=True, max_length=500, default='http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm')
         
     def __str__(self):
         return '[{timestamp}] {handle}: {message}'.format(**self.as_dict())

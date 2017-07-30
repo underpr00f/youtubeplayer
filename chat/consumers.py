@@ -201,6 +201,7 @@ def chat_send(message):
             'handle': msg.handle,
             'messageid': msg.id,
             'now': msg.timestamp,
+            'avatar': msg.image_url,
             #'user': msg.user,
             #'room': msg.room,
             })
