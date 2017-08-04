@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load socialprofile_tags %}
+
+{% block content %}
+
+       
+ 
+<h1>{{ room.label }}</h1>
+<h1>{{ room.current_user_id }}</h1>
+<h1>{{ request.user.id }}</h1>
+
+
+
+
+{% endblock content %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load socialprofile_tags %}
+
+{% block content %}
+
+ 
+<h1>Введите название приватного чата</h1>
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            
+            <div class="myerrors clearfix" style="color:red">
+            	
+                <strong>Ошибка ввода: {{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="myerrors clearfix" style="color:red">
+        	
+            <strong>Ошибка ввода(Введите другое имя): {{ error|escape }} </strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method='POST' action=''>{% csrf_token %}<input type='text' name='label' value='{{ request.POST.label }}' maxlength='30' style='background-color: #e4e4b8;' /><button type='submit'>Отправить</button></form>
+
+
+
+
+{% endblock content %}

@@ -3,14 +3,14 @@ import string
 from django.db import transaction
 from django.shortcuts import render, redirect
 from haikunator import Haikunator
-from .models import Room
+from .models import Room, Member
 from django.views.decorators.cache import never_cache
 from django.shortcuts import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
 from django.views.generic import TemplateView
-from .forms import FriendForm
+from .forms import FriendForm, LabelForm
 
 
 haikunator = Haikunator()
@@ -82,66 +82,121 @@ def priv_room(request):
 
 class FriendView(TemplateView):
     template_name = "chat/priv_room.html"
-    
 
-    def get(self, request, *args, **kwargs):
+
+    def get(self, request, pk, *args, **kwargs):
         
-        form = FriendForm()
-        users = User.objects.exclude(id=request.user.id)
-        #friend = get_object_or_404(Friend, current_user=request.user)
-        query = request.GET.get("q")
+        room = Member.objects.get(pk=pk)
+        if request.user.id == room.current_user_id:
+            form = FriendForm()
+            users = User.objects.exclude(id=request.user.id)
 
-        #true_friends=[]
+            query = request.GET.get("q")
+
+            true_members=[]
         
 
-        if query:
-            queryset_list = User.objects.filter(username=query)
-        else:
-            queryset_list = None
+            if query:
+                queryset_list = User.objects.filter(username=query)
+            else:
+                queryset_list = None
 
-        #your followers
-        #drugs = Friend.who_added_user(request.user)
-        #friendlist = []
-        #try to get or except None
-        '''
-        try:
+            #your followers
+            drugs = room.who_added_user(request.user)
+            memberlist = []
+        
+            member, created = Member.objects.get_or_create(current_user=request.user, pk=pk)
+            members = member.users.all()
 
-            friend = Friend.objects.get(current_user=request.user)
-            friends = friend.users.all()
-            if friends:
-                for fr in friends:
-                    friendlist.append(fr)
-                      
-        except Friend.DoesNotExist:           
-            friends = None
-        '''
-        #friend, created = Friend.objects.get_or_create(current_user=request.user)
-        #friends = friend.users.all()
-        '''
-        for fr in friends:
-            friendlist.append(fr)
-        '''
-        '''
-        true_friends = []
+        
+        
 
-        for friend in friends:
-            friendlist.append(friend)
-            
-            for drug in drugs:
+            for member in members:
+                memberlist.append(member)
+                
+                for drug in drugs:
                  
-                if drug.pk == friend.pk:
-                    true_friends.append(drug)
-                    drugs.remove(drug)
-                    friendlist.remove(drug)
-        '''
+                    if drug.pk == member.pk:
+                        true_members.append(drug)
+                        drugs.remove(drug)
+                        memberlist.remove(drug)
+            
                 
 
 
-        context = {'form': form, 'users': users,
-                   #'friends': friends,
-                   #'drugs': drugs,
+            context = {'form': form, 'users': users,
+                   'members': members,
+                   'drugs': drugs,
                    'object_list': queryset_list,
-                   #'true_friends': true_friends,
-                   #'friendlist': friendlist,
+                   'true_members': true_members,
+                   'memberlist': memberlist,
+                   'room': room,
                    }
-        return render(request,self.template_name, context)        
+            return render(request,self.template_name, context) 
+        else:
+            return redirect('home')       
+
+@never_cache
+@login_required
+def change_members(request, pk, operation, pkid):
+    
+    member = User.objects.get(pk=pkid)
+    label = Member.objects.get(pk=pk)
+    if operation == 'add':
+        Member.make_member(request.user, label, member)
+        return redirect('chat_index:private_room', pk = pk)
+    elif operation == 'remove':
+        Member.remove_member(request.user, label, member)
+        return redirect('chat_index:private_room', pk = pk)
+    return redirect('chat_index:private_room', pk = pk)
+
+
+from django.contrib import messages
+@never_cache
+@login_required
+def get_name(request):
+    #template_name = "chat/title_room.html"
+    new_room = None
+    form = LabelForm(request.POST or None)
+    
+    if request.method == 'POST':
+        '''
+        while not new_room:
+            query = request.POST.get("label")
+            userid = request.user.id
+            #checkmember = Member.objects.filter(current_user_id=userid)
+            new_room = Member.objects.create(label=query, current_user_id=userid)
+        '''
+
+        #form = LabelForm(request.POST)
+        if form.is_valid():
+            query = request.POST.get("label")
+            userid = request.user.id
+            new_room = Member.objects.create(label=query, current_user_id=userid)
+            return HttpResponseRedirect('/chat/private/%s/' % new_room.id)
+
+        else:
+            render(request, 'chat/title_room.html', {'form': LabelForm()})
+    #else:
+        #form = LabelForm()
+    # if a GET (or any other method) we'll create a blank form
+    
+
+    return render(request, 'chat/title_room.html', {'form': form})
+
+'''
+@never_cache
+@login_required
+def private_room(request, pk, *args,**kwargs):
+
+    room = Member.objects.get(pk=pk)
+    if request.user.id == room.current_user_id:
+    
+        return render(request, "chat/private_room.html", {
+            'room': room,
+            
+        })
+    else:
+        #need fix to error 404
+        return redirect('home')
+'''

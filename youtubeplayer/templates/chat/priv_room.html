@@ -10,84 +10,69 @@
 <h1>Введите название чата и добавьте в него пользователей</h1>
 <div id="display"></div> 
 
-<form method='GET' action=''><label for='q'>Поиск пользователя: </label><input type='text' name='q' value='{{ request.GET.q }}' maxlength='30' style='background-color: #e4e4b8;' /><button type='submit'>Поиск</button></form>
+<div class="ui-grid-b">
+<div class="ui-block-a">
+<h2><center>Поиск пользователя:</center></h2>
+<form method='GET' action='{% url "chat_index:private_room" pk=room.id %}'><input type='text' name='q' value='{{ request.GET.q }}' maxlength='30' style='background-color: #e4e4b8;' /><button type='submit'>Поиск</button></form>
+</div>
+
+<div class="ui-block-b">
 {% if request.GET.q %}
-          <h2><center>Результаты поиска</center></h2>
+          <center><h2>Результаты поиска</h2>
           {% for obj in object_list %}
             <p>Найден пользователь:</p>
-            <div class="{{ obj }}"><b>{{ obj }}</b></div>
+            <div class="{{ obj }}"><b>{{ obj }}</b>
+            {% if not obj in members %}
+              {% if obj.pk != user.pk %}
+                <a href="{% url 'chat_index:change_members' pk=room.id operation='add' pkid=obj.pk %}" > 
+                <button type="button" data-role="button" data-theme="b" >Пригласить в чат</button>
+                </a>
+              {% else %}
+                (Это вы)
+              {% endif %}
+            {% endif %}
+            </div>
           {% empty %}
           <center><p class="empty">Пользователи с именем '<b>{{ request.GET.q }}</b>' отсутствуют</p></center>
           {% endfor %}
+          </center>
         
 {% endif %}
+</div>
 
-<form action="" method="post">
-    {% csrf_token %}
-    <input id="title" type="text" placeholder="Название чата" />
-    <input id="name" type="text" placeholder="Введите пользователя" />
-    <input type="button" value="Добавить" onclick="insert()" />
-    <button type="submit" data-theme="b">Создать</button>
+  <div class="ui-block-c">
+    <h2>Участники чата</h2>
+    {% for true_member in true_members %}
+      <li>{{ true_member }}<a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=true_member.pk %}" > <button type="button" data-role="button" >Отменить</button>
+      </a></li>
+      {% empty %}
+      <p class="empty">Участники отсутствуют</p>
+    {% endfor %}
 
-</form>
+    <h2>Пригласили вас в чат</h2>
+    {% for drug in drugs %}
+      <li>{{ drug.username }}<a href="{% url 'chat_index:change_members' pk=room.id operation='add' pkid=drug.pk %}" > <button type="button" data-role="button" data-theme="b" >Согласиться</button>
+      </a></li>
+      {% empty %}
+        <p class="empty">Приглашений нет</p>
+    {% endfor %}
+    
+    <h2>Ожидание подтверждения</h2>
+    
+    {% for memberl in memberlist %}
+      <li>{{ memberl }}<a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberl.pk %}">
+      <button type="button" data-role="button" >Отменить</button>
+      </a></li>
 
+    {% empty %}
+        <p class="empty">Вы никого не пригласили в чат</p>
+      
+    {% endfor %}
 
-  
+  </div>
 
-
-
-<script type="text/javascript">
-var title = "";
-var names   = [];
-
-var titleInput  = document.getElementById("title");
-var nameInput   = document.getElementById("name");
-
-var messageBox  = document.getElementById("display");
-
-//оставляем уникальные элементы
-function unique(arr) {
-  var obj = {};
-
-  for (var i = 0; i < arr.length; i++) {
-    var str = arr[i];
-    obj[str] = true; // запомнить строку в виде свойства объекта
-  }
-
-  return Object.keys(obj); // или собрать ключи перебором для IE8-
-}
-
-
-function insert ( ) {
-  title = titleInput.value
-  if ( nameInput.value ) {
-    names.push( nameInput.value );
-
-  } else {
-    alert("Вы ввели пустое имя");
-  }
-
-  console.log(unique(names));
-  uniqnames = unique(names);
-   
-  clearAndShow();
-}
+</div>
 
 
-
-function clearAndShow () {
-  // Clear our fields
-  
-  nameInput.value = "";
-  
-  
-  // Show our output
-  messageBox.innerHTML = "";
-  messageBox.innerHTML += "Название: " + title + "<br/>";
-  messageBox.innerHTML += "Участники: " + uniqnames.join(", ") + "<br/>";
-
-}
-
-</script>
 
 {% endblock content %}

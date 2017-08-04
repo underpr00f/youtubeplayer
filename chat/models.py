@@ -117,9 +117,40 @@ class Message(models.Model):
 
 class Member(models.Model):
     
+    label = models.SlugField(unique=True, verbose_name=_("Название"))
     users = models.ManyToManyField(User)
     current_user = models.ForeignKey(User, related_name='ownergroup', null=True)
-  
-  
+
+    def __str__(self):
+        return self.label
+            
+    class Meta(object):
+        verbose_name = _("Приватная комната")
+
+
+    #add roomfriend
+    @classmethod
+    def make_member(cls,current_user, label, new_member):
+        member, created = cls.objects.get_or_create(
+            current_user=current_user, label = label,
+        )
+        member.users.add(new_member)
+
+    #remove roomfriend
+    @classmethod
+    def remove_member(cls,current_user, label, new_member):
+        member, created = cls.objects.get_or_create(
+            current_user=current_user, label = label,
+        )
+        member.users.remove(new_member)  
+    
+    #your followers
+    @classmethod
+    def who_added_user(cls, user):
+        users = []
+        for member in cls.objects.all():
+            if user in member.users.all():
+                users.append(member.current_user)
+        return users  
  
   
