@@ -3,7 +3,7 @@ import string
 from django.db import transaction
 from django.shortcuts import render, redirect
 from haikunator import Haikunator
-from .models import Room, Member
+from .models import Room, Member, MemberAccept
 from django.views.decorators.cache import never_cache
 from django.shortcuts import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -144,6 +144,7 @@ def change_members(request, pk, operation, pkid):
     label = Member.objects.get(pk=pk)
     if operation == 'add':
         Member.make_member(request.user, label, member)
+        MemberAccept.objects.get_or_create(accepter=member,acceptroom=label,agree=False)
         return redirect('chat_index:private_room', pk = pk)
     elif operation == 'remove':
         Member.remove_member(request.user, label, member)
@@ -184,19 +185,41 @@ def get_name(request):
 
     return render(request, 'chat/title_room.html', {'form': form})
 
-'''
+
 @never_cache
 @login_required
-def private_room(request, pk, *args,**kwargs):
+def select_room(request, *args,**kwargs):
 
-    room = Member.objects.get(pk=pk)
-    if request.user.id == room.current_user_id:
+    list_room = []
+    rooms = Member.objects.all()
+    room_members = MemberAccept.objects.filter(accepter=request.user.id, agree=True)
+    userinrooms = Member.objects.filter(users__id = request.user.id)
+    for userinroom in userinrooms:
+        for room_member in room_members:
+            if room_member.acceptroom.pk == userinroom.pk:
+                list_room.append(room_member.acceptroom.label)
+
     
-        return render(request, "chat/private_room.html", {
-            'room': room,
-            
-        })
-    else:
-        #need fix to error 404
-        return redirect('home')
-'''
+    return render(request, "chat/select_room.html", {
+        'rooms': rooms,
+        'room_members': room_members,
+        'userinrooms': userinrooms,
+        'list_room': list_room
+        
+    })
+
+
+
+@never_cache
+@login_required
+def accept_members(request, pk, operation, pkid):
+    
+    accepter = User.objects.get(pk=pkid)
+    acceptroom = Member.objects.get(pk=pk)
+    if operation == 'agree':
+        MemberAccept.objects.get_or_create(accepter=accepter,acceptroom=acceptroom,agree=True)
+        return redirect('chat_index:select_room')
+    elif operation == 'disagree':
+        Member.remove_member(request.user, label, member)
+        return redirect('chat_index:private_room', pk = pk)
+    return redirect('chat_index:select_room')

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load socialprofile_tags %}
+
+{% block content %}
+ 
+<div class="ui-grid-b">
+  <div class="ui-block-a">
+    
+    <a href="{% url 'chat_index:title_room' %}" data-role="button" data-theme="e" >{% trans "Создать Приватную комнату" %}</a>
+  </div>
+  <div class="ui-block-b">
+
+  {% for userinroom in userinrooms %}
+  
+    {% if not userinroom in room_members %}
+    Вас приглашают в чат: <b>{{ userinroom }}</b>
+    <a href="{% url 'chat_index:accept_members' pk=userinroom.id operation='agree' pkid=request.user.id %}" > 
+    <button type="button" data-role="button" data-theme="b" >Принять приглашение</button></a>
+    {% endif %}
+  {% endfor %} <br>  
+  </div>
+  <div class="ui-block-c">
+  {{ list_room }}<br>
+  <h1> Ваши приватные чаты </h1>
+  {% for room_member in room_members %}
+    {{ room_member.acceptroom }}
+  {% endfor %}<br>
+  <h1> Все чаты </h1>
+  {% for room in rooms %}
+    {{ room.label }}  
+  {% endfor %}
+  <br>
+
+
+  </div>  
+
+</div>
+
+
+
+
+{% endblock content %}

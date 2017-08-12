@@ -118,7 +118,7 @@ class Message(models.Model):
 class Member(models.Model):
     
     label = models.SlugField(unique=True, verbose_name=_("Название"))
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User, related_name='manyusers')
     current_user = models.ForeignKey(User, related_name='ownergroup', null=True)
 
     def __str__(self):
@@ -153,4 +153,17 @@ class Member(models.Model):
                 users.append(member.current_user)
         return users  
  
-  
+class MemberAccept(models.Model):
+    accepter = models.ForeignKey(User, related_name='accepteruser', null=True)
+    acceptroom = models.ForeignKey(Member, related_name='acceptroom', null=True)
+    agree = models.BooleanField(default = False)
+
+    #agree roomfriend
+    
+    @classmethod
+    def make_member(cls, accepter, acceptroom, agree):
+        memberaccept, created = cls.objects.get_or_create(
+            accepter=accepter, acceptroom = acceptroom, agree = True,
+        )
+        #memberaccept.add(new_member)
+    
