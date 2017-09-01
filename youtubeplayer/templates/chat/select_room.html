@@ -12,17 +12,30 @@
   </div>
   <div class="ui-block-b">
 
-  {% for userinroom in userinrooms %}
-  
-    {% if not userinroom in room_members %}
-    Вас приглашают в чат: <b>{{ userinroom }}</b>
-    <a href="{% url 'chat_index:accept_members' pk=userinroom.id operation='agree' pkid=request.user.id %}" > 
-    <button type="button" data-role="button" data-theme="b" >Принять приглашение</button></a>
-    {% endif %}
+  {% for room_invite in room_invites %}
+      
+    Вас приглашают в чат: <b>{{ room_invite.acceptroom }}</b>
+    <a href="{% url 'chat_index:accept_members' pk=room_invite.acceptroom_id operation='agree' pkid=request.user.id %}" > 
+    <button type="button" data-role="button" data-theme="b" >Принять</button></a>
+    <a href="{% url 'chat_index:accept_members' pk=room_invite.acceptroom_id operation='disagree' pkid=request.user.id %}" > 
+    <button type="button" data-role="button" data-theme="a" >Отклонить</button></a>
+  {% empty %}
+    <center><p class="empty">Приглашения отсутствуют</p></center>  
   {% endfor %} <br>  
   </div>
+  
   <div class="ui-block-c">
-  {{ list_room }}<br>
+  
+
+  <h1> Созданные вами комнаты </h1>
+  {% for room_owner in room_owners %}
+    <a href="{% url 'chat_index:private_room' pk=room_owner.id %}" ><button type="button" data-role="button" >{{ room_owner }}</button></a>  
+  {% empty %}
+    <center><p class="empty">Вы не создавали комнат</p></center>
+
+  {% endfor %}
+  <br>
+  
   <h1> Ваши приватные чаты </h1>
   {% for room_member in room_members %}
     {{ room_member.acceptroom }}
@@ -32,6 +45,7 @@
     {{ room.label }}  
   {% endfor %}
   <br>
+
 
 
   </div>  

@@ -1,7 +1,7 @@
 import random
 import string
 from django.db import transaction
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from haikunator import Haikunator
 from .models import Room, Member, MemberAccept
 from django.views.decorators.cache import never_cache
@@ -94,23 +94,28 @@ class FriendView(TemplateView):
             query = request.GET.get("q")
 
             true_members=[]
-        
+            memberlist = None        
+            
 
             if query:
                 queryset_list = User.objects.filter(username=query)
+
             else:
                 queryset_list = None
 
             #your followers
-            drugs = room.who_added_user(request.user)
-            memberlist = []
-        
-            member, created = Member.objects.get_or_create(current_user=request.user, pk=pk)
-            members = member.users.all()
+            #drugs = room.who_added_user(request.user)
 
-        
-        
+            #member, created = Member.objects.get_or_create(current_user=request.user, pk=pk)
+            #members = member.users.all()
+            members = MemberAccept.objects.filter(acceptroom_id=pk, agree=False)
+            membersinroom = MemberAccept.objects.filter(acceptroom_id=pk, agree=True)
 
+            if queryset_list:
+                memberlist = MemberAccept.objects.filter(acceptroom_id=pk, accepter = queryset_list)
+     
+               
+            '''
             for member in members:
                 memberlist.append(member)
                 
@@ -120,15 +125,16 @@ class FriendView(TemplateView):
                         true_members.append(drug)
                         drugs.remove(drug)
                         memberlist.remove(drug)
-            
+            '''
                 
 
 
             context = {'form': form, 'users': users,
                    'members': members,
-                   'drugs': drugs,
+                   'membersinroom': membersinroom,
+                   #'drugs': drugs,
                    'object_list': queryset_list,
-                   'true_members': true_members,
+                   #'true_members': true_members,
                    'memberlist': memberlist,
                    'room': room,
                    }
@@ -143,11 +149,13 @@ def change_members(request, pk, operation, pkid):
     member = User.objects.get(pk=pkid)
     label = Member.objects.get(pk=pk)
     if operation == 'add':
-        Member.make_member(request.user, label, member)
+        #Member.make_member(request.user, label, member)
         MemberAccept.objects.get_or_create(accepter=member,acceptroom=label,agree=False)
         return redirect('chat_index:private_room', pk = pk)
     elif operation == 'remove':
-        Member.remove_member(request.user, label, member)
+        #Member.remove_member(request.user, label, member)
+        M = get_object_or_404(MemberAccept, accepter=member,acceptroom=label)
+        M.delete()
         return redirect('chat_index:private_room', pk = pk)
     return redirect('chat_index:private_room', pk = pk)
 
@@ -190,21 +198,29 @@ def get_name(request):
 @login_required
 def select_room(request, *args,**kwargs):
 
-    list_room = []
     rooms = Member.objects.all()
     room_members = MemberAccept.objects.filter(accepter=request.user.id, agree=True)
+    room_owners = Member.objects.filter(current_user_id = request.user.id)
     userinrooms = Member.objects.filter(users__id = request.user.id)
-    for userinroom in userinrooms:
-        for room_member in room_members:
-            if room_member.acceptroom.pk == userinroom.pk:
-                list_room.append(room_member.acceptroom.label)
+    room_invites = MemberAccept.objects.filter(accepter=request.user.id, agree=False)
+
+    '''
+    room_chats = []
+    for room_member in room_members:
+        for room_owner in room_owners:
+            room_chats.append(room_member.acceptroom)
+            if room_owner.label != room_member.acceptroom:
+                room_chats.append(room_owner.label)
+    '''
 
     
     return render(request, "chat/select_room.html", {
         'rooms': rooms,
         'room_members': room_members,
         'userinrooms': userinrooms,
-        'list_room': list_room
+        'room_invites': room_invites,
+        'room_owners': room_owners,
+        #'room_chats': room_chats,
         
     })
 
@@ -217,9 +233,15 @@ def accept_members(request, pk, operation, pkid):
     accepter = User.objects.get(pk=pkid)
     acceptroom = Member.objects.get(pk=pk)
     if operation == 'agree':
-        MemberAccept.objects.get_or_create(accepter=accepter,acceptroom=acceptroom,agree=True)
+        M = get_object_or_404(MemberAccept, accepter=accepter,acceptroom=acceptroom)
+        M.agree = True
+        M.save()
+
         return redirect('chat_index:select_room')
     elif operation == 'disagree':
-        Member.remove_member(request.user, label, member)
-        return redirect('chat_index:private_room', pk = pk)
+        #M = MemberAccept.objects.get(accepter=accepter,acceptroom=acceptroom, agree = False)
+        #M.delete()
+        M = get_object_or_404(MemberAccept, accepter=accepter,acceptroom=acceptroom, agree = False)
+        M.delete()
+        return redirect('chat_index:select_room')
     return redirect('chat_index:select_room')

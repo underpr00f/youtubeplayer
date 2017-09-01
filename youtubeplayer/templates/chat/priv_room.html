@@ -6,7 +6,7 @@
 {% block content %}
 
        
- 
+<a href="{% url 'chat_index:select_room' %}" data-role="button" data-theme="e" >{% trans "Вернуться" %}</a> 
 <h1>Комната: {{ room.label }}</h1>
 <div id="display"></div> 
 
@@ -21,16 +21,17 @@
           <center><h2>Результаты поиска</h2>
           {% for obj in object_list %}
             <p>Найден пользователь:</p>
+
             <div class="{{ obj }}"><b>{{ obj }}</b>
-            {% if not obj in members %}
-              {% if obj.pk != user.pk %}
-                <a href="{% url 'chat_index:change_members' pk=room.id operation='add' pkid=obj.pk %}" > 
-                <button type="button" data-role="button" data-theme="b" >Пригласить в чат</button>
-                </a>
-              {% else %}
-                (Это вы)
+              {% if not memberlist %}
+                {% if obj.pk != user.pk %}
+                  <a href="{% url 'chat_index:change_members' pk=room.id operation='add' pkid=obj.pk %}" > 
+                  <button type="button" data-role="button" data-theme="b" >Пригласить в чат</button>
+                  </a>
+                {% else %}
+                  (Это вы)
+                {% endif %}
               {% endif %}
-            {% endif %}
             </div>
           {% empty %}
           <center><p class="empty">Пользователи с именем '<b>{{ request.GET.q }}</b>' отсутствуют</p></center>
@@ -41,26 +42,24 @@
 </div>
 
   <div class="ui-block-c">
+
+
     <h2>Участники чата</h2>
-    {% for true_member in true_members %}
-      <li>{{ true_member }}<a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=true_member.pk %}" > <button type="button" data-role="button" >Отменить</button>
+
+
+    {% for memberinroom in membersinroom %}
+
+      <li>{{ memberinroom.accepter }}<a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberinroom.accepter_id %}" > <button type="button" data-role="button" >Убрать</button>
       </a></li>
       {% empty %}
       <p class="empty">Участники отсутствуют</p>
     {% endfor %}
 
-    <h2>Пригласили вас в чат</h2>
-    {% for drug in drugs %}
-      <li>{{ drug.username }}<a href="{% url 'chat_index:change_members' pk=room.id operation='add' pkid=drug.pk %}" > <button type="button" data-role="button" data-theme="b" >Согласиться</button>
-      </a></li>
-      {% empty %}
-        <p class="empty">Приглашений нет</p>
-    {% endfor %}
-    
+   
     <h2>Ожидание подтверждения</h2>
     
-    {% for memberl in memberlist %}
-      <li>{{ memberl }}<a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberl.pk %}">
+    {% for memberl in members %}
+      <li>{{ memberl.accepter }}<a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberl.accepter_id %}">
       <button type="button" data-role="button" >Отменить</button>
       </a></li>
 
