@@ -13,12 +13,13 @@
   <div class="ui-block-b">
 
   {% for room_invite in room_invites %}
-      
+    {% if room_invite.agree == 0 %}  
     Вас приглашают в чат: <b>{{ room_invite.acceptroom }}</b>
     <a href="{% url 'chat_index:accept_members' pk=room_invite.acceptroom_id operation='agree' pkid=request.user.id %}" > 
     <button type="button" data-role="button" data-theme="b" >Принять</button></a>
     <a href="{% url 'chat_index:accept_members' pk=room_invite.acceptroom_id operation='disagree' pkid=request.user.id %}" > 
     <button type="button" data-role="button" data-theme="a" >Отклонить</button></a>
+    {% endif %}
   {% empty %}
     <center><p class="empty">Приглашения отсутствуют</p></center>  
   {% endfor %} <br>  
@@ -27,7 +28,7 @@
   <div class="ui-block-c">
   
 
-  <h1> Созданные вами комнаты </h1>
+  <h1> Созданные вами приватные чаты </h1>
   {% for room_owner in room_owners %}
     <a href="{% url 'chat_index:private_room' pk=room_owner.id %}" ><button type="button" data-role="button" >{{ room_owner }}</button></a>  
   {% empty %}
@@ -37,12 +38,22 @@
   <br>
   
   <h1> Ваши приватные чаты </h1>
+
+  <ul class="rooms">
+  {% for room_owner in room_owners %}
+    <li class="room-link" name='q' data-room-id="{{ room_owner.id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room_owner.id }}/'>{{ room_owner }}</a></li>  
+  {% empty %}
+    
+
+  {% endfor %}
   {% for room_member in room_members %}
-    {{ room_member.acceptroom }}
+    <li class="room-link" name='q' data-room-id="{{ room_member.acceptroom_id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room_member.acceptroom_id }}/'>{{ room_member.acceptroom }}</a></li>
   {% endfor %}<br>
+  </ul>
+
   <h1> Все чаты </h1>
   {% for room in rooms %}
-    {{ room.label }}  
+    <li>{{ room.label }} </li> 
   {% endfor %}
   <br>
 

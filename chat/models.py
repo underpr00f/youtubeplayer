@@ -12,8 +12,9 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
 class Room(models.Model):
-    name = models.TextField()
     label = models.SlugField(unique=True)
+    current_user = models.ForeignKey(User, related_name='ownerroom', null=True)
+    private = models.BooleanField(default = False)
 
     def __str__(self):
         return self.label
@@ -155,15 +156,9 @@ class Member(models.Model):
  
 class MemberAccept(models.Model):
     accepter = models.ForeignKey(User, related_name='accepteruser', null=True)
-    acceptroom = models.ForeignKey(Member, related_name='acceptroom', null=True)
+    acceptroom = models.ForeignKey(Room, related_name='acceptroom', null=True)
     agree = models.BooleanField(default = False)
 
-    #agree roomfriend
+
     
-    @classmethod
-    def make_member(cls, accepter, acceptroom, agree):
-        memberaccept, created = cls.objects.get_or_create(
-            accepter=accepter, acceptroom = acceptroom, agree = True,
-        )
-        #memberaccept.add(new_member)
-    
+

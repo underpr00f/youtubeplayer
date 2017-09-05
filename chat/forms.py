@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Member
+from .models import Room
 
 
 
@@ -29,6 +29,6 @@ class LabelForm(forms.ModelForm):
     """
     class Meta(object):
         """Configuration for the ModelForm"""
-        model = Member
+        model = Room
 
         fields = ('label', ) 

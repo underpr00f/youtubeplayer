@@ -1,7 +1,7 @@
 from functools import wraps
 
 from .exceptions import ClientError
-from .models import Room
+from .models import Room, MemberAccept
 
 
 def catch_client_error(func):
@@ -29,6 +29,19 @@ def get_room_or_error(room_id, user):
     # Find the room they requested (by ID)
     try:
         room = Room.objects.get(pk=room_id)
+        
+        #Access to writing
+        access = False
+        if room.private == True:
+            memberaccepter = MemberAccept.objects.filter(acceptroom_id=room_id, accepter_id = user.id, agree = True)
+            if not memberaccepter:
+                if user.id != room.current_user_id:
+                    access = False
+                else:
+                    access = True
+            else:
+                access = True
+
     except Room.DoesNotExist:
         raise ClientError("ROOM_INVALID")
     # Check permissions
@@ -36,4 +49,10 @@ def get_room_or_error(room_id, user):
     if room.staff_only and not user.is_staff:
         raise ClientError("ROOM_ACCESS_DENIED")
     '''
+    if access != True:
+         
+        raise ClientError("ACCESS_DENIED")
+        
+         
+                    
     return room

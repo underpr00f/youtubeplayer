@@ -37,6 +37,9 @@ def ws_connect(message):
             log.debug('invalid ws path=%s', message['path'])
             return
         room = Room.objects.get(id=pk)
+        #room = get_room_or_error(pk, message.user)
+        
+
         #handle = Message.objects.get(handle=handle)
     except ValueError:
         log.debug('invalid ws path=%s', message['path'])

@@ -59,9 +59,11 @@
     <h2>Ожидание подтверждения</h2>
     
     {% for memberl in members %}
-      <li>{{ memberl.accepter }}<a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberl.accepter_id %}">
+      
+      <li>{{ memberl.accepter }} <a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberl.accepter_id %}">
       <button type="button" data-role="button" >Отменить</button>
       </a></li>
+
 
     {% empty %}
         <p class="empty">Вы никого не пригласили в чат</p>

@@ -51,7 +51,20 @@ def chat_room(request, pk, *args,**kwargs):
 
     # If the room with the given label doesn't exist, automatically create it
     # upon first visit (a la etherpad).
-    room = Room.objects.get(pk=pk)
+    room = get_object_or_404(Room, pk=pk)
+    
+    '''
+    messages = "Доступ для запрещен"
+    if room.private == True:
+        membersinroom = MemberAccept.objects.filter(acceptroom_id=pk, agree=True)
+        ownerinroom = room.current_user_id
+        if membersinroom == True or ownerinroom == True:
+            messages = room.messages.order_by('-timestamp')[:10]
+        else:
+            messages = "Доступ для запрещен"
+    else:
+        messages = room.messages.order_by('-timestamp')[:10]
+    '''
     # We want to show the last 50 messages, ordered most-recent-last
     messages = room.messages.order_by('-timestamp')[:10]
     return render(request, "chat/room.html", {
@@ -86,7 +99,7 @@ class FriendView(TemplateView):
 
     def get(self, request, pk, *args, **kwargs):
         
-        room = Member.objects.get(pk=pk)
+        room = Room.objects.get(pk=pk)
         if request.user.id == room.current_user_id:
             form = FriendForm()
             users = User.objects.exclude(id=request.user.id)
@@ -147,10 +160,13 @@ class FriendView(TemplateView):
 def change_members(request, pk, operation, pkid):
     
     member = User.objects.get(pk=pkid)
-    label = Member.objects.get(pk=pk)
+    label = Room.objects.get(pk=pk)
     if operation == 'add':
-        #Member.make_member(request.user, label, member)
-        MemberAccept.objects.get_or_create(accepter=member,acceptroom=label,agree=False)
+        M = MemberAccept.objects.filter(accepter=member, acceptroom=label, agree=True)
+        if M:
+            MemberAccept.objects.get(accepter=member,acceptroom=label)
+        else:
+            MemberAccept.objects.create(accepter=member,acceptroom=label,agree=False)
         return redirect('chat_index:private_room', pk = pk)
     elif operation == 'remove':
         #Member.remove_member(request.user, label, member)
@@ -181,7 +197,7 @@ def get_name(request):
         if form.is_valid():
             query = request.POST.get("label")
             userid = request.user.id
-            new_room = Member.objects.create(label=query, current_user_id=userid)
+            new_room = Room.objects.create(label=query, current_user_id=userid, private = True)
             return HttpResponseRedirect('/chat/private/%s/' % new_room.id)
 
         else:
@@ -197,12 +213,14 @@ def get_name(request):
 @never_cache
 @login_required
 def select_room(request, *args,**kwargs):
-
-    rooms = Member.objects.all()
+    
+    rooms = Room.objects.all()
     room_members = MemberAccept.objects.filter(accepter=request.user.id, agree=True)
-    room_owners = Member.objects.filter(current_user_id = request.user.id)
-    userinrooms = Member.objects.filter(users__id = request.user.id)
+    
+    #userinrooms = Room.objects.filter(users__id = request.user.id)
     room_invites = MemberAccept.objects.filter(accepter=request.user.id, agree=False)
+
+    room_owners = Room.objects.filter(current_user_id = request.user.id, private = True)
 
     '''
     room_chats = []
@@ -217,7 +235,7 @@ def select_room(request, *args,**kwargs):
     return render(request, "chat/select_room.html", {
         'rooms': rooms,
         'room_members': room_members,
-        'userinrooms': userinrooms,
+        #'userinrooms': userinrooms,
         'room_invites': room_invites,
         'room_owners': room_owners,
         #'room_chats': room_chats,
@@ -231,7 +249,7 @@ def select_room(request, *args,**kwargs):
 def accept_members(request, pk, operation, pkid):
     
     accepter = User.objects.get(pk=pkid)
-    acceptroom = Member.objects.get(pk=pk)
+    acceptroom = Room.objects.get(pk=pk)
     if operation == 'agree':
         M = get_object_or_404(MemberAccept, accepter=accepter,acceptroom=acceptroom)
         M.agree = True
