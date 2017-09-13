@@ -84,13 +84,23 @@ $(function() {
         return false;
     });
 
-    
+    /*
     $("a.roomlink").click(function () {
         chatsock.send(JSON.stringify({
             "command": "leave",
             "room": $("div.chats").attr("data-room-id"),
         }));
     });
+    */
+
+    $(window).on('hashchange', function(e){
+        chatsock.send(JSON.stringify({
+            "command": "leave",
+            "room": $("div.chats").attr("data-room-id"),
+        }));
+    });
+    
+
     // Helpful debugging
     chatsock.onopen = function () {
         console.log("Connected to chat socket");

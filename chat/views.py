@@ -51,7 +51,8 @@ def chat_room(request, pk, *args,**kwargs):
 
     # If the room with the given label doesn't exist, automatically create it
     # upon first visit (a la etherpad).
-    room = get_object_or_404(Room, pk=pk)
+    #room = get_object_or_404(Room, pk=pk)
+    room = Room.objects.get(pk=pk)
     
     '''
     messages = "Доступ для запрещен"

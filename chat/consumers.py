@@ -28,7 +28,7 @@ def ws_connect(message):
     # form /chat/{label}/, and finds a Room if the message path is applicable,
     # and if the Room exists. Otherwise, bails (meaning this is a some othersort
     # of websocket). So, this is effectively a version of _get_object_or_404.
-    
+    message.channel_session['room'] = None
     message.reply_channel.send({'accept': True})
     try:
         prefix, pk = message['path'].strip('/').split('/')
@@ -112,16 +112,19 @@ def ws_receive(message):
         # See above for the note about Group
         Group('chat-'+label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
     '''
-@channel_session_user
+@channel_session
 def ws_disconnect(message):
-    '''
+    room_id = message.channel_session['room']
     try:
         pk = message.channel_session['room']
         room = Room.objects.get(id=pk)
         Group('chat-'+str(room.id), channel_layer=message.channel_layer).discard(message.reply_channel)
-    except (KeyError, Room.DoesNotExist):
-        pass
-    
+        message.channel_session['room'] = None
+        #room.websocket_group.discard(message.reply_channel)
+    except Room.DoesNotExist:
+        log.debug('ws room does not exist pk=%s', room_id)
+        return
+
     '''
     #for multichat
     room_id = message.channel_session['room']
@@ -133,7 +136,7 @@ def ws_disconnect(message):
     except Room.DoesNotExist:
         log.debug('ws room does not exist pk=%s', room_id)
         return
-
+    '''
 
 @channel_session_user
 @catch_client_error
@@ -165,20 +168,44 @@ def chat_join(message):
 @catch_client_error
 def chat_leave(message):
     # Reverse of join - remove them from everything.
-    room = get_room_or_error(message["room"], message.user)
-
-    # Send a "leave message" to the room if available
+    '''
+    pk = message.channel_session['room']
+    
+    room = get_room_or_error(Room.objects.get(id=pk).id, message.user)
+    
     if NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS:
         room.send_message(None, message.user, MSG_TYPE_LEAVE)
-
+    
+    
     room.websocket_group.discard(message.reply_channel)
-    message.channel_session['room'] = room.id
+    message.channel_session['room'] = 0
     # Send a message back that will prompt them to close the room
     message.reply_channel.send({
         "text": json.dumps({
             "leave": str(room.id),
         }),
     })
+    '''
+    pk = message.channel_session['room']
+    if pk:    
+        room = Room.objects.get(id=pk)
+
+        # Send a "leave message" to the room if available
+    
+        if NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS:
+            room.send_message(None, message.user, MSG_TYPE_LEAVE)
+    
+        #room.websocket_group.discard(message.reply_channel)
+        Group('chat-'+str(room.id), channel_layer=message.channel_layer).discard(message.reply_channel)
+        # Send a message back that will prompt them to close the room
+        message.reply_channel.send({
+            "text": json.dumps({
+                "leave": str(room.id),
+            }),
+        })
+
+    message.channel_session['room'] = None
+    
 
 @channel_session_user
 @catch_client_error
