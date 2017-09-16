@@ -23,6 +23,7 @@ def date_handler(obj):
         raise TypeError
 
 @channel_session_user_from_http
+@catch_client_error
 def ws_connect(message):
     # Extract the room from the message. This expects message.path to be of the
     # form /chat/{label}/, and finds a Room if the message path is applicable,
@@ -36,8 +37,8 @@ def ws_connect(message):
         if prefix != 'chat':
             log.debug('invalid ws path=%s', message['path'])
             return
-        room = Room.objects.get(id=pk)
-        #room = get_room_or_error(pk, message.user)
+        #room = Room.objects.get(id=pk)
+        room = get_room_or_error(pk, message.user)
         
 
         #handle = Message.objects.get(handle=handle)
@@ -55,7 +56,8 @@ def ws_connect(message):
     # This may be a FIXME?
     Group('chat-'+str(room.id), channel_layer=message.channel_layer).add(message.reply_channel)
     
-    message.channel_session['room'] = room.id
+    message.channel_session['room'] = room.pk
+
     '''#for multichat
     message.reply_channel.send({'accept': True})
     # Initialise their session
@@ -204,17 +206,17 @@ def chat_leave(message):
             }),
         })
 
-    message.channel_session['room'] = None
+        message.channel_session['room'] = None
     
 
 @channel_session_user
 @catch_client_error
 def chat_send(message):
     # Check that the user in the room
-    '''
-    if message['room'] not in message.channel_session['rooms']:
-        raise ClientError("ROOM_ACCESS_DENIED")
-    '''
+    
+    if message['room'] == message.channel_session['room']:
+        raise ClientError("ACCESS_DENIED")
+    
     # Find the room they're sending to, check perms
 
     room = get_room_or_error(message["room"], message.user)

@@ -42,14 +42,30 @@
   <ul class="rooms">
   {% for room_owner in room_owners %}
     <li class="room-link" name='q' data-room-id="{{ room_owner.id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room_owner.id }}/'>{{ room_owner }}</a></li>  
-  {% empty %}
-    
+     
 
   {% endfor %}
   {% for room_member in room_members %}
     <li class="room-link" name='q' data-room-id="{{ room_member.acceptroom_id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room_member.acceptroom_id }}/'>{{ room_member.acceptroom }}</a></li>
   {% endfor %}<br>
   </ul>
+
+  <h1> Все доступные чаты </h1>
+  <ul class="rooms">
+  {% for general_room in general_rooms %}
+    <li class="room-link" name='q' data-room-id="{{ general_room.id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ general_room.id }}/'>{{ general_room.label }}</a></li>
+  {% endfor %}
+  {% for room_owner in room_owners %}
+    <li class="room-link" name='q' data-room-id="{{ room_owner.id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room_owner.id }}/'>{{ room_owner }}</a></li>  
+     
+
+  {% endfor %}
+  {% for room_member in room_members %}
+    <li class="room-link" name='q' data-room-id="{{ room_member.acceptroom_id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room_member.acceptroom_id }}/'>{{ room_member.acceptroom }}</a></li>
+  {% endfor %}
+  </ul>
+  <br>
+
 
   <h1> Все чаты </h1>
   {% for room in rooms %}

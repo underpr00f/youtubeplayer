@@ -6,7 +6,7 @@
 {% block content %}
 
  
-<h1>Введите название приватного чата</h1>
+<h1>Введите название для чата</h1>
 
 {% if form.errors %}
     {% for field in form %}
@@ -26,7 +26,14 @@
     {% endfor %}
 {% endif %}
 
-<form method='POST' action=''>{% csrf_token %}<input type='text' name='label' value='{{ request.POST.label }}' maxlength='30' style='background-color: #e4e4b8;' /><button type='submit'>Создать</button></form>
+<form method='POST' action=''>
+    {% csrf_token %}
+    <input type='text' name='label' value='{{ request.POST.label }}' maxlength='30' style='background-color: #e4e4b8;' />
+    <label for="private_group">Закрытая группа</label>
+    <input type="checkbox" name="private_group" id="private_group" />
+    <button type='submit'>Создать</button>
+
+</form>
 
 
 

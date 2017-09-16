@@ -11,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.generic import TemplateView
 from .forms import FriendForm, LabelForm
+from .utils import get_room_or_error, catch_client_error
+from django.core.urlresolvers import reverse
 
 
 haikunator = Haikunator()
@@ -37,9 +39,11 @@ def new_room(request, *args,**kwargs):
 
     return redirect("chat_index:chat_list_rooms")
 
+from django.core.exceptions import PermissionDenied
 
 @never_cache
 @login_required
+#@catch_client_error
 def chat_room(request, pk, *args,**kwargs):
     """
     Room view - show the room, with latest messages.
@@ -52,26 +56,37 @@ def chat_room(request, pk, *args,**kwargs):
     # If the room with the given label doesn't exist, automatically create it
     # upon first visit (a la etherpad).
     #room = get_object_or_404(Room, pk=pk)
-    room = Room.objects.get(pk=pk)
-    
-    '''
-    messages = "Доступ для запрещен"
+    room = get_object_or_404(Room, pk=pk)
+    access = False
     if room.private == True:
-        membersinroom = MemberAccept.objects.filter(acceptroom_id=pk, agree=True)
-        ownerinroom = room.current_user_id
-        if membersinroom == True or ownerinroom == True:
-            messages = room.messages.order_by('-timestamp')[:10]
+        memberaccepter = MemberAccept.objects.filter(acceptroom_id=pk, accepter_id = request.user.id, agree = True)
+        if not memberaccepter:
+            if request.user.id != room.current_user_id:
+                access = False
+            else:
+                access = True
         else:
-            messages = "Доступ для запрещен"
+            access = True
+    elif room.private == False:
+        access = True
     else:
+        access = False
+
+    if access != True:
+        #need to output with error
+        raise PermissionDenied
+        #return redirect('chat_index:chat_list_rooms') 
+    
+    else:
+        #rooms = get_room_or_error(pk, request.user)
+        #room = Room.objects.get(pk=rooms.pk)
+
+        # We want to show the last 50 messages, ordered most-recent-last
         messages = room.messages.order_by('-timestamp')[:10]
-    '''
-    # We want to show the last 50 messages, ordered most-recent-last
-    messages = room.messages.order_by('-timestamp')[:10]
-    return render(request, "chat/room.html", {
-        'room': room,
-        'messages': messages,
-    })
+        return render(request, "chat/room.html", {
+            'room': room,
+            'messages': messages,
+        })
 
 @never_cache
 @login_required
@@ -154,7 +169,10 @@ class FriendView(TemplateView):
                    }
             return render(request,self.template_name, context) 
         else:
-            return redirect('home')       
+            return redirect('home')
+    def post(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse('chat_index:select_room'))
+
 
 @never_cache
 @login_required
@@ -163,7 +181,7 @@ def change_members(request, pk, operation, pkid):
     member = User.objects.get(pk=pkid)
     label = Room.objects.get(pk=pk)
     if operation == 'add':
-        M = MemberAccept.objects.filter(accepter=member, acceptroom=label, agree=True)
+        M = MemberAccept.objects.filter(accepter=member, acceptroom=label)
         if M:
             MemberAccept.objects.get(accepter=member,acceptroom=label)
         else:
@@ -197,9 +215,17 @@ def get_name(request):
         #form = LabelForm(request.POST)
         if form.is_valid():
             query = request.POST.get("label")
+
+            #check checkbox
             userid = request.user.id
-            new_room = Room.objects.create(label=query, current_user_id=userid, private = True)
-            return HttpResponseRedirect('/chat/private/%s/' % new_room.id)
+            private = request.POST.get("private_group", False)
+            if private:
+                new_room = Room.objects.create(label=query, current_user_id=userid, private = True)
+                return HttpResponseRedirect('/chat/private/%s/' % new_room.id)
+            else:
+                new_room = Room.objects.create(label=query, current_user_id=userid, private = False)
+                #reverse for redirecting after POST
+                return HttpResponseRedirect(reverse('chat_index:select_room'))
 
         else:
             render(request, 'chat/title_room.html', {'form': LabelForm()})
@@ -222,6 +248,7 @@ def select_room(request, *args,**kwargs):
     room_invites = MemberAccept.objects.filter(accepter=request.user.id, agree=False)
 
     room_owners = Room.objects.filter(current_user_id = request.user.id, private = True)
+    general_rooms = Room.objects.filter(private = 0)
 
     '''
     room_chats = []
@@ -239,7 +266,7 @@ def select_room(request, *args,**kwargs):
         #'userinrooms': userinrooms,
         'room_invites': room_invites,
         'room_owners': room_owners,
-        #'room_chats': room_chats,
+        'general_rooms': general_rooms,
         
     })
 

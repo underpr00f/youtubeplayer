@@ -4,31 +4,37 @@
 {% load socialprofile_tags %}
 
 {% block content %}
-
-  <p>Вернуться к <a class="roomlink" href = "{% url 'chat_index:chat_list_rooms' %}">списку доступных каналов</a></p>
-  <h1>{{ room }}{{ room.private }}</h1>
-
-  <p class="quiet">
-    Каждый зарегистрированный пользователь может воспользоваться этой ссылкой для чата: 
-    <code>{{ request.scheme }}://{{ request.get_host }}/chat/{{ room.id }}/</code> 
-  </p>
-  <p>
-    <div id = "handle" class = "handle" type="text" placeholder="handle" data-user = "{{ user.username }}"><h1><code>{{ user.username }}{{ request.user.id }}</code></h1></div>
-    <!--<input id="handle" type="text" placeholder="handle">-->
-  </p>
-  <form id="chatform">
+<div class="ui-grid-a">
+  <div class="ui-block-a">
+    <h3><center>Комната: {{ room }}</center></h3>
     
-
-<div data-role="controlgroup" data-type="horizontal">
-    <input type="text" id="message" data-wrapper-class="controlgroup-textinput ui-btn">
-    <button type="submit" id="go" data-icon="check">Отправить</button>
+  </div>
+  <div class="ui-block-b">
+    <a href="{% url 'chat_index:select_room' %}" data-inline="true" data-mini="true" data-role="button" data-icon="arrow" data-theme="b" >{% trans "Вернуться" %}</a>
+  </div>
 </div>
 
-<br>
+  <form id="chatform">
+            
+    <div id = "handle" class = "handle" type="text" placeholder="handle" data-user = "{{ user.username }}">
+            {% if user.social_profile.avatar %}
+                <img src="{{ MEDIA_URL }}{{ user.social_profile.avatar }}" style="width: 25px; height: 25px">
+            {% elif user.social_profile.image_url %}
+                <img src="{{ user.social_profile.image_url }}" style="width: 25px; height: 25px">
+            {% else %}
+                <img src="{{ sp_form.image_url.value|default:"http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm" }}" style="width: 25px; height: 25px">
+            {% endif %}
+    <code>{{ user.username }}:</code>
 
-
+    </div>
+    <div data-role="controlgroup" data-type="horizontal">
+        <input type="text" id="message" data-wrapper-class="controlgroup-textinput ui-btn">
+        <button type="submit" id="go" data-icon="check">Отправить</button>
+    </div>
+    <br>
     
   </form>
+
 <div id="chats" data-room-id="{{ room.id }}" class='chats'>
         {% for message in messages %}
             <div class='messages'>
@@ -171,5 +177,8 @@ $(function() {
 {% endblock content %}
 
 {% block afterbody %}
-
+  <p class="quiet">
+    Ссылка на комнату: 
+    <code>{{ request.scheme }}://{{ request.get_host }}/chat/{{ room.id }}/</code> 
+  </p>
 {% endblock afterbody %}

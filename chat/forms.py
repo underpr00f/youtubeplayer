@@ -32,3 +32,4 @@ class LabelForm(forms.ModelForm):
         model = Room
 
         fields = ('label', ) 
+

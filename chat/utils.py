@@ -42,6 +42,10 @@ def get_room_or_error(room_id, user):
                     access = True
             else:
                 access = True
+        elif room.private == False:
+            access = True
+        else:
+            access = False
 
     except Room.DoesNotExist:
         raise ClientError("ROOM_INVALID")

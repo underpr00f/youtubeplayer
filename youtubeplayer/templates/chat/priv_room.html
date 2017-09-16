@@ -6,7 +6,8 @@
 {% block content %}
 
        
-<a href="{% url 'chat_index:select_room' %}" data-role="button" data-theme="e" >{% trans "Вернуться" %}</a> 
+<a href="{% url 'home' %}" data-role="button" data-theme="e" >{% trans "Принять" %}</a>
+
 <h1>Комната: {{ room.label }}</h1>
 <div id="display"></div> 
 
