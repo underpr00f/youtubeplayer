@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load socialprofile_tags %}
+{% load static %}
+
+
+{% block content %}
+
+<p> Для выбора чата достаточно кликнуть один раз мышкой по группе</p>
+
+<ul class="rooms">
+    {% for room in rooms %}
+        <li class="room-link" name='q' data-room-id="{{ room.id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room.id }}/'>{{ room }}</a></li>
+    {% empty %}
+        <p class="empty">No chat rooms defined</p>
+    {% endfor %}
+</ul>
+
+  <script type="text/javascript" src='{% static "js/jquery-1.12.1.min.js" %}'></script>
+
+
+
+{% endblock content %}
+
+{% block afterbody %}
+
+{% endblock afterbody %}

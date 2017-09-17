@@ -1,72 +1,145 @@
+import re
 import json
-from channels import Channel
-from channels.auth import channel_session_user_from_http, channel_session_user
-
-from .settings import MSG_TYPE_LEAVE, MSG_TYPE_ENTER, NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS
+import logging
+from channels import Group
+from channels.sessions import channel_session
 from .models import Room, Message
+from channels.auth import channel_session_user_from_http, channel_session_user
+from django.contrib.auth.models import User
+
+
+from channels import Channel
 from .utils import get_room_or_error, catch_client_error
+from .settings import MSG_TYPE_LEAVE, MSG_TYPE_ENTER, NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS
 from .exceptions import ClientError
 
-from channels.sessions import channel_session
-import logging
 log = logging.getLogger(__name__)
 
-#set data in chat messages
-from django.utils import timezone
-now = str(timezone.now().strftime('%d %m %Y %H:%M:%S'))
+#Serialize json
+def date_handler(obj):
+    if hasattr(obj, 'isoformat'):
+        return obj.isoformat().replace('T', ' ')
+    else:
+        raise TypeError
 
-### WebSocket handling ###
-
-
-# This decorator copies the user from the HTTP session (only available in
-# websocket.connect or http.request messages) to the channel session (available
-# in all consumers with the same reply_channel, so all three here)
 @channel_session_user_from_http
+@catch_client_error
 def ws_connect(message):
+    # Extract the room from the message. This expects message.path to be of the
+    # form /chat/{label}/, and finds a Room if the message path is applicable,
+    # and if the Room exists. Otherwise, bails (meaning this is a some othersort
+    # of websocket). So, this is effectively a version of _get_object_or_404.
+    message.channel_session['room'] = None
+    message.reply_channel.send({'accept': True})
+    try:
+        prefix, pk = message['path'].strip('/').split('/')
+        #handle = Message.objects.get(handle)
+        if prefix != 'chat':
+            log.debug('invalid ws path=%s', message['path'])
+            return
+        #room = Room.objects.get(id=pk)
+        room = get_room_or_error(pk, message.user)
+        
+
+        #handle = Message.objects.get(handle=handle)
+    except ValueError:
+        log.debug('invalid ws path=%s', message['path'])
+        return
+    except Room.DoesNotExist:
+        log.debug('ws room does not exist pk=%s', pk)
+        return
+
+    log.debug('chat connect room=%s client=%s:%s', 
+        room.id, message['client'][0], message['client'][1])
+    
+    # Need to be explicit about the channel layer so that testability works
+    # This may be a FIXME?
+    Group('chat-'+str(room.id), channel_layer=message.channel_layer).add(message.reply_channel)
+    
+    message.channel_session['room'] = room.pk
+
+    '''#for multichat
     message.reply_channel.send({'accept': True})
     # Initialise their session
     message.channel_session['rooms'] = []
+    '''
 
-
-# Unpacks the JSON in the received WebSocket frame and puts it onto a channel
-# of its own with a few attributes extra so we can route it
-# This doesn't need @channel_session_user as the next consumer will have that,
-# and we preserve message.reply_channel (which that's based on)
 @channel_session
 @channel_session_user
 def ws_receive(message):
-    # All WebSocket frames have either a text or binary payload; we decode the
-    # text part here assuming it's JSON.
-    # You could easily build up a basic framework that did this encoding/decoding
-    # for you as well as handling common errors.
-  
+    
     payload = json.loads(message['text'])
     payload['reply_channel'] = message.content['reply_channel']
     Channel("chat.receive").send(payload)
+    '''
+    # Look up the room from the channel session, bailing if it doesn't exist
+    try:
+        label = message.channel_session['room']
+        room = Room.objects.get(label=label)
+        #handle = Message.objects.get(handle=message.user)
+    except KeyError:
+        log.debug('no room in channel_session')
+        return
+    except Room.DoesNotExist:
+        log.debug('recieved message, buy room does not exist label=%s', label)
+        return
+
+    # Parse out a chat message from the content text, bailing if it doesn't
+    # conform to the expected message format.
+    try:
+        #handle = message.user
+        
+        dataS = json.loads(message.content['text'])
+        dataS = dataS['message']
 
 
+        handle = message.user.username
+        
 
+        data = {'message': dataS, 'handle': handle}
+        #mess = Message.objects.get(handle=handle)
+    except ValueError:
+        log.debug("ws message isn't json text=%s", text)
+        return
+    
+    if set(data.keys()) != set(('message','handle')):
+        log.debug("ws message unexpected format data=%s", data)
+        return
 
-@channel_session_user
+    if data:
+        log.debug('chat message room=%s handle=%s message=%s', 
+            room.label, data['handle'], data['message'])
+        m = room.messages.create(**data)
+
+        # See above for the note about Group
+        Group('chat-'+label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
+    '''
+@channel_session
 def ws_disconnect(message):
-    # Unsubscribe from any connected rooms
-    for room_id in message.channel_session.get("rooms", set()):
-        try:
-            room = Room.objects.get(pk=room_id)
-            # Removes us from the room's send group. If this doesn't get run,
-            # we'll get removed once our first reply message expires.
-            room.websocket_group.discard(message.reply_channel)
-        except Room.DoesNotExist:
-            pass
+    room_id = message.channel_session['room']
+    try:
+        pk = message.channel_session['room']
+        room = Room.objects.get(id=pk)
+        Group('chat-'+str(room.id), channel_layer=message.channel_layer).discard(message.reply_channel)
+        message.channel_session['room'] = None
+        #room.websocket_group.discard(message.reply_channel)
+    except Room.DoesNotExist:
+        log.debug('ws room does not exist pk=%s', room_id)
+        return
 
+    '''
+    #for multichat
+    room_id = message.channel_session['room']
+    try:
+        room = Room.objects.get(pk=room_id)
+        # Removes us from the room's send group. If this doesn't get run,
+        # we'll get removed once our first reply message expires.
+        room.websocket_group.discard(message.reply_channel)
+    except Room.DoesNotExist:
+        log.debug('ws room does not exist pk=%s', room_id)
+        return
+    '''
 
-### Chat channel handling ###
-
-
-# Channel_session_user loads the user out from the channel session and presents
-# it as message.user. There's also a http_session_user if you want to do this on
-# a low-level HTTP usernamer, or just channel_session if all you want is the
-# message.channel_session object without the auth fetching overhead.
 @channel_session_user
 @catch_client_error
 def chat_join(message):
@@ -83,58 +156,67 @@ def chat_join(message):
     # to so that everyone in the chat room gets them.
     room.websocket_group.add(message.reply_channel)
     message.channel_session['rooms'] = list(set(message.channel_session['rooms']).union([room.id]))
-    #recent_msgs = Message.objects.filter(room=room.id).order_by(ChatModelFields.CREATED_AT)[:10]
-    recent_msgs = Message.objects.filter(room=room.id).order_by('-timestamp')[:10]
     # Send a message back that will prompt them to open the room
     # Done server-side so that we could, for example, make people
     # join rooms automatically.
-    history = []
-    for msg in recent_msgs:
-        history.append({
-            'message': msg.message,
-            'username': msg.username,
-            'messageid': msg.id,
-            'timestamp': str(msg.timestamp),
-            'avatar': msg.image_url,
-            #'user': msg.user,
-            #'room': msg.room,
-            })
-        
     message.reply_channel.send({
         "text": json.dumps({
             "join": str(room.id),
-            "title": room.title,
-            "history": history,
+            "label": room.label,
         }),
     })
-
 
 @channel_session_user
 @catch_client_error
 def chat_leave(message):
     # Reverse of join - remove them from everything.
-    room = get_room_or_error(message["room"], message.user)
-
-    # Send a "leave message" to the room if available
+    '''
+    pk = message.channel_session['room']
+    
+    room = get_room_or_error(Room.objects.get(id=pk).id, message.user)
+    
     if NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS:
         room.send_message(None, message.user, MSG_TYPE_LEAVE)
-
+    
+    
     room.websocket_group.discard(message.reply_channel)
-    message.channel_session['rooms'] = list(set(message.channel_session['rooms']).difference([room.id]))
+    message.channel_session['room'] = 0
     # Send a message back that will prompt them to close the room
     message.reply_channel.send({
         "text": json.dumps({
             "leave": str(room.id),
         }),
     })
+    '''
+    pk = message.channel_session['room']
+    if pk:    
+        room = Room.objects.get(id=pk)
 
+        # Send a "leave message" to the room if available
+    
+        if NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS:
+            room.send_message(None, message.user, MSG_TYPE_LEAVE)
+    
+        #room.websocket_group.discard(message.reply_channel)
+        Group('chat-'+str(room.id), channel_layer=message.channel_layer).discard(message.reply_channel)
+        # Send a message back that will prompt them to close the room
+        message.reply_channel.send({
+            "text": json.dumps({
+                "leave": str(room.id),
+            }),
+        })
+
+        message.channel_session['room'] = None
+    
 
 @channel_session_user
 @catch_client_error
 def chat_send(message):
     # Check that the user in the room
-    if int(message['room']) not in message.channel_session['rooms']:
-        raise ClientError("ROOM_ACCESS_DENIED")
+    
+    if message['room'] == message.channel_session['room']:
+        raise ClientError("ACCESS_DENIED")
+    
     # Find the room they're sending to, check perms
 
     room = get_room_or_error(message["room"], message.user)
@@ -148,9 +230,10 @@ def chat_send(message):
     for msg in recent_msgs:
         history.append({
             'message': msg.message,
-            'username': msg.username,
+            'handle': msg.handle,
             'messageid': msg.id,
-            #'now': msg.timestamp,
+            'now': msg.timestamp,
+            'avatar': msg.image_url,
             #'user': msg.user,
             #'room': msg.room,
             })
@@ -160,64 +243,7 @@ def chat_send(message):
             #"join": str(room.id),
             #"title": room.title,
             "history": history,
-        }),
+        },
+        default=date_handler),
     })
     
-
-from channels.generic.websockets import JsonWebsocketConsumer
-
-
-
-@channel_session_user_from_http
-def wsock_connect(message):
-    Group('list_rooms').add(message.reply_channel)
-    Group('list_rooms').send({
-        'text': json.dumps({
-            'username': message.user.username,
-            'is_logged_in': True
-        })
-    })
-
-'''
-@channel_session
-def wsock_receive(message):
-    # Look up the room from the channel session, bailing if it doesn't exist
-    try:
-        title = message.channel_session['room']
-        room = Room.objects.get(title=title)
-    except KeyError:
-        log.debug('no room in channel_session')
-        return
-    except Room.DoesNotExist:
-        log.debug('recieved message, buy room does not exist title=%s', title)
-        return
-
-    # Parse out a chat message from the content text, bailing if it doesn't
-    # conform to the expected message format.
-    try:
-        data = json.loads(message['text'])
-    except ValueError:
-        log.debug("ws message isn't json text=%s", text)
-        return
-    
-    if set(data.keys()) != set(('username', 'message')):
-        log.debug("ws message unexpected format data=%s", data)
-        return
-
-    if data:
-        log.debug('chat message room=%s username=%s message=%s', 
-            room.title, data['username'], data['message'])
-        m = room.messages.create(**data)
-
-        # See above for the note about Group
-        Group('chat-'+title, channel_layer=message.channel_layer).send({'text': json.dumps(m)})
-'''
-@channel_session_user
-def wsock_disconnect(message, title):
-    Group('list_rooms').send({
-        'text': json.dumps({
-            'username': message.user.username,
-            'is_logged_in': False
-        })
-    })
-    Group('list_rooms').discard(message.reply_channel)

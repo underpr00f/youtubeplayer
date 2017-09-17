@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load socialprofile_tags %}
+
+{% block content %}
+
+       
+<a href="{% url 'home' %}" data-role="button" data-theme="e" >{% trans "Принять" %}</a>
+
+<div id="display"></div> 
+
+<div class="ui-grid-b">
+<div class="ui-block-a">
+<h2><center>Комната: {{ room.label }}</center></h2>
+<h2><center>Поиск пользователя:</center></h2>
+<form method='GET' action='{% url "chat_index:private_room" pk=room.id %}'><input type='text' name='q' value='{{ request.GET.q }}' maxlength='30' style='background-color: #e4e4b8;' /><button type='submit'>Поиск</button></form>
+</div>
+
+<div class="ui-block-b">
+{% if request.GET.q %}
+          <center><h2>Результаты поиска</h2>
+          {% for obj in object_list %}
+            <p>Найден пользователь:</p>
+
+            <div class="{{ obj }}"><b>{{ obj }}</b>
+              {% if not memberlist %}
+                {% if obj.pk != user.pk %}
+                  <a href="{% url 'chat_index:change_members' pk=room.id operation='add' pkid=obj.pk %}" > 
+                  <button type="button" data-role="button" data-theme="b" >Пригласить в чат</button>
+                  </a>
+                {% else %}
+                  (Это вы)
+                {% endif %}
+              {% endif %}
+            </div>
+          {% empty %}
+          <center><p class="empty">Пользователи с именем '<b>{{ request.GET.q }}</b>' отсутствуют</p></center>
+          {% endfor %}
+          </center>
+        
+{% endif %}
+</div>
+
+  <div class="ui-block-c">
+  <a href="{% url 'chat_index:change_members' pk=room.id operation='delete' pkid=request.user.id %}" data-role="button" data-icon="delete" data-theme="b"><b>Удалить комнату</b></a>
+
+    <h2>Участники чата</h2>
+
+
+    {% for memberinroom in membersinroom %}
+
+      <li>{{ memberinroom.accepter }}<a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberinroom.accepter_id %}" > <button type="button" data-role="button" >Убрать</button>
+      </a></li>
+      {% empty %}
+      <p class="empty">Участники отсутствуют</p>
+    {% endfor %}
+
+   
+    <h2>Ожидание подтверждения</h2>
+    
+    {% for memberl in members %}
+      
+      <li>{{ memberl.accepter }} <a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberl.accepter_id %}">
+      <button type="button" data-role="button" >Отменить</button>
+      </a></li>
+
+
+    {% empty %}
+        <p class="empty">Вы никого не пригласили в чат</p>
+      
+    {% endfor %}
+
+  </div>
+
+</div>
+
+
+
+{% endblock content %}

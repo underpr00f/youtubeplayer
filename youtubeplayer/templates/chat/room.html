@@ -1,3 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load socialprofile_tags %}
+
+{% block content %}
+<div class="ui-grid-a">
+  <div class="ui-block-a">
+    <b>Комната: {{ room }}</b>
+    <a href="{% url 'chat_index:select_room' %}" data-inline="true" data-mini="true" data-role="button" data-icon="arrow-u" data-theme="a" >{% trans "Вернуться" %}</a>  
+    
+  </div>
+  <div class="ui-block-b" style="text-align:right;">
+
+  </div>
+</div>
+
+  <form id="chatform">
+            
+    <div id = "handle" class = "handle" type="text" placeholder="handle" data-user = "{{ user.username }}">
+            {% if user.social_profile.avatar %}
+                <img src="{{ MEDIA_URL }}{{ user.social_profile.avatar }}" style="width: 25px; height: 25px">
+            {% elif user.social_profile.image_url %}
+                <img src="{{ user.social_profile.image_url }}" style="width: 25px; height: 25px">
+            {% else %}
+                <img src="{{ sp_form.image_url.value|default:"http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm" }}" style="width: 25px; height: 25px">
+            {% endif %}
+    <code>{{ user.username }}:</code>
+
+    </div>
+    <div data-role="controlgroup" data-type="horizontal">
+        <input type="text" id="message" data-wrapper-class="controlgroup-textinput ui-btn">
+        <button type="submit" id="go" data-icon="check">Отправить</button>
+    </div>
+    <br>
+    
+  </form>
+
+<div id="chats" data-room-id="{{ room.id }}" class='chats'>
+        {% for message in messages %}
+            <div class='messages'>
+            {% if user.username == message.handle %}
+                <img class='sp-profile-img-selfchat' src='{{ message.image_url }}'>
+                <span class='selfmessages'>{{ message.id }}) {{ message.message }}</span>
+                <br>
+                <span class='selfusername'>{{ message.handle }}</span>
+                <span class='selfdate'>[{{ message.formatted_timestamp }}]</span>
+                <span class='clearing'></span>
+                <br>
+            {% else %}
+                <img class='sp-profile-img-chat' src='{{ message.image_url }}'>
+                <span class='message'>{{ message.id }}) {{ message.message }}</span>
+                <br>
+                <span class='username'>{{ message.handle }}</span>
+                <span class='udate'>[{{ message.formatted_timestamp }}]</span>
+                <span class='clearing'></span>
+                <br>
+            {% endif %}   
+            </div>
+        {% endfor %}
+</div>
+
+<script type="text/javascript" src='{% static "js/jquery-1.12.1.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/reconnecting-websocket.min.js" %}'></script>
+
+<script type="text/javascript">
 $(function() {
     // When we're using HTTPS, use WSS too.
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
@@ -84,14 +150,7 @@ $(function() {
         return false;
     });
 
-    /*
-    $("a.roomlink").click(function () {
-        chatsock.send(JSON.stringify({
-            "command": "leave",
-            "room": $("div.chats").attr("data-room-id"),
-        }));
-    });
-    */
+
 
     $(window).on('hashchange', function(e){
         chatsock.send(JSON.stringify({
@@ -110,3 +169,17 @@ $(function() {
     }
 
 });  
+
+</script>
+
+
+
+
+{% endblock content %}
+
+{% block afterbody %}
+  <p class="quiet">
+    Ссылка на комнату: 
+    <code>{{ request.scheme }}://{{ request.get_host }}/chat/{{ room.id }}/</code> 
+  </p>
+{% endblock afterbody %}

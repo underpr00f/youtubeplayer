@@ -8,9 +8,14 @@
 <p>Текущее время: {{ current_date }}.</p>
 <div class="ui-grid-b">
 	<div class="ui-block-a">
-		<a href="{% url 'chat_index:chat_index' %}" data-role="button" data-theme="e" >{% trans "Чат" %}</a></div>
+		<a href="{% url 'chat_index:new_room' %}" data-role="button" data-theme="e" >{% trans "Новая комната" %}</a>
+		<a href="{% url 'chat_index:select_room' %}" data-role="button" data-theme="e" >{% trans "Комнаты" %}</a>
+	</div>
 	<div class="ui-block-b">
-		<a href="{% url 'friend_index:friend_index' %}" data-role="button" data-theme="b" >{% trans "Друзья" %}</a></div> 
+		<a href="{% url 'friend_index:friend_index' %}" data-role="button" data-theme="b" >{% trans "Друзья" %}</a>
+		
+
+	</div> 
 
 	<div class="ui-block-c"><a href="{% url 'chat_index:chat_list_rooms' %}" data-role="button" data-theme="e" >{% trans "Правильный Чат" %}</a></div>
 </div>
