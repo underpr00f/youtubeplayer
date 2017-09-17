@@ -8,11 +8,11 @@
        
 <a href="{% url 'home' %}" data-role="button" data-theme="e" >{% trans "Принять" %}</a>
 
-<h1>Комната: {{ room.label }}</h1>
 <div id="display"></div> 
 
 <div class="ui-grid-b">
 <div class="ui-block-a">
+<h2><center>Комната: {{ room.label }}</center></h2>
 <h2><center>Поиск пользователя:</center></h2>
 <form method='GET' action='{% url "chat_index:private_room" pk=room.id %}'><input type='text' name='q' value='{{ request.GET.q }}' maxlength='30' style='background-color: #e4e4b8;' /><button type='submit'>Поиск</button></form>
 </div>
@@ -43,7 +43,7 @@
 </div>
 
   <div class="ui-block-c">
-
+  <a href="{% url 'chat_index:change_members' pk=room.id operation='delete' pkid=request.user.id %}" data-role="button" data-icon="delete" data-theme="b"><b>Удалить комнату</b></a>
 
     <h2>Участники чата</h2>
 

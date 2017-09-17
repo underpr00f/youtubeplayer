@@ -4,7 +4,9 @@
 {% load socialprofile_tags %}
 
 {% block content %}
- 
+<!-- for refresh page -->
+<meta http-equiv="Cache-Control" content="private"> 
+
 <div class="ui-grid-b">
   <div class="ui-block-a">
     
@@ -30,7 +32,7 @@
 
   <h1> Созданные вами приватные чаты </h1>
   {% for room_owner in room_owners %}
-    <a href="{% url 'chat_index:private_room' pk=room_owner.id %}" ><button type="button" data-role="button" >{{ room_owner }}</button></a>  
+    <a href="{% url 'chat_index:private_room' pk=room_owner.id %}" ><button type="button" data-role="button" data-mini="true">{{ room_owner }}</button></a> 
   {% empty %}
     <center><p class="empty">Вы не создавали комнат</p></center>
 
@@ -46,7 +48,7 @@
 
   {% endfor %}
   {% for room_member in room_members %}
-    <li class="room-link" name='q' data-room-id="{{ room_member.acceptroom_id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room_member.acceptroom_id }}/'>{{ room_member.acceptroom }}</a></li>
+    <li class="room-link" name='q' data-room-id="{{ room_member.acceptroom_id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room_member.acceptroom_id }}/' >{{ room_member.acceptroom }}</a></li><a href="{% url 'chat_index:accept_members' pk=room_member.acceptroom_id operation='leave' pkid=request.user.id %}" data-role="button" data-icon="delete" data-iconpos="notext" data-inline="true">Delete</a>
   {% endfor %}<br>
   </ul>
 
@@ -68,9 +70,11 @@
 
 
   <h1> Все чаты </h1>
+  <ul class="rooms">
   {% for room in rooms %}
-    <li>{{ room.label }} </li> 
+    <li class="room-link" name='q' data-room-id="{{ room.id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room.id }}/'>{{ room.label }} </li> 
   {% endfor %}
+  </ul>
   <br>
 
 

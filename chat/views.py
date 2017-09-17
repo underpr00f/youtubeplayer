@@ -192,6 +192,14 @@ def change_members(request, pk, operation, pkid):
         M = get_object_or_404(MemberAccept, accepter=member,acceptroom=label)
         M.delete()
         return redirect('chat_index:private_room', pk = pk)
+    
+    elif operation == 'delete':
+        if label.current_user_id == request.user.id:
+            M = get_object_or_404(Room, current_user=member,id=pk)
+            M.delete()
+            return HttpResponseRedirect(reverse('chat_index:select_room'))
+        else:
+            raise PermissionDenied
     return redirect('chat_index:private_room', pk = pk)
 
 
@@ -279,15 +287,27 @@ def accept_members(request, pk, operation, pkid):
     accepter = User.objects.get(pk=pkid)
     acceptroom = Room.objects.get(pk=pk)
     if operation == 'agree':
-        M = get_object_or_404(MemberAccept, accepter=accepter,acceptroom=acceptroom)
-        M.agree = True
-        M.save()
+        if accepter.id == request.user.id:
+            M = get_object_or_404(MemberAccept, accepter=accepter,acceptroom=acceptroom)
+            M.agree = True
+            M.save()
+            return redirect('chat_index:select_room')
+        else:
+            raise PermissionDenied
 
-        return redirect('chat_index:select_room')
+        
     elif operation == 'disagree':
-        #M = MemberAccept.objects.get(accepter=accepter,acceptroom=acceptroom, agree = False)
-        #M.delete()
-        M = get_object_or_404(MemberAccept, accepter=accepter,acceptroom=acceptroom, agree = False)
-        M.delete()
-        return redirect('chat_index:select_room')
+        if accepter.id == request.user.id:
+            M = get_object_or_404(MemberAccept, accepter=accepter,acceptroom=acceptroom, agree = False)
+            M.delete()
+            return redirect('chat_index:select_room')
+        else:
+            raise PermissionDenied 
+    elif operation == 'leave':
+        if accepter.id == request.user.id:
+            M = get_object_or_404(MemberAccept, accepter=accepter,acceptroom=acceptroom, agree = True)
+            M.delete()
+            return redirect('chat_index:select_room')
+        else:
+            raise PermissionDenied    
     return redirect('chat_index:select_room')

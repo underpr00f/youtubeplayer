@@ -6,11 +6,12 @@
 {% block content %}
 <div class="ui-grid-a">
   <div class="ui-block-a">
-    <h3><center>Комната: {{ room }}</center></h3>
+    <b>Комната: {{ room }}</b>
+    <a href="{% url 'chat_index:select_room' %}" data-inline="true" data-mini="true" data-role="button" data-icon="arrow-u" data-theme="a" >{% trans "Вернуться" %}</a>  
     
   </div>
-  <div class="ui-block-b">
-    <a href="{% url 'chat_index:select_room' %}" data-inline="true" data-mini="true" data-role="button" data-icon="arrow" data-theme="b" >{% trans "Вернуться" %}</a>
+  <div class="ui-block-b" style="text-align:right;">
+
   </div>
 </div>
 
