@@ -4,14 +4,18 @@
 {% load socialprofile_tags %}
 
 {% block content %}
+<meta http-equiv="Cache-Control" content="private"> 
 <div class="ui-grid-a">
   <div class="ui-block-a">
     <b>Комната: {{ room }}</b>
-    <a href="{% url 'chat_index:select_room' %}" data-inline="true" data-mini="true" data-role="button" data-icon="arrow-u" data-theme="a" >{% trans "Вернуться" %}</a>  
+      
     
   </div>
   <div class="ui-block-b" style="text-align:right;">
-
+    {% if room.current_user.id == request.user.id %}
+        <a href="{% url 'chat_index:private_room' pk=room.id %}" data-inline="true" data-mini="true" data-role="button" data-icon="grid" data-theme="a" >{% trans "Настроить" %}</a>
+    {% endif %}
+    <a href="{% url 'chat_index:select_room' %}" data-inline="true" data-mini="true" data-role="button" data-icon="arrow-u" data-theme="a" >{% trans "Вернуться" %}</a>
   </div>
 </div>
 
@@ -157,6 +161,7 @@ $(function() {
             "command": "leave",
             "room": $("div.chats").attr("data-room-id"),
         }));
+
     });
     
 

@@ -21,7 +21,7 @@ haikunator = Haikunator()
 @login_required
 def about(request):
     return render(request, "chat/about.html")
-
+'''
 @never_cache
 @login_required
 def new_room(request, *args,**kwargs):
@@ -35,9 +35,11 @@ def new_room(request, *args,**kwargs):
             label = haikunator.haikunate()
             if Room.objects.filter(label=label).exists():
                 continue
-            new_room = Room.objects.create(label=label)
+            new_room = Room.objects.create(label=label, current_user_id=request.user.id, private = False)
 
-    return redirect("chat_index:chat_list_rooms")
+    return redirect("chat_index:chat_room", pk = new_room.pk)
+    #return HttpResponseRedirect(reverse("chat_index:chat_room", pk = new_room.pk))
+'''
 
 from django.core.exceptions import PermissionDenied
 
@@ -88,16 +90,42 @@ def chat_room(request, pk, *args,**kwargs):
             'messages': messages,
         })
 
+from django.core.paginator import Paginator, InvalidPage
+
 @never_cache
 @login_required
 def chat_list_rooms(request):
 
     # Get a list of rooms, ordered alphabetically
-    rooms = Room.objects.order_by("id")
+    object_list = Room.objects.all()
+
+    paginator = Paginator(object_list, 6)
+    page_obj = paginator.page(1)
     # Render that in the index template
     return render(request, "chat/list_rooms.html", {
-        "rooms": rooms,
+        "object_list": page_obj.object_list,
+        "page": page_obj,
     })
+
+def chat_list_rooms_json(request, page):
+
+    # Get a list of rooms, ordered alphabetically
+    object_list = Room.objects.all()
+
+    paginator = Paginator(object_list, 6)
+    try:
+        page_obj = paginator.page(page)
+    except InvalidPage:
+        # Return 404 if the page doesn't exist
+        raise Http404
+    # Render that in the index template
+    return render(request, "chat/tracks.json", {
+        "object_list": page_obj.object_list,
+        "page": page_obj,
+        },
+        'text/javascript')
+
+
 '''
 @never_cache
 @login_required
@@ -115,7 +143,8 @@ class FriendView(TemplateView):
 
     def get(self, request, pk, *args, **kwargs):
         
-        room = Room.objects.get(pk=pk)
+        room = get_object_or_404(Room, pk=pk)
+        #room = Room.objects.get(pk=pk)
         if request.user.id == room.current_user_id:
             form = FriendForm()
             users = User.objects.exclude(id=request.user.id)
@@ -179,7 +208,7 @@ class FriendView(TemplateView):
 def change_members(request, pk, operation, pkid):
     
     member = User.objects.get(pk=pkid)
-    label = Room.objects.get(pk=pk)
+    label = get_object_or_404(Room, pk=pk)
     if operation == 'add':
         M = MemberAccept.objects.filter(accepter=member, acceptroom=label)
         if M:
@@ -255,8 +284,9 @@ def select_room(request, *args,**kwargs):
     #userinrooms = Room.objects.filter(users__id = request.user.id)
     room_invites = MemberAccept.objects.filter(accepter=request.user.id, agree=False)
 
-    room_owners = Room.objects.filter(current_user_id = request.user.id, private = True)
+    room_owners = Room.objects.filter(current_user_id = request.user.id)
     general_rooms = Room.objects.filter(private = 0)
+    #general_room_owners = general_rooms.filter(current_user_id = request.user.id)
 
     '''
     room_chats = []
@@ -275,6 +305,7 @@ def select_room(request, *args,**kwargs):
         'room_invites': room_invites,
         'room_owners': room_owners,
         'general_rooms': general_rooms,
+        #'general_room_owners': general_room_owners,
         
     })
 

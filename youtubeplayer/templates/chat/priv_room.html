@@ -6,18 +6,24 @@
 {% block content %}
 
        
-<a href="{% url 'home' %}" data-role="button" data-theme="e" >{% trans "Принять" %}</a>
+<a href="{% url 'chat_index:select_room' %}" data-role="button" data-theme="e" >{% trans "Принять" %}</a>
 
 <div id="display"></div> 
 
 <div class="ui-grid-b">
 <div class="ui-block-a">
-<h2><center>Комната: {{ room.label }}</center></h2>
+
+{% if room.private %}
+<h4><center>Приватная комната: {{ room.label }}</center></h4>
 <h2><center>Поиск пользователя:</center></h2>
 <form method='GET' action='{% url "chat_index:private_room" pk=room.id %}'><input type='text' name='q' value='{{ request.GET.q }}' maxlength='30' style='background-color: #e4e4b8;' /><button type='submit'>Поиск</button></form>
+{% else %}
+<h4><center>Общая комната: {{ room.label }}</center></h4>
+{% endif %}
 </div>
 
 <div class="ui-block-b">
+{% if room.private %}
 {% if request.GET.q %}
           <center><h2>Результаты поиска</h2>
           {% for obj in object_list %}
@@ -40,11 +46,12 @@
           </center>
         
 {% endif %}
+{% endif %}
 </div>
 
   <div class="ui-block-c">
   <a href="{% url 'chat_index:change_members' pk=room.id operation='delete' pkid=request.user.id %}" data-role="button" data-icon="delete" data-theme="b"><b>Удалить комнату</b></a>
-
+{% if room.private %}
     <h2>Участники чата</h2>
 
 
@@ -70,7 +77,7 @@
         <p class="empty">Вы никого не пригласили в чат</p>
       
     {% endfor %}
-
+{% endif %}
   </div>
 
 </div>

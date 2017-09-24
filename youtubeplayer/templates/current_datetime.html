@@ -3,13 +3,13 @@
 {% load socialprofile_tags %}
 
 {% block title %}The current time{% endblock %}
-{% block title_in_body %}Текущее время{% endblock %}
+{% block title_in_body %}Текущее время: {{ current_date }}{% endblock %}
 {% block content %}
-<p>Текущее время: {{ current_date }}.</p>
+
 <div class="ui-grid-b">
 	<div class="ui-block-a">
-		<a href="{% url 'chat_index:new_room' %}" data-role="button" data-theme="e" >{% trans "Новая комната" %}</a>
 		<a href="{% url 'chat_index:select_room' %}" data-role="button" data-theme="e" >{% trans "Комнаты" %}</a>
+		
 	</div>
 	<div class="ui-block-b">
 		<a href="{% url 'friend_index:friend_index' %}" data-role="button" data-theme="b" >{% trans "Друзья" %}</a>
@@ -17,11 +17,13 @@
 
 	</div> 
 
-	<div class="ui-block-c"><a href="{% url 'chat_index:chat_list_rooms' %}" data-role="button" data-theme="e" >{% trans "Правильный Чат" %}</a></div>
+	<div class="ui-block-c"><a href="{% url 'chat_index:chat_list_rooms' %}" data-role="button" data-theme="e" >{% trans "Работа со списком" %}</a></div>
 </div>
+{% endblock %}
+
+{% block afterbody %}
 <p class="quiet">
-   Или, вы можете посетить <code>{{ request.scheme }}://{{ request.get_host }}/chat/any-path-you-want</code> 
-   для вступления в желаемую группу.
+   <code>Вы можете посетить {{ request.scheme }}://{{ request.get_host }}/chat/any-path-you-want для вступления в желаемый чат.</code>
 </p>
 
 {% endblock %}
