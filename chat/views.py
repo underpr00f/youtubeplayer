@@ -91,39 +91,28 @@ def chat_room(request, pk, *args,**kwargs):
         })
 
 from django.core.paginator import Paginator, InvalidPage
+from el_pagination.decorators import page_template
 
 @never_cache
 @login_required
-def chat_list_rooms(request):
+@page_template('chat/list_rooms_page.html')
+def chat_list_rooms(request, template = 'chat/list_rooms.html',
+    extra_context=None):
+    #template = 'chat/list_rooms.html'
+    #page_template = 'chat/list_rooms_page.html'
 
-    # Get a list of rooms, ordered alphabetically
-    object_list = Room.objects.all()
+    context = {
+        'object_list': Room.objects.all(),
+        
+    }
+    if extra_context is not None:
+        context.update(extra_context)
 
-    paginator = Paginator(object_list, 6)
-    page_obj = paginator.page(1)
-    # Render that in the index template
-    return render(request, "chat/list_rooms.html", {
-        "object_list": page_obj.object_list,
-        "page": page_obj,
-    })
+    return render(
+        request, template, context)
+    
 
-def chat_list_rooms_json(request, page):
 
-    # Get a list of rooms, ordered alphabetically
-    object_list = Room.objects.all()
-
-    paginator = Paginator(object_list, 6)
-    try:
-        page_obj = paginator.page(page)
-    except InvalidPage:
-        # Return 404 if the page doesn't exist
-        raise Http404
-    # Render that in the index template
-    return render(request, "chat/tracks.json", {
-        "object_list": page_obj.object_list,
-        "page": page_obj,
-        },
-        'text/javascript')
 
 
 '''
