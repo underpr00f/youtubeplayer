@@ -4,7 +4,7 @@
 {% load socialprofile_tags %}
 
 {% block content %}
-<meta http-equiv="Cache-Control" content="private"> 
+
 <div class="ui-grid-a">
   <div class="ui-block-a">
     <b>Комната: {{ room }}</b>
@@ -64,7 +64,7 @@
         {% endfor %}
 </div>
 
-<script type="text/javascript" src='{% static "js/reconnecting-websocket.min.js" %}'></script>
+
 
 <script type="text/javascript">
 $(function() {
@@ -72,7 +72,7 @@ $(function() {
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
     
     
-    var chatsock = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + window.location.pathname);
+    var chatsock = new WebSocket(ws_scheme + '://' + window.location.host + '/chat/'+ $("div.chats").attr("data-room-id"));
     
 
 
@@ -153,31 +153,39 @@ $(function() {
         return false;
     });
 
-
-
-    $(window).on('hashchange', function(e){
-        chatsock.send(JSON.stringify({
-            "command": "leave",
-            "room": $("div.chats").attr("data-room-id"),
-        }));
+    hashOn = 0;
+    
+    $(window).on('hashchange', function(event){
+        if ( hashOn ) {
+            hashOn = 0;
+            chatsock.send(JSON.stringify({
+                "command": "leave",
+                "room": $("div.chats").attr("data-room-id"),
+            }));
+            
+                       
+        }
+        hashOn = 1;
 
     });
     
 
     // Helpful debugging
-    chatsock.onopen = function () {
+    chatsock.onopen = function (event) {
         console.log("Connected to chat socket");
+        
     };
-    chatsock.onclose = function () {
+    chatsock.onclose = function (event) {
         console.log("Disconnected from chat socket");
+        hashOn = 0;
+        
     }
 
 });  
 
 </script>
 
-
-
+<script type="text/javascript" src='{% static "js/reconnecting-websocket.min.js" %}'></script>
 
 {% endblock content %}
 
