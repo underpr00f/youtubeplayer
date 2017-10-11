@@ -2,23 +2,42 @@
 {% load i18n %}
 {% load socialprofile_tags %}
 
-{% block title %}The current time{% endblock %}
-{% block title_in_body %}Текущее время: {{ current_date }}{% endblock %}
+{% block title %}Текущее время{% endblock %}
+{% block title_in_body %}{% endblock %}
 {% block content %}
 
-<div class="ui-grid-b">
-	<div class="ui-block-a">
-		<a href="{% url 'chat_index:select_room' %}" data-role="button" data-theme="e" >{% trans "Комнаты" %}</a>
-		
-	</div>
-	<div class="ui-block-b">
-		<a href="{% url 'friend_index:friend_index' %}" data-role="button" data-theme="b" >{% trans "Друзья" %}</a>
-		
+<div class='container-fluid'>
+    <div class='row'>
+        <div class='col-12'>
+            <div class="alert alert-secondary" role="alert">
+            <center>Текущее время: {{ current_date }}</center>
+            </div>
+        </div>
 
-	</div> 
+    </div>
 
-	<div class="ui-block-c"><a href="{% url 'chat_index:chat_list_rooms' %}" data-role="button" data-theme="e" >{% trans "Работа со списком" %}</a></div>
+
+    <div class='row'>
+        <div class='col-11 mx-auto col-lg-2 order-12'>
+            
+            <a role="button" class="btn btn-secondary btn-lg" href="{% url 'chat_index:select_room' %}">{% trans "Комнаты" %}</a>
+            
+        </div>
+        <div class='col-11 col-lg-8 mx-auto order-6' >
+            <div class="alert alert-primary" role="alert" style='min-height: 400px;'>           
+              <a role="button" class="btn btn-secondary btn-block" href="{% url 'chat_index:chat_list_rooms' %}">{% trans "Работа со списком" %}</a>
+            </div>
+        </div>
+        
+        <div class='col-12 col-lg-2 order-1'>
+            <a role="button" class="btn btn-secondary btn-lg" href="{% url 'friend_index:friend_index' %}">{% trans "Друзья" %}</a>
+        </div>
+
+    </div>
+
+
 </div>
+
 {% endblock %}
 
 {% block afterbody %}
