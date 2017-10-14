@@ -3,80 +3,50 @@
     max-width: 273px;
 }
 
-.ui-icon-googleplusB { 
-    background: transparent url("../images/Google-Plus.png");
+.button-image:before {
+    content: "";
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position : center center;
+    background-repeat:no-repeat;
     background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
-
 }
 
-.ui-icon-facebookB { 
-    background: transparent url("../images/Facebook-128.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-
+.ui-icon-googleplusB:before{
+    
+    background-image : url(../images/Google-Plus.png);
 }
 
-.ui-icon-twitterB { 
-    background: transparent url("../images/Twitter-Bird-128.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
 
+.ui-icon-facebookB:before { 
+    background-image: url("../images/Facebook-128.png");
+}
+
+.ui-icon-twitterB:before { 
+    background-image: url("../images/Twitter-Bird-128.png");
     
 }
 
-.ui-icon-VkB { 
-    background: transparent url("../images/vk-logo-of-social-network.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
-  
-    
-}
+.ui-icon-VkB:before { 
 
-.ui-icon-OdnoklassnikiB { 
-    background: transparent url("../images/odnoklassniki-logo.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
-  
-    
-}
-
-#sp-google-button .ui-icon-googleplusB {
-    
+    background-image: url("../images/vk-logo-of-social-network.png");
 
 }
 
-#sp-facebook-button .ui-icon-facebookB {
-    
-
+.ui-icon-OdnoklassnikiB:before { 
+    background-image: url("../images/odnoklassniki-logo.png");
+   
 }
 
-#sp-twitter-button .ui-icon-twitterB {
-    
+.icon-custom {
+    width: 124px !important;
+    display: inline-block;
+    padding: 4px 0 !important;
 }
-
-#sp-vk-button .ui-icon-VkB {
-    
-}
-
-#sp-odnoklassniki-button .ui-icon-OdnoklassnikiB {
-    
-}
-
 
 #sp-profile-form ul {
     list-style: none;

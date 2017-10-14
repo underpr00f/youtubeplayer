@@ -10,7 +10,7 @@
     <div class='row'>
         <div class='col-12'>
             <div class="alert alert-secondary" role="alert">
-            <center>Текущее время: {{ current_date }}</center>
+            	<center>Текущее время: {{ current_date }}</center>
             </div>
         </div>
 
@@ -18,31 +18,32 @@
 
 
     <div class='row'>
-        <div class='col-11 mx-auto col-lg-2 order-12'>
-            
+        <div class='col-11 mx-auto col-lg-2'>           
             <a role="button" class="btn btn-secondary btn-lg" href="{% url 'chat_index:select_room' %}">{% trans "Комнаты" %}</a>
-            
         </div>
-        <div class='col-11 col-lg-8 mx-auto order-6' >
+
+        <div class='col-11 col-lg-8 mx-auto' >
             <div class="alert alert-primary" role="alert" style='min-height: 400px;'>           
-              <a role="button" class="btn btn-secondary btn-block" href="{% url 'chat_index:chat_list_rooms' %}">{% trans "Работа со списком" %}</a>
+              	<a role="button" class="btn btn-secondary btn-block" href="{% url 'chat_index:chat_list_rooms' %}">{% trans "Работа со списком" %}</a>
             </div>
         </div>
         
-        <div class='col-12 col-lg-2 order-1'>
+        <div class='col-11 col-lg-2 mx-auto'>
             <a role="button" class="btn btn-secondary btn-lg" href="{% url 'friend_index:friend_index' %}">{% trans "Друзья" %}</a>
         </div>
 
     </div>
-
-
 </div>
+
 
 {% endblock %}
 
 {% block afterbody %}
-<p class="quiet">
-   <code>Вы можете посетить {{ request.scheme }}://{{ request.get_host }}/chat/any-path-you-want для вступления в желаемый чат.</code>
-</p>
+<div class='row mx-auto'>
+	<p class="quiet">
+   		<code>Вы можете посетить {{ request.scheme }}://{{ request.get_host }}/chat/any-path-you-want для вступления в желаемый чат.</code>
+	</p>
+</div>
+
 
 {% endblock %}

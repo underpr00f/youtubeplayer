@@ -6,7 +6,7 @@ two-step model-based activation workflow.
 
 from django.conf.urls import include, url
 from django.views.generic.base import TemplateView
-
+from django.views.decorators.cache import never_cache
 from . import views
 
 
@@ -24,7 +24,7 @@ urlpatterns = [
         views.ActivationView.as_view(),
         name='registration_activate'),
     url(r'^register/$',
-        views.RegistrationView.as_view(),
+        never_cache(views.RegistrationView.as_view()),
         name='registration_register'),
     url(r'^register/complete/$',
         TemplateView.as_view(

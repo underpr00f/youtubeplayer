@@ -30,13 +30,13 @@
             var isDebug = false;
         </script>
     {% endif %}
-
+{% block head %}{% endblock %}
     <script>
         /* Fix Facebook Appending Hash */
         if (window.location.hash == "#_=_")
             window.location.hash = "";
     </script>
-    {% block head %}{% endblock %}
+    
 </head>
 <body {% block body_class %}{% endblock %}>
     <script src='{% static "js/jquery-3.2.1.min.js" %}'></script>
@@ -99,11 +99,33 @@
 </nav>
         
     {% else %}
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <div class='container'>
+        <h4 class="navbar-brand">Здравствуйте, Аноним</h4>
 
-        <h4>Здравствуйте, Аноним</h4>
+        <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarCollapseLinks' aria-expanded='false' aria-label='Toggle Navigation'>
+        <span class='navbar-toggler-icon'></span>
+        </button>
+
+          <div class='collapse navbar-collapse' id='navbarCollapseLinks'>
+            <ul class='navbar-nav flex-row ml-md-auto d-none d-md-flex'>
+              <li class='nav-item'>
+                <a href='{% url "auth_login" %}' class='nav-link'>Войти</a>
+              </li>
+              <li class='nav-item'>
+                <a href='{% url "registration_register" %}' class='nav-link'>Зарегистрироваться</a>
+              </li>
+            </ul>
+          </div>
+      </div>
+    </nav>
     {% endif %}
+    
 
-    <h3><center> {% block title_in_body %}{% endblock %} </center></h3>
+    {% block title_in_body %}{% endblock %}
+    
+
+
     {% block header %}{% endblock %}
     <hr>
     {% block content %}{% endblock %}
