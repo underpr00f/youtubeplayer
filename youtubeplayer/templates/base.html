@@ -47,7 +47,7 @@
   
    
     {% if user.is_authenticated %}
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
    <div class='container'>
       <a class="navbar-brand" href="{% url 'sp_profile_view_page' %}">
         {% if user.social_profile.avatar %}

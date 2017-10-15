@@ -3,81 +3,117 @@
 {% load i18n %}
 {% load socialprofile_tags %}
 
+{% block title_in_body %}
+<div class="alert alert-success text-center" role="alert">
+  <h4 class="alert-heading">
+    {% if room.private %}
+      Приватная комната: {{ room.label }} 
+    {% else %}
+      Общая комната: {{ room.label }}
+    {% endif %}  
+  </h4>
+</div>
+{% endblock %}
+
 {% block content %}
 
-       
-<a href="{% url 'chat_index:select_room' %}" data-role="button" data-theme="e" >{% trans "Принять" %}</a>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <a href="{% url 'chat_index:select_room' %}" role="button" class="btn btn-dark btn-block">{% trans "Принять" %}</a>
+    </div>
+    <div class="col-6 text-center">
+      {% if room.private %}
+        
+        
+        <form method='GET' action='{% url "chat_index:private_room" pk=room.id %}'>
+          <div class="input-group">
+            <input type='text' name='q' value='{{ request.GET.q }}' class="form-control" placeholder="Поиск пользователя для приглашения" />
+            <span class="input-group-btn">
+              <button type='submit' class="btn btn-outline-dark">Поиск</button>
+            </span>
+          </div>
+        </form>
+      {% else %}
+        
+      {% endif %}
+      {% if room.private %}
+      {% if request.GET.q %}
+                <center><h2>Результаты поиска</h2>
+                {% for obj in object_list %}
+                  
 
-<div id="display"></div> 
+                  <div class="{{ obj }}">Найден пользователь: <b>{{ obj }}</b>
+
+                    {% if not memberlist %}
+                      {% if obj.pk != user.pk %}
+                        <a href="{% url 'chat_index:change_members' pk=room.id operation='add' pkid=obj.pk %}" > 
+                        <button type="button" class="btn btn-dark">Пригласить в чат</button>
+                        </a>
+                      {% else %}
+                        (Это вы)
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                {% empty %}
+                <center><p class="empty">Пользователи с именем '<b>{{ request.GET.q }}</b>' отсутствуют</p></center>
+                {% endfor %}
+                </center>
+              
+      {% endif %}
+      {% endif %}
+    </div>
+    
+    <div class="col">
+      <a href="{% url 'chat_index:change_members' pk=room.id operation='delete' pkid=request.user.id %}" role="button" data-icon="delete" class="btn btn-danger btn-block"><b>Удалить комнату</b></a>
+
+      {% if room.private %}
+      <h2>Участники чата</h2>
+
+
+      {% for memberinroom in membersinroom %}
+
+        <li>{{ memberinroom.accepter }}<a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberinroom.accepter_id %}" > <button type="button" class="btn btn-outline-dark btn-block" >Убрать</button>
+        </a></li>
+        {% empty %}
+        <p class="empty">Участники отсутствуют</p>
+      {% endfor %}
+
+     
+      <h2>Ожидание подтверждения</h2>
+      
+      {% for memberl in members %}
+        
+        <li>{{ memberl.accepter }} <a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberl.accepter_id %}">
+        <button type="button" class="btn btn-outline-dark btn-block" >Отменить</button>
+        </a></li>
+
+
+      {% empty %}
+          <p class="empty">Вы никого не пригласили в чат</p>
+        
+      {% endfor %}
+      {% endif %}
+    </div>
+    
+  </div>
+
+
+</div>         
+
 
 <div class="ui-grid-b">
 <div class="ui-block-a">
 
-{% if room.private %}
-<h4><center>Приватная комната: {{ room.label }}</center></h4>
-<h2><center>Поиск пользователя:</center></h2>
-<form method='GET' action='{% url "chat_index:private_room" pk=room.id %}'><input type='text' name='q' value='{{ request.GET.q }}' maxlength='30' style='background-color: #e4e4b8;' /><button type='submit'>Поиск</button></form>
-{% else %}
-<h4><center>Общая комната: {{ room.label }}</center></h4>
-{% endif %}
-</div>
+
 
 <div class="ui-block-b">
-{% if room.private %}
-{% if request.GET.q %}
-          <center><h2>Результаты поиска</h2>
-          {% for obj in object_list %}
-            <p>Найден пользователь:</p>
 
-            <div class="{{ obj }}"><b>{{ obj }}</b>
-              {% if not memberlist %}
-                {% if obj.pk != user.pk %}
-                  <a href="{% url 'chat_index:change_members' pk=room.id operation='add' pkid=obj.pk %}" > 
-                  <button type="button" data-role="button" data-theme="b" >Пригласить в чат</button>
-                  </a>
-                {% else %}
-                  (Это вы)
-                {% endif %}
-              {% endif %}
-            </div>
-          {% empty %}
-          <center><p class="empty">Пользователи с именем '<b>{{ request.GET.q }}</b>' отсутствуют</p></center>
-          {% endfor %}
-          </center>
-        
-{% endif %}
-{% endif %}
 </div>
 
   <div class="ui-block-c">
-  <a href="{% url 'chat_index:change_members' pk=room.id operation='delete' pkid=request.user.id %}" data-role="button" data-icon="delete" data-theme="b"><b>Удалить комнату</b></a>
-{% if room.private %}
-    <h2>Участники чата</h2>
 
 
-    {% for memberinroom in membersinroom %}
-
-      <li>{{ memberinroom.accepter }}<a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberinroom.accepter_id %}" > <button type="button" data-role="button" >Убрать</button>
-      </a></li>
-      {% empty %}
-      <p class="empty">Участники отсутствуют</p>
-    {% endfor %}
-
-   
-    <h2>Ожидание подтверждения</h2>
-    
-    {% for memberl in members %}
-      
-      <li>{{ memberl.accepter }} <a href="{% url 'chat_index:change_members' pk=room.id operation='remove' pkid=memberl.accepter_id %}">
-      <button type="button" data-role="button" >Отменить</button>
-      </a></li>
-
-
-    {% empty %}
-        <p class="empty">Вы никого не пригласили в чат</p>
-      
-    {% endfor %}
-{% endif %}
   </div>
 
 </div>

@@ -2,40 +2,76 @@
 {% load static %}
 {% load i18n %}
 {% load socialprofile_tags %}
-
+{% block title_in_body %}
+<div class="alert alert-success text-center" role="alert">
+  <h4 class="alert-heading">
+    Введите название для чата    
+  </h4>
+</div>
+{% endblock title_in_body %}
 {% block content %}
 
- 
-<h1>Введите название для чата</h1>
+<div class="container">
+  <div class="row">
 
-{% if form.errors %}
-    {% for field in form %}
-        {% for error in field.errors %}
-            
-            <div class="myerrors clearfix" style="color:red">
-            	
-                <strong>Ошибка ввода: {{ error|escape }}</strong>
+    <div class="col-8 mx-auto">
+        
+
+        
+
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    
+                    <div class="myerrors clearfix" style="color:red">
+                    	
+                        <strong>Ошибка ввода: {{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="myerrors clearfix" style="color:red">
+                	
+                    <strong>Ошибка ввода(Введите другое имя): {{ error|escape }} </strong>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method='POST' action='' class="form-post">
+            {% csrf_token %}
+            <input class="form-control" type='text' name='label' value='{{ request.POST.label }}' maxlength='30' placeholder="Введите название чата" />
+            <br>
+            <div class="form-check">
+            <div class="container">
+            <div class="row">
+            <label class="custom-control custom-checkbox">
+                
+                <div class="col">
+                  <input type="checkbox" name="private_group" id="private_group" class="custom-control-input">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description ml-4">Закрытая группа</span> 
+                </div>
+                <div class="col-1">
+                  <div class="btn-group">
+                    <button href="{% url 'chat_index:select_room' %}" class="btn btn-outline-dark " >{% trans "Отмена" %}</button>
+
+                    <button class="btn btn-dark" type='submit'>Создать</button>
+                   
+                </div>
+                 
+            </label>
             </div>
-        {% endfor %}
-    {% endfor %}
-    {% for error in form.non_field_errors %}
-        <div class="myerrors clearfix" style="color:red">
-        	
-            <strong>Ошибка ввода(Введите другое имя): {{ error|escape }} </strong>
-        </div>
-    {% endfor %}
-{% endif %}
+            </div> 
+            </div>
+            
+            
 
-<form method='POST' action=''>
-    {% csrf_token %}
-    <input type='text' name='label' value='{{ request.POST.label }}' maxlength='30' style='background-color: #e4e4b8;' />
-    <label for="private_group">Закрытая группа</label>
-    <input type="checkbox" name="private_group" id="private_group" />
-    <button type='submit'>Создать</button>
+        </form>
 
-</form>
+        
+    </div>
 
-<a href="{% url 'chat_index:select_room' %}" data-role="button" data-theme="e" >{% trans "Вернуться" %}</a>
-
+  </div>
+</div>
 
 {% endblock content %}

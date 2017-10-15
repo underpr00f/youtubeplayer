@@ -7,18 +7,20 @@
 <!-- for refresh page -->
 <meta http-equiv="Cache-Control" content="private"> 
 
-<div class="ui-grid-b">
-  <div class="ui-block-a">
-    
-    <a href="{% url 'chat_index:title_room' %}" data-role="button" data-theme="e" >{% trans "Создать комнату" %}</a>
+<div class="container-fluid">
+  <div class="row">
 
+  <div class="col">
+    
+    <a href="{% url 'chat_index:title_room' %}" role="button" class="btn btn-dark btn-block" >{% trans "Создать комнату" %}</a>
+    <br>
     <h4> Настроить созданные вами чаты </h4>
     {% for room_owner in room_owners %}
       {% if room_owner.private %}
-        <a href="{% url 'chat_index:private_room' pk=room_owner.id %}" ><button type="button" data-role="button" data-mini="true" data-theme="b">{{ room_owner }}</button></a> 
+        <a href="{% url 'chat_index:private_room' pk=room_owner.id %}" ><button type="button" class="btn btn-dark btn-block">{{ room_owner }}</button></a> 
     
       {% else %}
-        <a href="{% url 'chat_index:private_room' pk=room_owner.id %}" ><button type="button" data-role="button" data-mini="true" data-theme="a">{{ room_owner }}</button></a> 
+        <a href="{% url 'chat_index:private_room' pk=room_owner.id %}" ><button type="button" class="btn btn-outline-dark btn-block">{{ room_owner }}</button></a> 
       {% endif %}
     {% empty %}
       <center><p class="empty">Вы не создавали комнат</p></center>
@@ -26,22 +28,22 @@
     {% endfor %}
     <br>
   </div>
-  <div class="ui-block-b">
+  <div class="col">
 
   {% for room_invite in room_invites %}
     {% if room_invite.agree == 0 %}  
     Вас приглашают в чат: <b>{{ room_invite.acceptroom }}</b>
     <a href="{% url 'chat_index:accept_members' pk=room_invite.acceptroom_id operation='agree' pkid=request.user.id %}" > 
-    <button type="button" data-role="button" data-theme="b" >Принять</button></a>
+    <button type="button" class="btn btn-dark btn-block">Принять</button></a>
     <a href="{% url 'chat_index:accept_members' pk=room_invite.acceptroom_id operation='disagree' pkid=request.user.id %}" > 
-    <button type="button" data-role="button" data-theme="a" >Отклонить</button></a>
+    <button type="button" class="btn btn-outline-dark btn-block">Отклонить</button></a>
     {% endif %}
   {% empty %}
     <center><p class="empty">Приглашения отсутствуют</p></center>  
   {% endfor %} <br>  
   </div>
   
-  <div class="ui-block-c">
+  <div class="col">
   
   <h4> Ваши приватные чаты </h4>
 
@@ -54,7 +56,7 @@
   {% endfor %}
   <br>
   {% for room_member in room_members %}
-    <li class="room-link" name='q' data-room-id="{{ room_member.acceptroom_id }}" style="background: #ddd"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room_member.acceptroom_id }}/' >{{ room_member.acceptroom }}</a><a href="{% url 'chat_index:accept_members' pk=room_member.acceptroom_id operation='leave' pkid=request.user.id %}" data-role="button" data-icon="delete" data-iconpos="notext" data-inline="true">Delete</a></li>
+    <li class="room-link" name='q' data-room-id="{{ room_member.acceptroom_id }}" style="background: #ddd"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room_member.acceptroom_id }}/' >{{ room_member.acceptroom }}</a><button onclick='location.href="{% url 'chat_index:accept_members' pk=room_member.acceptroom_id operation='leave' pkid=request.user.id %}"' class="btn btn-default btn-sm"><b>X</b></button></li>
   {% endfor %}
   <br>
   </ul>
@@ -87,7 +89,7 @@
   <br>
 
 
-
+  </div>
   </div>  
 
 </div>
