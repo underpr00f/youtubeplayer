@@ -1,4 +1,4 @@
-#!c:\Python\python.exe
+#! /home/underproof/myvenv/bin python
 # -*- coding:utf-8 -*-
 """youtubeplayer URL Configuration
 
@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'^socialprofile/', include('socialprofile.urls')),
     url(r'^chat/', include('chat.urls', namespace='chat_index')),
     url(r'^friendship/', include('friendship.urls', namespace='friend_index')),
-    #url(r'^chat/stream/$', never_cache(index), name='chat_index'),
+    
     #url(r'^accounts/', include('socialprofile.urls', namespace="accounts")),
 
     # Index Page
@@ -46,10 +46,10 @@ urlpatterns = [
 if settings.DEBUG:
     from django.conf.urls.static import static
     from django.contrib.staticfiles import views as staticfiles_view
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + urlpatterns
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
     urlpatterns += [
         url(r'^static/(?P<path>.*)$', staticfiles_view.serve),
-    ] + urlpatterns
+    ] 
 
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns

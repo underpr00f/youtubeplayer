@@ -1,4 +1,4 @@
-#!c:\Python\python.exe
+#! /home/underproof/myvenv/bin python
 # -*- coding:utf-8 -*-
 """
 A two-step (registration followed by activation) workflow, implemented

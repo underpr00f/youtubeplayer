@@ -1,4 +1,4 @@
-#!c:\Python\python.exe
+#! /home/underproof/myvenv/bin python
 # -*- coding:utf-8 -*-
 """
 Django settings for youtubeplayer project.
@@ -127,6 +127,7 @@ DATABASES = {
         'PASSWORD': '73501505',
         'HOST': '127.0.0.1',
         'PORT': '3306',
+        'OPTIONS': {'charset': 'utf8mb4'},
         
     }
 }
