@@ -1,4 +1,4 @@
-#!c:\Python\python.exe
+#! /home/underproof/myvenv/bin python
 # -*- coding:utf-8 -*-
 """
 Custom signals sent during the registration and activation processes.

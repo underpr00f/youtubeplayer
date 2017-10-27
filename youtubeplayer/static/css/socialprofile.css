@@ -3,80 +3,86 @@
     max-width: 273px;
 }
 
-.ui-icon-googleplusB { 
-    background: transparent url("../images/Google-Plus.png");
+.button-image:before {
+    content: "";
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position : center center;
+    background-repeat:no-repeat;
     background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
-
 }
 
-.ui-icon-facebookB { 
-    background: transparent url("../images/Facebook-128.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-
+.ui-icon-googleplusB:before{
+    
+    background-image : url(../images/Google-Plus.png);
 }
 
-.ui-icon-twitterB { 
-    background: transparent url("../images/Twitter-Bird-128.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
 
+.ui-icon-facebookB:before { 
+    background-image: url("../images/Facebook-128.png");
+}
+
+.ui-icon-twitterB:before { 
+    background-image: url("../images/Twitter-Bird-128.png");
     
 }
 
-.ui-icon-VkB { 
-    background: transparent url("../images/vk-logo-of-social-network.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
+.ui-icon-VkB:before { 
+
+    background-image: url("../images/vk-logo-of-social-network.png");
+
+}
+
+.ui-icon-OdnoklassnikiB:before { 
+    background-image: url("../images/odnoklassniki-logo.png");
+   
+}
+
+.icon-custom {
+    width: 124px !important;
+    display: inline-block;
+    padding: 4px 0 !important;
+}
+
+.custom-checkbox .custom-control-indicator {
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  background-color: #fff;
+  border: 1px solid #2c2b2c;
+}
+.custom-control-description {
+  color: #2c2b2c;
+  text-transform: uppercase;
+  line-height: 2.7;
+  font-size: 14px;
+}
+/* When I remove background the icon goes back to that default size */
+.custom-control-input:checked~.custom-control-indicator {
+  background-color: #343a40!important;
+}
+
+input[type="text"],
+select.form-control {
   
-    
-}
-
-.ui-icon-OdnoklassnikiB { 
-    background: transparent url("../images/odnoklassniki-logo.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
+  background: #faffbd;
+  border: 2px solid #d4edda;
+  -webkit-box-shadow: none;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 255, 8, 0.6);
+  border-radius: 2;
   
-    
+  
 }
 
-#sp-google-button .ui-icon-googleplusB {
-    
-
+input[type="text"]:focus,
+select.form-control:focus {
+  border-color: #343a40;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #3e4042;
 }
-
-#sp-facebook-button .ui-icon-facebookB {
-    
-
-}
-
-#sp-twitter-button .ui-icon-twitterB {
-    
-}
-
-#sp-vk-button .ui-icon-VkB {
-    
-}
-
-#sp-odnoklassniki-button .ui-icon-OdnoklassnikiB {
-    
-}
-
 
 #sp-profile-form ul {
     list-style: none;
@@ -105,7 +111,7 @@
     display: inline-block;
     height: 20px;
     width: 20px;
-    padding-right: 15px;
+    /*padding-right: 15px;*/
 }
 
 .sp-profile-img-selfchat {

@@ -1,14 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Ошибка аутентификации{% endblock %}
-{% block title_in_body %}Осуществите вход или зарегистрируйтесь{% endblock %}
+
+{% block title_in_body %}
+<div class="alert alert-danger" role="alert">
+  <h4 class="alert-heading">
+    <center>
+	  Осуществите вход или зарегистрируйтесь
+	</center>
+  </h4>
+</div>
+{% endblock %}
+
 {% block content %}
-    <form action="" method="post">
-      {% csrf_token %}
-      <!-- as_p для того, чтобы каждый элемент формы был с новой строки -->
-      {{ form.as_p }}
-      <input type="button" onclick="location.href='../login'" value='Войти'>
-      <input type="button" onclick="location.href='../register'" value='Зарегистрироваться'>
 
-
-    </form>
 {% endblock %}

@@ -1,0 +1,24 @@
+{% load i18n %}
+{% load socialprofile_tags %}
+{% load static %}
+{% load el_pagination_tags %}
+
+
+{% paginate object_list %}
+<ul>
+	{% for object in object_list %}
+        <li name='q' data-room-id="{{ object.id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ object.id }}/'>{{ object }}</a></li>
+        <br>
+    {% empty %}
+        <p class="empty">No chat rooms defined</p>
+    {% endfor %}    
+</ul>
+{% show_more %}
+
+
+
+
+
+
+
+

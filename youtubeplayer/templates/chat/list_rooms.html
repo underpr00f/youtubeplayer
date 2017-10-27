@@ -5,20 +5,17 @@
 
 
 {% block content %}
+<h1>Бесконечный скроллинг Twitter-style</h1>
 
-<p> Для выбора чата достаточно кликнуть один раз мышкой по группе</p>
+{% include page_template %}
 
-<ul class="rooms">
-    {% for room in rooms %}
-        <li class="room-link" name='q' data-room-id="{{ room.id }}"><a href = '{{ request.scheme }}://{{ request.get_host }}/chat/{{ room.id }}/'>{{ room }}</a></li>
-    {% empty %}
-        <p class="empty">No chat rooms defined</p>
-    {% endfor %}
-</ul>
+{% block js %}
+    {{ block.super }}
+    <script src='{% static "js/jquery-3.2.1.min.js" %}'></script>
+    <script src="{{ STATIC_URL }}el-pagination/js/el-pagination.js"></script>
+    <script>$.endlessPaginate({paginateOnScroll: true});</script>
 
-  <script type="text/javascript" src='{% static "js/jquery-1.12.1.min.js" %}'></script>
-
-
+{% endblock %}
 
 {% endblock content %}
 
