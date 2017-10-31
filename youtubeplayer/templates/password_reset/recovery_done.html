@@ -1,7 +1,13 @@
 {% extends "password_reset/base.html" %}{% load i18n %}
 
 {% block title %}{% trans "Новый пароль установлен" %}{% endblock %}
-
+{% block title_in_body %}
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading text-center">
+    Новый пароль установлен
+  </h4>
+</div>
+{% endblock %}
 {% block content %}
-	<p>Ваш пароль успешно сброшен. Вы можете осуществить <a href="{% url 'auth_login' %}">вход</a></p>
+	<h4 class='text-center'>Ваш пароль успешно сброшен. Вы можете осуществить <a href="{% url 'auth_login' %}">вход</a></h4>
 {% endblock %}

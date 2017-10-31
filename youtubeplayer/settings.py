@@ -28,7 +28,7 @@ SECRET_KEY = 'a6587vu2uxg!zi3e*h!n!u%2t4=6hsrs38up7vwfc+-11w99g0'
 DEBUG = True
 #DEBUG = os.environ.get("DEBUG", False)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'myyoutubeplayer.com',]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'myyoutubeplayer.com', 'underproof.pythonanywhere.com']
 
 
 # Application definition
@@ -198,6 +198,19 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 DEFAULT_FROM_EMAIL = 'info@google.ru'
+
+'''
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "2017@gmail.com"
+EMAIL_HOST_PASSWORD = 'Hello'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #console stdout
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+AUTH_USER_EMAIL_UNIQUE = True
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+'''
 
 FILE_CHARSET='utf-8'
 

@@ -355,8 +355,9 @@ class ResetDone(generic.TemplateView):
 
 
 reset_done = ResetDone.as_view()
-
+from django.contrib.auth.decorators import login_required
 ###Change password form по возможности заменить на класс
+@login_required
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)

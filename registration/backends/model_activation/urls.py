@@ -45,7 +45,7 @@ urlpatterns = [
     url(r'^reset/done/$', views.ResetDone.as_view(), name='password_reset_done'),
     url(r'^reset/(?P<token>[\w:-]+)/$', views.Reset.as_view(),
         name='password_reset_reset'),
-    url(r'^password/changing/$', views.change_password, name='change_password'),
+    url(r'^password/changing/$', never_cache(views.change_password), name='change_password'),
     url(r'^password/changing/done$', views.change_password, name='change_password_done'),
     
 ]

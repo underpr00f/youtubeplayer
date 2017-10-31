@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Активация успешна!{% endblock %}
 {% block title_in_body %}
-<div class="alert alert-danger" role="alert">
+<div class="alert alert-success" role="alert">
   <h4 class="alert-heading">
     <center>
 		Активация успешна!
@@ -11,6 +11,6 @@
 {% endblock %}
 {% block content %}
 
-<p> Ваша учетная запись активирована. <a href="{% url 'auth_login' %}">Заходите</a> на сайт. </p>
+<h4 class='text-center'> Ваша учетная запись активирована. <a href="{% url 'auth_login' %}">Заходите</a> на сайт. </h4>
 
 {% endblock %}

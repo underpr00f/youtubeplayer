@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 
 {% block title %} Новый пароль установлен {% endblock %}
-{% block title_in_body %}Новый пароль установлен{% endblock %}
+{% block title_in_body %}
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading text-center">
+    Новый пароль установлен
+  </h4>
+</div>
+{% endblock %}
 {% block content %}
-	<p>{{ user.username }}, Ваш пароль успешно изменен. Перейти <a href="{% url 'home' %}">на главную</a></p>
+
+	<h4 class='text-center'> {{ user.username }}, Ваш пароль успешно изменен. Перейти <a href="{% url 'home' %}">на главную</a></h4>
+
 {% endblock %}
