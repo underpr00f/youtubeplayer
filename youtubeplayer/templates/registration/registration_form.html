@@ -14,16 +14,25 @@
 {% block content %}
 <form method="post" class="post-form" action="">
 {% csrf_token %}
-<dl class="register">
-{% for field in form %}
 
-    <dt>{{ field.label_tag }}</dt>
-    <dd class="clearfix">{{ field }}
-    {% if field.help_text %}<div class="clearfix">{{ field.help_text }}</div>{% endif %}
-    {% if field.errors %}<div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
-    </dd>
+{% for field in form %}
+    <div class="row">
+    <div class="form-group col-6">
+          
+
+          <label for="{{ field.id_for_label }}"><b>{{ field.label }}</b></label>
+          
+          <input class="form-control input-sm" id="{{ field.id_for_label }}" name="{{ field.html_name }}" /> 
+          {{ field.errors }}
+          {% if field.help_text %}
+          <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+        {% endif %}
+          
+      </div>
+      </div>
+
 {% endfor %}
-</dl>
+
 
 <div class="btn-toolbar" role="toolbar">
 	<button type="submit" class="btn btn-dark">Зарегистрироваться</button>
@@ -32,4 +41,8 @@
 </div>
 
 </form>
+{% endblock %}
+
+{% block footer %}
+<hr>
 {% endblock %}

@@ -119,29 +119,50 @@
           </div>
       </div>
     </nav>
+
     {% endif %}
-    
+
 
     {% block title_in_body %}{% endblock %}
-    
-
-
+ 
     {% block header %}{% endblock %}
-    <hr>
     {% block content %}{% endblock %}
     
+    {% block messages %}
+    {% endblock %}
     {% block footer %}
+    {% if not user.is_authenticated %}
+    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img class="d-block w-100" src="{% static 'images/pyth-django-mount.jpg' %}" alt="First slide">
+        <div class="carousel-caption">
+          <button type="button" class="btn btn-outline-success" style="background-color: #cfef9e;" onclick="location.href='../register'">Зарегистрироваться</button>
+          <h3>Приветствую! Меня зовут underproof и я веб-разработчик.</h3>
+          <p>Если вы хотите ознакомиться с возможностями моего сайта на Django, пожалуйста зарегистрируйтесь и осуществите вход</p>
+
+        </div>
+      </div>
+    </div>
+    </div>
+    {% endif %}
+
     <hr>
 
     {% endblock %}
+    {% block afterbody %}    
+    <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+          <p class="navbar-text pull-left">© 2017 - Site Built By underproof
 
-    {% block messages %}
+          </p>
+
+          <button type="button" class="btn btn-danger btn-xs button-image ui-icon-Youtube" onclick='location.href="https://www.youtube.com/channel/UCZ03_XaJDmYrRBrprK2-j4A"'>Subscribe on YouTube</button>
+    </div>
+
+    {% endblock afterbody %}
 
 
-    
-    
-    {% endblock %}
-    {% block afterbody %}{% endblock afterbody %}
 </section>
 
     

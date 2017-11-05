@@ -5,13 +5,22 @@
 {% block title_in_body %}{% trans "Профиль для " %}{{ user.username }}{% endblock %}
 
 {% block header %}
-    <header data-role="header">
-        <a href="{% url 'sp_profile_view_page' %}?returnTo={{ sp_form.returnTo.value }}"
-           data-role="button">{% trans "Отмена" %}</a>
-
-        <h1 class="ui-title">{% trans "Профиль" %}</h1>
-        <a href="#" data-role="button" onclick="$('#sp-profile-form').submit();">{% trans "Применить" %}</a>
-    </header>
+    <div class="alert-success">
+    <div class="container-fluid pt-3">
+        <div class="row">
+            <div class="col2 mx-auto">
+                <a role="button" href="{% url 'sp_profile_view_page' %}?returnTo={{ sp_form.returnTo.value }}"
+           class="btn btn-outline-dark btn-block">{% trans "Отмена" %}</a>
+            </div>
+        <div class="col8 mx-auto text-center">
+            <h1 class="ui-title">{% trans "Профиль" %}</h1>
+        </div>
+        <div class="col2 mx-auto">
+            <a href="#" role="button" class="btn btn-dark btn-block" onclick="$('#sp-profile-form').submit();">{% trans "Применить" %}</a>
+        </div>
+    </div>
+    </div>
+    </div>
 {% endblock %}
 
 {% block content %}
@@ -27,15 +36,31 @@
         {% else %}
         	Empty
         {% endif %}
-        <form action="{% url 'sp_profile_edit_page' %}" method="post" id="sp-profile-form" data-ajax="false" enctype="multipart/form-data">
+        <form action="{% url 'sp_profile_edit_page' %}" method="post" id="sp-profile-form" data-ajax="false" enctype="multipart/form-data" class="post-form">
+
             {% csrf_token %}
+            <div class="form-group">
+            {% for field in user_form %}
+                <div class="row">
+                <div class="form-group col-6">
+                    
+
+                    <label for="{{ field.id_for_label }}"><b>{{ field.label }}</b></label>
+
+                    <input class="form-control input-sm" id="{{ field.id_for_label }}" name="{{ field.html_name }}" type="text" value="{{ field.value }}"/> 
+                    {{ field.errors }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                    {% endif %}
+                    
+                </div>
+                </div>
+            {% endfor %}
             
-            <ul>
-                {{ user_form.as_p }}
-            </ul>
-            <ul>
-                {{ sp_form.as_p }}
-            </ul>
+            {{ sp_form.as_p }}
+
+
+            </div>
         </form>
         <h3 style="margin-left:10px;">{% trans "Социальные соединения" %}</h3>
         {% if user.social_auth.all.count == 1 %}
