@@ -16,17 +16,19 @@
 {% csrf_token %}
 
 {% for field in form %}
+
     <div class="row">
-    <div class="form-group col-6">
+    <div class="form-group col-6 mx-5">
           
 
-          <label for="{{ field.id_for_label }}"><b>{{ field.label }}</b></label>
+          <b>{{ field.label_tag }}</b>
+          <br>
           
-          <input class="form-control input-sm" id="{{ field.id_for_label }}" name="{{ field.html_name }}" /> 
           {{ field.errors }}
+          {{ field }}
           {% if field.help_text %}
           <small class="form-text text-muted">{{ field.help_text|safe }}</small>
-        {% endif %}
+          {% endif %}
           
       </div>
       </div>
@@ -34,7 +36,9 @@
 {% endfor %}
 
 
-<div class="btn-toolbar" role="toolbar">
+
+
+<div class="btn-toolbar mx-5" role="toolbar">
 	<button type="submit" class="btn btn-dark">Зарегистрироваться</button>
 	<button type="reset" class="btn btn-default">Очистить</button>
 	<button type="button" class="btn btn-success" onclick="location.href='../login'">Войти</button>

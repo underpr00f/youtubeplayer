@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load socialprofile_tags %}
 
-{% block title_in_body %}{% trans "Профиль для " %}{{ user.username }}{% endblock %}
+{% block title_in_body %}{% endblock %}
 
 {% block header %}
     <div class="alert-success">
@@ -13,7 +13,7 @@
            class="btn btn-outline-dark btn-block">{% trans "Отмена" %}</a>
             </div>
         <div class="col8 mx-auto text-center">
-            <h1 class="ui-title">{% trans "Профиль" %}</h1>
+            <h1 class="ui-title">{% trans "Профиль для " %}{{ user.username }}</h1>
         </div>
         <div class="col2 mx-auto">
             <a href="#" role="button" class="btn btn-dark btn-block" onclick="$('#sp-profile-form').submit();">{% trans "Применить" %}</a>
@@ -25,16 +25,17 @@
 
 {% block content %}
     <section title="profile" data-role="content">
+        <div class="container">
         <!--{% if user.social_profile.image_url %}
             <img src="{{ user.social_profile.image_url }}"/>
 
         {% endif %}-->
         {% if user.social_profile.avatar %}
-        	<img src="{{ MEDIA_URL }}{{ user.social_profile.avatar }}" width="100" height = "100">
+            <img src="{{ MEDIA_URL }}{{ user.social_profile.avatar }}" width="100" height = "100">
         {% elif user.social_profile.image_url %}
-        	<img src="{{ user.social_profile.image_url }}"/>
+            <img src="{{ user.social_profile.image_url }}"/>
         {% else %}
-        	Empty
+            Empty
         {% endif %}
         <form action="{% url 'sp_profile_edit_page' %}" method="post" id="sp-profile-form" data-ajax="false" enctype="multipart/form-data" class="post-form">
 
@@ -43,22 +44,24 @@
             {% for field in user_form %}
                 <div class="row">
                 <div class="form-group col-6">
-                    
+
 
                     <label for="{{ field.id_for_label }}"><b>{{ field.label }}</b></label>
 
-                    <input class="form-control input-sm" id="{{ field.id_for_label }}" name="{{ field.html_name }}" type="text" value="{{ field.value }}"/> 
+                    <input class="form-control input-sm" id="{{ field.id_for_label }}" name="{{ field.html_name }}" type="text" value="{{ field.value }}"/>
                     {{ field.errors }}
                     {% if field.help_text %}
                         <small class="form-text text-muted">{{ field.help_text|safe }}</small>
                     {% endif %}
-                    
+
                 </div>
                 </div>
             {% endfor %}
-            
-            {{ sp_form.as_p }}
-
+                <div class="row">
+                <div class="form-group col-6">
+                    {{ sp_form.as_p }}
+                </div>
+                </div>
 
             </div>
         </form>
@@ -72,18 +75,19 @@
             <ul>
                 {% for user_social_auth in user.social_auth.all %}
                     <a href="{% url "social:disconnect" user_social_auth.provider %}"
-                       data-role="button">{% trans "Disconnect" %} {{ user_social_auth.provider|social_provider_name }}</a>
+                       role="button" class="btn btn-outline-dark">{% trans "Disconnect" %} {{ user_social_auth.provider|social_provider_name }}</a>
                 {% endfor %}
                 <li><a href="{% url "sp_select_page" %}" data-rel="dialog"
-                       data-role="button">{% trans "Добавить Социальное соединение" %}</a></li>
-            
+                       role="button" class="btn btn-outline-dark">{% trans "Добавить Социальное соединение" %}</a></li>
+
 
         {% endif %}
 
         <br>
         <br>
-        
-        <li><a href="{% url "sp_delete_page" %}" data-role="button" data-theme="e">{% trans "Удалить аккаунт" %}</a></li>
+
+        <li><a href="{% url "sp_delete_page" %}" role="button" class="btn btn-outline-dark">{% trans "Удалить аккаунт" %}</a></li>
         </ul>
+        </div>
     </section>
 {% endblock %}

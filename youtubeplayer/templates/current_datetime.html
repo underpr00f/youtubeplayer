@@ -4,49 +4,68 @@
 {% load static %}
 {% block title %}Текущее время{% endblock %}
 {% block title_in_body %}{% endblock %}
+
+
 {% block content %}
+{% if user.is_authenticated %}
     <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img class="d-block w-100" src="{% static 'images/pyth-django-mount.jpg' %}" alt="First slide">
         <div class="carousel-caption">
 
-          <h3>Текущее время: {{ current_date }}</h3>
+          <h3>{{ current_date }}</h3>
 
         </div>
       </div>
     </div>
     </div>
 
-<div class='container pt-2'>
 
-    <div class='row'>
-        <div class='col-12 mx-auto col-lg-2'>
-            <a role="button" class="btn btn-dark btn-block" href="{% url 'chat_index:select_room' %}">{% trans "Комнаты" %}</a>
-
-
+<div class="container-fluid" style="background-color: #eee">
+    <div class="container p-5">
+        <div class="card-deck">
+            <div class="card text-center border-secondary mb-3" style="width: 20rem;" >
+                <img src="{% static 'images/dressing-room.png' %}" alt="">
+                <div class="card-body text-secondary">
+                    <h4 class="card-title">Чат</h4>
+                    <p class="card-text">На данном хостинге к сожалению данный сервис не работает</p>
+                    <a href="{% url 'chat_index:select_room' %}" role="button" class="btn btn-outline-secondary">Перейти</a>
+                </div>
+            </div>
+            <div class="card text-center border-secondary mb-3" style="width: 20rem;" >
+                <img src="{% static 'images/men-shaking-hands.png' %}" alt="">
+                <div class="card-body text-secondary">
+                    <h4 class="card-title">Друзья</h4>
+                    <p class="card-text">Ваши друзья и подписчики</p>
+                    <br>
+                    <a href="{% url 'friend_index:friend_index' %}" role="button" class="btn btn-outline-secondary">Перейти</a>
+                </div>
+            </div>
+            <div class="card text-center border-secondary mb-3" style="width: 20rem;" >
+                <img src="{% static 'images/list.png' %}" alt="">
+                <div class="card-body text-secondary">
+                    <h4 class="card-title">Список</h4>
+                    <p class="card-text">Работа с длинным списком (бесконечная пагинация)</p>
+                    <a href="{% url 'chat_index:chat_list_rooms' %}" role="button" class="btn btn-outline-secondary">Перейти</a>
+                </div>
+            </div>
         </div>
-
-        <div class='col-12 col-lg-2 mx-auto' >
-            <a role="button" class="btn btn-dark btn-block" href="{% url 'friend_index:friend_index' %}">{% trans "Друзья" %}</a>
-        </div>
-
-        <div class='col-12 col-lg-2 mx-auto'>
-            <a role="button" class="btn btn-dark btn-block" href="{% url 'chat_index:chat_list_rooms' %}">{% trans "Работа со списком" %}</a>
-        </div>
-
     </div>
 </div>
 
 
-{% endblock %}
-
-{% block afterbody %}
 <div class='container'>
     <p class="quiet">
         <code>Вы можете посетить {{ request.scheme }}://{{ request.get_host }}/chat/any-path-you-want для вступления в желаемый чат.</code>
     </p>
 </div>
+{% endif %}
+{% endblock %}
+
+
+{% block afterbody %}
+
 
 <div class="navbar navbar-default navbar-fixed-bottom">
     <div class="container">
@@ -58,3 +77,4 @@
 </div>
 
 {% endblock %}
+

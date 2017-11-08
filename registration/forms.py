@@ -43,12 +43,47 @@ class RegistrationForm(UserCreationForm):
     # but workflows in django-registration which involve explicit
     # activation step do require it. If you need an optional email
     # field, simply subclass and declare the field not required.
+
+
+
     email = forms.EmailField(
         help_text=_(u'email address'),
-        required=True
+        required=True,
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+
+    )
+    
+    password1 = forms.CharField(
+        label= _(u"Пароль"),
+        widget=forms.PasswordInput(attrs={'class': 'form-control', }),
+
     )
 
+    password2 = forms.CharField(
+        label= _(u"Подтверждение пароля"),
+        widget=forms.PasswordInput(attrs={'class': 'form-control', }),
+
+    )
+
+    last_name = forms.CharField(
+        label= _(u"Фамилия"),
+        widget=forms.TextInput(attrs={'class': 'form-control', }),
+
+    )
+
+    first_name = forms.CharField(
+        label= _(u"Имя"),
+        widget=forms.TextInput(attrs={'class': 'form-control', }),
+
+    )
+
+
+
+
+
     class Meta(UserCreationForm.Meta):
+
+
         fields = [
             User.USERNAME_FIELD,
             'email',
@@ -57,9 +92,21 @@ class RegistrationForm(UserCreationForm):
             'last_name',
             'first_name',
         ]
+
+
+        #password widgets didn`t worked
+        widgets = {
+            User.USERNAME_FIELD: forms.TextInput(attrs={'class': 'form-control'}),
+            
+
+        }
+        
+
         required_css_class = 'required'
 
         ordering = ['user__username']
+
+
 
     def clean(self):
         """

@@ -7,56 +7,55 @@
 
 {% endblock %}
 
+{% block title_in_body %}
+<div class="alert alert-success text-center" role="alert">
+  <h4 class="alert-heading">
+    Друзья пользователя {{ user.username }}
+  </h4>
+</div>
+{% endblock %}
+
 {% block content %}
 <meta http-equiv="Cache-Control" content="private"> 
 
 <div class="container">
 	
-	<!--
-	<form method="post">
-	{% csrf_token %}
+    <div class="row">
+        <div class="col">
+            <h2>Список всех пользователей</h2>
+            {% for user in users %}
+                {% if not user in friends %}
+                <li>{{ user.username }}
+                <br>
+                <a href="{% url 'friend_index:change_friends' operation='add' pk=user.pk %}" role="button" class="btn btn-outline-secondary btn-block">Добавить</a>
+                </a></li>
+                
+                {% endif %} 
+            {% endfor %}
+        </div>
+        <div class="col-6 text-center">    
 
-    {{ form.post }}
-    <br>
-    <label for='Searching'>Поиск пользователя: </label><input type='text' name='q' placeholder="Найти друга" maxlength='30' style='background-color: #e4e4b8;' />
-
-    <button type="submit">Найти</button>
-    </form>
-    -->
-
-    <form method='GET' action='/friendship/'><label for='q'>Поиск пользователя: </label><input type='text' name='q' value='{{ request.GET.q }}' maxlength='30' style='background-color: #e4e4b8;' /><button type='submit'>Поиск</button></form>
+            <form method='GET' action='/friendship/'>
+                <div class="input-group">
+                    <input type='text' class="form-control" name='q' value='{{ request.GET.q }}' maxlength='30' style='background-color: #e4e4b8;' placeholder="Поиск пользователя для приглашения" />
+                    <span class="input-group-btn">
+                        <button type='submit' class="btn btn-outline-dark">Поиск</button>
+                    </span>
+                </div>
+            </form>
         
 
+
     
-
-
-
-
-    <div class="col-md-3 " >
-    <h2>Список всех пользователей</h2>
-    {% for user in users %}
-    	{% if not user in friends %}
-    	<li>{{ user.username }}
-    	
-        <a href="{% url 'friend_index:change_friends' operation='add' pk=user.pk %}" >
-    	<button type="button" data-role="button" data-theme="b" >Добавить</button>
-    	</a></li>
-    	
-    	{% endif %}	
-    {% endfor %}
-    </div>
-
-    <div class="col-md-6 " >
         
         {% if request.GET.q %}
         	<h2><center>Результаты поиска</center></h2>
         	{% for obj in object_list %}
         		<p>Найден пользователь:</p>
-        		<li><b>{{ obj }}</b>
+        		<li><b>{{ obj }}</b> (Это Вы!)
         		{% if not obj in friends %}
         			{% if obj.pk != user.pk %}
-        			<a href="{% url 'friend_index:change_friends' operation='add' pk=obj.pk %}" > 
-    				<button type="button" data-role="button" data-theme="b" >Подписаться</button>
+        			<a href="{% url 'friend_index:change_friends' operation='add' pk=obj.pk %}" role="button" class="btn btn-outline-secondary" >Подписаться</a>
     				</a>
     				{% endif %}
     			{% endif %}
@@ -66,26 +65,14 @@
         	{% endfor %}
         
         {% endif %}
+    
     </div>
+    <div class="col">
+   
 
-    <div class="col-md-3">
-    <!-- ЭТО лист подписчиков без друзей
-    <h2>Ваши подписки</h2>
-    
-    
-    {% for friend in friends %}
-    	<li>{{ friend.username }}<a href="{% url 'friend_index:change_friends' operation='remove' pk=friend.pk %}">
-    	<button type="button" data-role="button" >Убрать</button>
-    	</a></li>
-
-    {% empty %}
-        <p class="empty">Подписки отсутствуют</p>
-   		
-    {% endfor %}
-    -->
     <h2>Ваши друзья</h2>
     {% for true_friend in true_friends %}
-    	<li>{{ true_friend }}<a href="{% url 'friend_index:change_friends' operation='remove' pk=true_friend.pk %}" > <button type="button" data-role="button" >Отменить дружбу</button>
+    	<li>{{ true_friend }}<a href="{% url 'friend_index:change_friends' operation='remove' pk=true_friend.pk %}" role="button" class="btn btn-outline btn-block" >Отменить дружбу</a>
     	</a></li>
     	{% empty %}
    		<p class="empty">Друзья отсутствуют</p>
@@ -93,7 +80,7 @@
 
     <h2>Подписаны на вас</h2>
     {% for drug in drugs %}
-    	<li>{{ drug.username }}<a href="{% url 'friend_index:change_friends' operation='add' pk=drug.pk %}" > <button type="button" data-role="button" data-theme="b" >Подружиться</button>
+    	<li>{{ drug.username }}<a href="{% url 'friend_index:change_friends' operation='add' pk=drug.pk %}" role="button" class="btn btn-outline btn-block" >Подружиться</a>
     	</a></li>
     	{% empty %}
         <p class="empty">На вас никто не подписан</p>
@@ -102,8 +89,7 @@
     <h2>Ваши подписки</h2>
     
     {% for friendl in friendlist %}
-    	<li>{{ friendl }}<a href="{% url 'friend_index:change_friends' operation='remove' pk=friendl.pk %}">
-    	<button type="button" data-role="button" >Убрать</button>
+    	<li>{{ friendl }}<a href="{% url 'friend_index:change_friends' operation='remove' pk=friendl.pk %}" role="button" class="btn btn-warning btn-block" >Убрать</a>
     	</a></li>
 
     {% empty %}

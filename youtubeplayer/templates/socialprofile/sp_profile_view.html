@@ -31,7 +31,7 @@
 {% block content %}
     <section title="profile" data-role="content">
 
-
+        <div class="container">
         <section title="{% trans 'Picture' %}" class="sp-profile-img">
         	{% if user.social_profile.avatar %}
         		<img src="{{ MEDIA_URL }}{{ user.social_profile.avatar }}" width="100" height = "100">
@@ -45,7 +45,7 @@
             <h2 class="sp-profile-name">{{ user_form.first_name.value|default:"&nbsp;" }} {{ user_form.last_name.value|default:"&nbsp;" }}</h2>
         </section>
 
-        <div class="container">
+        
         <ul>
             <li>{{ user_form.username.label_tag }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {{ user_form.username.value|default:"&nbsp;" }}</li>

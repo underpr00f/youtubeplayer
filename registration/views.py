@@ -195,7 +195,7 @@ class LogoutView(View):
 def my_homepage_view(request,*args,**kwargs):
     
     if not request.user.is_authenticated():
-        return HttpResponseRedirect('/accounts/login/')
+        return render(request, 'current_datetime.html',)
     
     else:
         now = datetime.datetime.now()

@@ -7,17 +7,17 @@
 <!-- for refresh page -->
 <meta http-equiv="Cache-Control" content="private"> 
 
-<div class="container-fluid">
+<div class="container-fluid mt-5">
   <div class="row">
 
   <div class="col">
     
-    <a href="{% url 'chat_index:title_room' %}" role="button" class="btn btn-dark btn-block" >{% trans "Создать комнату" %}</a>
+    <a href="{% url 'chat_index:title_room' %}" role="button" class="btn btn-secondary btn-block" >{% trans "Создать комнату" %}</a>
     <br>
     <h4> Настроить созданные вами чаты </h4>
     {% for room_owner in room_owners %}
       {% if room_owner.private %}
-        <a href="{% url 'chat_index:private_room' pk=room_owner.id %}" ><button type="button" class="btn btn-dark btn-block">{{ room_owner }}</button></a> 
+        <a href="{% url 'chat_index:private_room' pk=room_owner.id %}" role="button" class="btn btn-outline-secondary btn-block">{{ room_owner }}</a> 
     
       {% else %}
         <a href="{% url 'chat_index:private_room' pk=room_owner.id %}" ><button type="button" class="btn btn-outline-dark btn-block">{{ room_owner }}</button></a> 
