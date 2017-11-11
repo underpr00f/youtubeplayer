@@ -26,7 +26,7 @@ class SocialProfileForm(forms.ModelForm):
     user = forms.IntegerField(widget=forms.HiddenInput, required=True)
     returnTo = forms.CharField(widget=forms.HiddenInput, required=False, initial='/')  # URI to Return to after save
     manually_edited = forms.BooleanField(widget=forms.HiddenInput, required=False, initial=True)
-    description = forms.CharField(label=_(u'Описание'), widget = forms.Textarea(attrs={'class': 'form-control',}))
+    description = forms.CharField(label=_(u'Описание'), required=False, widget = forms.Textarea(attrs={'class': 'form-control',}))
 
 
     avatar = forms.ImageField(

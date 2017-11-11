@@ -47,5 +47,6 @@ urlpatterns = [
         name='password_reset_reset'),
     url(r'^password/changing/$', never_cache(views.change_password), name='change_password'),
     url(r'^password/changing/done$', views.change_password, name='change_password_done'),
+    url(r'^about/$', never_cache(views.about_us), name='about_us'),
     
 ]

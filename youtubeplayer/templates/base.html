@@ -13,9 +13,9 @@
     <!--<script src='{% static "js/jquery-1.12.1.min.js" %}'></script>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>-->
-         
 
-    
+
+
 
     <title>{% block title %}{% endblock %}</title>
 
@@ -36,16 +36,16 @@
         if (window.location.hash == "#_=_")
             window.location.hash = "";
     </script>
-    
+
 </head>
 <body {% block body_class %}{% endblock %}>
     <script src='{% static "js/jquery-3.2.1.min.js" %}'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src='{% static "bootstrap/js/bootstrap.js" %}'></script>
- 
+
 <section {% block page_role %}data-role="page"{% endblock %}>
-  
-   
+
+
     {% if user.is_authenticated %}
 <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
    <div class='container'>
@@ -73,7 +73,7 @@
             <a href='{% url "home" %}' class='nav-link'>Главная</a>
           </li>
           <li class='nav-item'>
-            <a href='#' class='nav-link'>Инфо</a>
+            <a href='{% url "about_us" %}' class='nav-link'>Инфо</a>
           </li>
 
           <li class="nav-item dropdown">
@@ -91,16 +91,18 @@
 
 
         <form class="form-inline ml-auto">
-          <input class="form-control mr-sm-2" type="text" placeholder="Поиск" aria-label="Search">
-          <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Поиск</button>
+          <div class="input-group">
+          <input class="form-control mr-sm-2" type="text" placeholder="Поиск по сайту" aria-label="Search">
+          <span class="input-group-btn"><button class="btn btn-outline-light my-2 my-sm-0" type="submit">Поиск</button></span>
+          </div>
         </form>
       </div>
   </div>
 </nav>
-        
+
     {% else %}
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-      <div class='container'>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+   <div class='container'>
         <h4 class="navbar-brand">Здравствуйте, Аноним</h4>
 
         <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarCollapseLinks' aria-expanded='false' aria-label='Toggle Navigation'>
@@ -108,7 +110,7 @@
         </button>
 
           <div class='collapse navbar-collapse' id='navbarCollapseLinks'>
-            <ul class='navbar-nav flex-row ml-md-auto d-none d-md-flex'>
+            <ul class='navbar-nav ml-auto'>
               <li class='nav-item'>
                 <a href='{% url "auth_login" %}' class='nav-link'>Войти</a>
               </li>
@@ -124,10 +126,10 @@
 
 
     {% block title_in_body %}{% endblock %}
- 
+
     {% block header %}{% endblock %}
     {% block content %}{% endblock %}
-    
+
     {% block messages %}
     {% endblock %}
     {% block footer %}
@@ -137,9 +139,9 @@
       <div class="carousel-item active">
         <img class="d-block w-100" src="{% static 'images/pyth-django-mount.jpg' %}" alt="First slide">
         <div class="carousel-caption">
-          <button type="button" class="btn btn-outline-success" style="background-color: #cfef9e;" onclick="location.href='../register'">Зарегистрироваться</button>
+          <button type="button" class="btn btn-outline-success" style="background-color: #cfef9e;" onclick="location.href='{% url "registration_register" %}'">Зарегистрироваться</button>
           <h3>Приветствую! Меня зовут underproof и я веб-разработчик.</h3>
-          <p>Если вы хотите ознакомиться с возможностями моего сайта на Django, пожалуйста зарегистрируйтесь и осуществите вход</p>
+          <h6>Если вы хотите ознакомиться с возможностями моего сайта на Django, пожалуйста зарегистрируйтесь и осуществите вход</h6>
 
         </div>
       </div>
@@ -150,14 +152,14 @@
     <hr>
 
     {% endblock %}
-    {% block afterbody %}    
+    {% block afterbody %}
     <div class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
-          <p class="navbar-text pull-left">© 2017 - Site Built By underproof
+          <h6 class="navbar-text pull-left">© 2017 - Site Built By underproof
 
-          </p>
+          </h6>
 
-          <button type="button" class="btn btn-danger btn-xs button-image ui-icon-Youtube" onclick='location.href="https://www.youtube.com/channel/UCZ03_XaJDmYrRBrprK2-j4A"'>Subscribe on YouTube</button>
+          <button type="button" class="btn btn-danger btn-xs button-image ui-icon-Youtube" onclick='location.href="https://www.youtube.com/channel/UCZ03_XaJDmYrRBrprK2-j4A"'><span class="d-none d-sm-inline-block">Subscribe on YouTube</span></button>
     </div>
 
     {% endblock afterbody %}
@@ -165,8 +167,8 @@
 
 </section>
 
-    
-	
+
+
 
 </body>
 </html>

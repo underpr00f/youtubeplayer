@@ -25,29 +25,29 @@
 <div class="container-fluid" style="background-color: #eee">
     <div class="container p-5">
         <div class="card-deck">
-            <div class="card text-center border-secondary mb-3" style="width: 20rem;" >
+            <div class="card text-center border-success mb-3">
                 <img src="{% static 'images/dressing-room.png' %}" alt="">
                 <div class="card-body text-secondary">
                     <h4 class="card-title">Чат</h4>
                     <p class="card-text">На данном хостинге к сожалению данный сервис не работает</p>
-                    <a href="{% url 'chat_index:select_room' %}" role="button" class="btn btn-outline-secondary">Перейти</a>
+                    <a href="{% url 'chat_index:select_room' %}" role="button" class="btn btn-outline-success">Перейти</a>
                 </div>
             </div>
-            <div class="card text-center border-secondary mb-3" style="width: 20rem;" >
+            <div class="card text-center border-success mb-3">
                 <img src="{% static 'images/men-shaking-hands.png' %}" alt="">
                 <div class="card-body text-secondary">
                     <h4 class="card-title">Друзья</h4>
                     <p class="card-text">Ваши друзья и подписчики</p>
                     <br>
-                    <a href="{% url 'friend_index:friend_index' %}" role="button" class="btn btn-outline-secondary">Перейти</a>
+                    <a href="{% url 'friend_index:friend_index' %}" role="button" class="btn btn-outline-success">Перейти</a>
                 </div>
             </div>
-            <div class="card text-center border-secondary mb-3" style="width: 20rem;" >
+            <div class="card text-center border-success mb-3">
                 <img src="{% static 'images/list.png' %}" alt="">
                 <div class="card-body text-secondary">
                     <h4 class="card-title">Список</h4>
                     <p class="card-text">Работа с длинным списком (бесконечная пагинация)</p>
-                    <a href="{% url 'chat_index:chat_list_rooms' %}" role="button" class="btn btn-outline-secondary">Перейти</a>
+                    <a href="{% url 'chat_index:chat_list_rooms' %}" role="button" class="btn btn-outline-success">Перейти</a>
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@
 
 
 <div class='container'>
-    <p class="quiet">
+    <p class="quiet" style="font-size: 1.5vw !important;">
         <code>Вы можете посетить {{ request.scheme }}://{{ request.get_host }}/chat/any-path-you-want для вступления в желаемый чат.</code>
     </p>
 </div>
@@ -69,11 +69,11 @@
 
 <div class="navbar navbar-default navbar-fixed-bottom">
     <div class="container">
-      <p class="navbar-text pull-left">© 2017 - Site Built By underproof
+      <h6>© 2017 - Site Built By underproof
 
-      </p>
+      </h6>
 
-    <button type="button" class="btn btn-danger btn-xs button-image ui-icon-Youtube" onclick='location.href="https://www.youtube.com/channel/UCZ03_XaJDmYrRBrprK2-j4A"'>Subscribe on YouTube</button>
+    <button type="button" class="btn btn-danger btn-xs button-image ui-icon-Youtube" onclick='location.href="https://www.youtube.com/channel/UCZ03_XaJDmYrRBrprK2-j4A"'><span class="d-none d-sm-inline-block">Subscribe on YouTube</span></button>
 </div>
 
 {% endblock %}

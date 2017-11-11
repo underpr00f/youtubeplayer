@@ -374,5 +374,13 @@ def change_password(request):
         'form': form
     })
 
-
+#about page
+def about_us(request,*args,**kwargs):
+    
+    if not request.user.is_authenticated():
+        return render(request, 'about.html',)
+    
+    else:
+        now = datetime.datetime.now()
+        return render(request, 'about.html', {'current_date': now})
 
