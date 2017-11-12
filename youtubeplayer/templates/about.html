@@ -5,11 +5,23 @@
 {% block title_in_body %}
 <div class="alert alert-success" role="alert">
   <h4 class="alert-heading text-center">
-    Обо мне
+    Youtubeplayer
   </h4>
 </div>
 {% endblock %}
 
+<p><iframe name="forPlaylist" width="1300" height="170" frameborder="0" class="block2"></iframe></p>
+<p style="float:right; padding-right: 100px;"><iframe name="forVideo" src="Images\playerImage.jpg" class="forAuth" width="700" height="350" frameborder="0" style="border: 2px solid grey" ></iframe></p>
+  
+<!-- <div class="forAuth"><a href="main.html">Меню авторизации</a> </div> -->
+<div class="block1">Введите ссылку на видео (канал) с YouTube и ключ разработчика (плеер выведет вам список из последних 10 видео):
+<form action="\cgi-bin\cgiGet.py" class="block1" target="forPlaylist" method="post">
+  <input type="text" placeholder="Введите ссылку" name="urlChannel"> Ссылка на видео (канал) <br><br>
+  <input type="password" placeholder="Введите API-ключ" name="apiKey"> Ключ разработчика <br>
+  <input type="submit" value='Отправить'>
+  <input type="reset" value="Очистить">
+    
+</form></div>
 
 {% block content %}
 

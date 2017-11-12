@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^socialprofile/', include('socialprofile.urls')),
     url(r'^chat/', include('chat.urls', namespace='chat_index')),
     url(r'^friendship/', include('friendship.urls', namespace='friend_index')),
+    url(r'^player/', include('player.urls', namespace='player_index')),
     
     #url(r'^accounts/', include('socialprofile.urls', namespace="accounts")),
 

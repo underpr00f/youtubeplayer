@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'el_pagination',
     
     'sslserver',
-    #'player',
+    'player',
     'social_django',
     'social.apps.django_app.default',
     'registration',

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Youtubeplayer {% endblock %}
+{% block title_in_body %}
+<div class="alert alert-success text-center" role="alert">
+  <h4 class="alert-heading">
+    Youtubeplayer
+  </h4>
+  Введите ссылку на видео (канал) с YouTube (плеер выведет вам список из последних 10 видео):
+</div>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+  	<div class="col-lg-3 col-sm-3 col-xs-12 pt-3">
+  	</div>
+
+	
+	<div class="col-lg-6 col-sm-6 col-xs-12 pt-3 text-center">
+
+		<!--<form action="/player/" class="post-form" target="forPlaylist" method='GET'>-->
+		<form action="/player/" class="post-form" method='GET'>
+
+		  <input class="form-control" type="text" placeholder="Введите ссылку" name="urlChannel">
+
+		  
+		  
+	      <div class="btn-toolbar" role="toolbar">
+	        <button type="submit" class="btn btn-dark icon-custom">Поиск</button>
+	        <button type="reset" class="btn btn-default icon-custom">Очистить</button>
+		  </div>
+
+		</form>
+	
+      
+      {% if request.GET.urlChannel %}
+        <h2>Результаты поиска</h2>
+        {% for name in name_list %}
+        	{{ name }}
+        {% endfor %}
+
+        {% for obj in video_list %}
+            
+            {{ obj | safe }}
+
+        {% empty %}
+        <center><p class="empty">Канал '<b>{{ request.GET.urlChannel }}</b>' отсутствуют</p></center>
+        {% endfor %}
+
+      {% endif %}
+	</div>
+
+	
+  </div>
+  <div class="col-lg-3 col-sm-3 col-xs-12 pt-3">
+  </div>
+
+
+  <div class="row">
+  	<div class="embed">
+		<iframe name="forPlaylist" width="1300" height="170" frameborder="0" style="border: 2px solid grey" class="embed-responsive-item"></iframe>
+	</div>
+	<div class="embed-responsive embed-responsive-16by9">
+		<iframe name="forVideo" src="{% static 'images/dressing-room.png' %}" class="embed-responsive-item" frameborder="0" style="border: 2px solid grey" ></iframe></div>
+  </div>
+
+</div>
+
+
+{% endblock %}
