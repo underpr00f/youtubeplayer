@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 import requests
 import json
 import re
+from youtubeplayer.social_auth import YOUTUBE_API_KEY
 
 # Create your views here.
 @never_cache
@@ -19,10 +20,6 @@ class PlayerView(TemplateView):
 	def get(self, request, *args, **kwargs):
 		CHANNEL_ID = request.GET.get("urlChannel")
 		VIDEO_ID = None
-
-
-		
-		YOUTUBE_API_KEY='AIzaSyCg2TiZUIkvSOqlNS0pVtAQG_0WkohscD0'
 		queryset_list=[]
 		vidID = []
 		chName = []
