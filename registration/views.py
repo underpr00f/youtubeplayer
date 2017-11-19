@@ -195,7 +195,7 @@ class LogoutView(View):
 def my_homepage_view(request,*args,**kwargs):
     
     if not request.user.is_authenticated():
-        return HttpResponseRedirect('/accounts/login/')
+        return render(request, 'current_datetime.html',)
     
     else:
         now = datetime.datetime.now()
@@ -355,8 +355,9 @@ class ResetDone(generic.TemplateView):
 
 
 reset_done = ResetDone.as_view()
-
+from django.contrib.auth.decorators import login_required
 ###Change password form по возможности заменить на класс
+@login_required
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -373,5 +374,13 @@ def change_password(request):
         'form': form
     })
 
-
+#about page
+def about_us(request,*args,**kwargs):
+    
+    if not request.user.is_authenticated():
+        return render(request, 'about.html',)
+    
+    else:
+        now = datetime.datetime.now()
+        return render(request, 'about.html', {'current_date': now})
 

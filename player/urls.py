@@ -1,22 +1,18 @@
 """
-Backwards-compatible URLconf for existing django-registration
-installs; this allows the standard ``include('registration.urls')`` to
-continue working, but that usage is deprecated and will be removed in
-a future release.  For new installs, use
-``include('registration.backends.model_activation.urls')``.
+URLconf for registration and activation, using django-registration's
+two-step model-based activation workflow.
 
 """
 
-import warnings
-
-from player.backends.model_activation import urls as model_urls
-
-
-warnings.warn(
-    "include('registration.urls') is deprecated; use "
-    "include('registration.backends.model_activation.urls') instead.",
-    DeprecationWarning
-)
+from django.conf.urls import include, url
+from django.views.generic.base import TemplateView
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required
+from . import views
 
 
-urlpatterns = model_urls.urlpatterns
+urlpatterns = [
+    
+    url(r'^$', never_cache(login_required(views.PlayerView.as_view())), name='player'),
+    
+]

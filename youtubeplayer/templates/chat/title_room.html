@@ -8,13 +8,14 @@
     Введите название для чата    
   </h4>
 </div>
+
 {% endblock title_in_body %}
 {% block content %}
 
 <div class="container">
   <div class="row">
 
-    <div class="col-8 mx-auto">
+    <div class="col-12 mx-auto">
         
 
         
@@ -39,27 +40,26 @@
 
         <form method='POST' action='' class="form-post">
             {% csrf_token %}
-            <input class="form-control" type='text' name='label' value='{{ request.POST.label }}' maxlength='30' placeholder="Введите название чата" />
-            <br>
+            <div class="input-group">
+                <input class="form-control" type='text' name='label' value='{{ request.POST.label }}' maxlength='30' placeholder="Введите название чата" /><span class="input-group-btn"><button class="btn btn-dark" type='submit'>Создать</button></span>
+            </div>
+            
             <div class="form-check">
             <div class="container">
             <div class="row">
-            <label class="custom-control custom-checkbox">
+                <div class="col mx-auto">
+                  <label class="custom-control custom-checkbox">
                 
-                <div class="col">
+                
                   <input type="checkbox" name="private_group" id="private_group" class="custom-control-input">
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description ml-4">Закрытая группа</span> 
-                </div>
-                <div class="col-1">
-                  <div class="btn-group">
-                    <button href="{% url 'chat_index:select_room' %}" class="btn btn-outline-dark " >{% trans "Отмена" %}</button>
+                
 
-                    <button class="btn btn-dark" type='submit'>Создать</button>
-                   
-                </div>
                  
-            </label>
+                  </label>
+                                     
+                </div>
             </div>
             </div> 
             </div>
@@ -67,7 +67,9 @@
             
 
         </form>
-
+    <div class="col-3 mr-auto">
+        <a href="{% url 'chat_index:select_room' %}" role="button" class="btn btn-outline-dark " >{% trans "Отмена" %}</a>
+    </div>
         
     </div>
 

@@ -1,7 +1,17 @@
 {% extends "base.html"  %}
+{% block title_in_body %}
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading text-center">
+    Регистрация завершена
+  </h4>
+</div>
+{% endblock %}
+
 {% block content %}
-<h1>Регистрация завершена</h1>
 Спасибо за уделённое время. На ваш e-mail отправлен 
 код подтверждения. Необходимо подтвердить регистрацию, 
 просто кликнув по указанной ссылке.<br/><br/>
+{% endblock %}
+{% block footer %}
+<div class="container" style="height: 600px"></div>
 {% endblock %}

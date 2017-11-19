@@ -1,4 +1,4 @@
-Register at site.
-Link this URL to finish
-{{ site }}/accounts/activate/{{ activation_key }}/
-Thanks!
+Регистрация на сайте выполнена.
+Для активации аккаунта кликните на ссылку ниже
+http://{{ site }}/accounts/activate/{{ activation_key }}/
+Спасибо!

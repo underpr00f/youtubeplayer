@@ -19,10 +19,10 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col">
+    <div class="col-lg-3 col-sm-3 col-xs-12 pt-3">
       <a href="{% url 'chat_index:select_room' %}" role="button" class="btn btn-dark btn-block">{% trans "Принять" %}</a>
     </div>
-    <div class="col-6 text-center">
+    <div class="col-lg-6 col-sm-6 col-xs-12 pt-3 text-center">
       {% if room.private %}
         
         
@@ -64,7 +64,7 @@
       {% endif %}
     </div>
     
-    <div class="col">
+    <div class="col-lg-3 col-sm-3 col-xs-12 pt-3">
       <a href="{% url 'chat_index:change_members' pk=room.id operation='delete' pkid=request.user.id %}" role="button" data-icon="delete" class="btn btn-danger btn-block"><b>Удалить комнату</b></a>
 
       {% if room.private %}
@@ -102,21 +102,7 @@
 </div>         
 
 
-<div class="ui-grid-b">
-<div class="ui-block-a">
 
-
-
-<div class="ui-block-b">
-
-</div>
-
-  <div class="ui-block-c">
-
-
-  </div>
-
-</div>
 
 
 

@@ -32,6 +32,7 @@ from registration.views import ResetDone as BaseResetDone
 from .utils import get_user_model, get_username
 
 from registration.views import change_password
+from registration.views import about_us
 
 class RegistrationView(BaseRegistrationView):
     """
