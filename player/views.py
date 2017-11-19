@@ -27,22 +27,23 @@ class PlayerView(TemplateView):
 		vidID = []
 		chName = []
 		
-		match = re.search("=", CHANNEL_ID)
-		if match:
-			VIDEO_ID = CHANNEL_ID.rsplit('=', 1)[-1]
-			CHANNEL_URI = 'https://www.googleapis.com/youtube/v3/videos?key={}&part=snippet&id={}'
-			FORMAT_YOUTUBE_URI = CHANNEL_URI.format( YOUTUBE_API_KEY, VIDEO_ID)
-			#get json
-			content = requests.get(FORMAT_YOUTUBE_URI).text
-			data = json.loads(content)
 
-			#search ChannelId and ChannelTitle
-			for item in data.get('items'):
-				CHANNEL_ID = item.get('snippet').get('channelId')
-		else:
-			CHANNEL_ID = CHANNEL_ID.rsplit('/', 1)[-1]
 		
 		if CHANNEL_ID:
+			match = re.search("=", CHANNEL_ID)
+			if match:
+				VIDEO_ID = CHANNEL_ID.rsplit('=', 1)[-1]
+				CHANNEL_URI = 'https://www.googleapis.com/youtube/v3/videos?key={}&part=snippet&id={}'
+				FORMAT_YOUTUBE_URI = CHANNEL_URI.format( YOUTUBE_API_KEY, VIDEO_ID)
+				#get json
+				content = requests.get(FORMAT_YOUTUBE_URI).text
+				data = json.loads(content)
+
+				#search ChannelId and ChannelTitle
+				for item in data.get('items'):
+					CHANNEL_ID = item.get('snippet').get('channelId')
+			else:
+				CHANNEL_ID = CHANNEL_ID.rsplit('/', 1)[-1]
 			
 			YOUTUBE_URI = 'https://www.googleapis.com/youtube/v3/search?key={}&channelId={}&part=snippet,id&type=video&order=date&maxResults=10'
 			FORMAT_YOUTUBE_URI = YOUTUBE_URI.format( YOUTUBE_API_KEY, CHANNEL_ID)
@@ -50,7 +51,7 @@ class PlayerView(TemplateView):
 			content = requests.get(FORMAT_YOUTUBE_URI).text			
 			data = json.loads(content)
 
-			CHANNEL_ID = CHANNEL_ID.rsplit('=', 1)[-1]
+			#CHANNEL_ID = CHANNEL_ID.rsplit('=', 1)[-1]
 			
 			
 

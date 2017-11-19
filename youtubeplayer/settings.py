@@ -22,7 +22,7 @@ DEMO_DIR = os.path.join(BASE_DIR, 'youtubeplayer')
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'a6587vu2uxg!zi3e*h!n!u%2t4=6hsrs38up7vwfc+-11w99g0'
+#SECRET_KEY = 'a6587vu2uxg!zi3e*h!n!u%2t4=6hsrs38up7vwfc+-11w99g0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

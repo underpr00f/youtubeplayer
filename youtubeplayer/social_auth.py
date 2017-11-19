@@ -2,6 +2,35 @@
 # Модель пользователя. Здесь стандартная.
 import os
 
+#secrets
+SECRET_KEY = 'a6587vu2uxg!zi3e*h!n!u%2t4=6hsrs38up7vwfc+-11w99g0'
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'underproof$youtubedb',
+        'USER': 'underproof',
+        'PASSWORD': 'F0rc0sigan',
+        'HOST': 'underproof.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
+        'OPTIONS': {'charset': 'utf8mb4'},
+
+    }
+}
+FILE_CHARSET='utf-8'
+DEFAULT_CHARSET='utf-8'
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "underproof2017@gmail.com"
+EMAIL_HOST_PASSWORD = 'Helloworld'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+AUTH_USER_EMAIL_UNIQUE = True
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+'''
+
 #DJANGO_AUTH_MODEL="socialprofile.User"
 #AUTH_USER_MODEL = 'auth.User'
 SOCIAL_AUTH_USER_MODEL = 'auth.User'
