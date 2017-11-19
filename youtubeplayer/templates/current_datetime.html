@@ -24,41 +24,58 @@
 
 <div class="container-fluid" style="background-color: #eee">
     <div class="container p-5">
+        <div class="row">
         <div class="card-deck">
+        
             <div class="card text-center border-success mb-3">
-                <img src="{% static 'images/dressing-room.png' %}" alt="">
+                <img class="card-img-top img-fluid" src="{% static 'images/dressing-room.png' %}" alt="">
                 <div class="card-body text-secondary">
                     <h4 class="card-title">Чат</h4>
                     <p class="card-text">На данном хостинге к сожалению данный сервис не работает</p>
+                </div>
+                <div class="card-footer">
                     <a href="{% url 'chat_index:select_room' %}" role="button" class="btn btn-outline-success">Перейти</a>
                 </div>
             </div>
+                 
             <div class="card text-center border-success mb-3">
-                <img src="{% static 'images/men-shaking-hands.png' %}" alt="">
+                <img class="card-img-top img-fluid" src="{% static 'images/men-shaking-hands.png' %}" alt="">
                 <div class="card-body text-secondary">
                     <h4 class="card-title">Друзья</h4>
                     <p class="card-text">Ваши друзья и подписчики</p>
-                    <br>
+                </div>
+                <div class="card-footer">
                     <a href="{% url 'friend_index:friend_index' %}" role="button" class="btn btn-outline-success">Перейти</a>
                 </div>
             </div>
+            
+            <div class="w-100 d-none d-sm-block d-md-none"><!-- wrap every 2 on sm--></div>
+
             <div class="card text-center border-success mb-3">
-                <img src="{% static 'images/list.png' %}" alt="">
+                <img class="card-img-top img-fluid" src="{% static 'images/list.png' %}" alt="">
                 <div class="card-body text-secondary">
                     <h4 class="card-title">Список</h4>
                     <p class="card-text">Работа с длинным списком (бесконечная пагинация)</p>
+                </div>
+                <div class="card-footer">
                     <a href="{% url 'chat_index:chat_list_rooms' %}" role="button" class="btn btn-outline-success">Перейти</a>
                 </div>
             </div>
 
+
             <div class="card text-center border-success mb-3">
-                <img src="{% static 'images/list.png' %}" alt="">
+                <img class="card-img-top img-fluid" src="{% static 'images/televisions.png' %}" alt="">
                 <div class="card-body text-secondary">
                     <h4 class="card-title">Youtubeplayer</h4>
                     <p class="card-text">Мой плеер YouTube</p>
+                </div>
+                <div class="card-footer">
                     <a href="{% url 'player_index:player' %}" role="button" class="btn btn-outline-success">Перейти</a>
                 </div>
             </div>
+
+            <div class="w-100 d-none d-sm-block d-md-none"><!-- wrap every 2 on sm--></div>
+        </div>
         </div>
     </div>
 </div>

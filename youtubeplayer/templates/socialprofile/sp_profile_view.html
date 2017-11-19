@@ -17,10 +17,10 @@
 
             <div class="col-xs-12 col-sm-4 col-lg-2 mx-auto">
                 {% if request.user.username == user_form.username.value %}
-            
+
                 <a role="button" class="btn btn-lg btn-dark btn-block" href="{% url "sp_profile_edit_page" %}?returnTo={{ sp_form.returnTo.value }}" data-role="button"
                        data-ajax="false">{% trans "Изменить" %}</a>
-            
+
                 {% endif %}
             </div>
         </div>
@@ -33,38 +33,38 @@
 
         <div class="container">
         <section title="{% trans 'Picture' %}" class="sp-profile-img">
-        	{% if user.social_profile.avatar %}
-        		<img src="{{ MEDIA_URL }}{{ user.social_profile.avatar }}" width="100" height = "100">
-        	{% elif user.social_profile.image_url %}
-        		<img src="{{ user.social_profile.image_url }}"/>
-        	{% else %}
-        		<img src="{{ sp_form.image_url.value|default:"http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm" }}">
-        	{% endif %}
-            
+            {% if user.social_profile.avatar %}
+                <img src="{{ MEDIA_URL }}{{ user.social_profile.avatar }}" width="100" height = "100">
+            {% elif user.social_profile.image_url %}
+                <img src="{{ user.social_profile.image_url }}"/>
+            {% else %}
+                <img src="{{ sp_form.image_url.value|default:"http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm" }}">
+            {% endif %}
+
 
             <h2 class="sp-profile-name">{{ user_form.first_name.value|default:"&nbsp;" }} {{ user_form.last_name.value|default:"&nbsp;" }}</h2>
         </section>
 
-        
-        <ul>
-            <li>{{ user_form.username.label_tag }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        <ul class="list-group">
+            <li class="list-group-item">{{ user_form.username.label_tag }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {{ user_form.username.value|default:"&nbsp;" }}</li>
 
-            <li>{{ user_form.email.label_tag }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <li class="list-group-item">{{ user_form.email.label_tag }}
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {{ user_form.email.value|default:"&nbsp;" }}</li>
 
-            <li>{{ sp_form.gender.label_tag }}
-            	&nbsp;{{ sp_form.gender.value|title|default:"&nbsp;" }}
+            <li class="list-group-item">{{ sp_form.gender.label_tag }}
+                &nbsp;{{ sp_form.gender.value|title|default:"&nbsp;" }}
             </li>
 
-            <li>{{ sp_form.url.label_tag }}
+            <li class="list-group-item">{{ sp_form.url.label_tag }}
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ sp_form.url.value|urlize }}
             </li>
 
-            <li>{{ sp_form.description.label_tag }}&nbsp;{{ sp_form.description.value|default:"&nbsp;" }}</li>
+            <li class="list-group-item">{{ sp_form.description.label_tag }}&nbsp;{{ sp_form.description.value|default:"&nbsp;" }}</li>
             {% if request.user.username == user_form.username.value %}
-                <li>{% trans "Аутентификация:" %}&nbsp;&nbsp;&nbsp;
+                <li class="list-group-item">{% trans "Аутентификация:" %}&nbsp;&nbsp;&nbsp;
                     {% for user_social_auth in user.social_auth.all %}
                         {{ user_social_auth.provider|social_provider_name }}{% if not forloop.last %},&nbsp;{% endif %}
                     {% empty %}
