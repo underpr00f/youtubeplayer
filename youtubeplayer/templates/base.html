@@ -47,7 +47,7 @@
 
 
     {% if user.is_authenticated %}
-<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
    <div class='container'>
       <a class="navbar-brand" href="{% url 'sp_profile_view_page' %}">
         {% if user.social_profile.avatar %}
@@ -67,7 +67,7 @@
 
 
 
-      <div class='collapse navbar-collapse' id='navbarCollapseLinks'>
+      <div class='collapse navbar-collapse navbar-toggleable-md' id='navbarCollapseLinks'>
         <ul class='navbar-nav'>
           <li class='nav-item'>
             <a href='{% url "home" %}' class='nav-link'>Главная</a>
@@ -89,10 +89,10 @@
 
         </ul>
 
-        
-        <form class="form-inline ml-auto">
+      
+        <form class="form-inline ml-auto" class="post-form">
           <div class="input-group">
-          <input class="form-control mr-sm-2" type="text" placeholder="Поиск по сайту" aria-label="Search">
+          <input class="form-control" type="text" placeholder="Поиск по сайту" aria-label="Search">
           <span class="input-group-btn"><button class="btn btn-outline-light my-2 my-sm-0" type="submit">Поиск</button></span>
           </div>
         </form>

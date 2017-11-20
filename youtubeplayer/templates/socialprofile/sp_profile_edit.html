@@ -7,17 +7,19 @@
 {% block header %}
     <div class="alert-success">
     <div class="container-fluid pt-3 pb-3">
-        <div class="row">
-            <div class="col-xs-12 col-sm-4 col-lg-2 mx-auto">
-                <a role="button" href="{% url 'sp_profile_view_page' %}?returnTo={{ sp_form.returnTo.value }}"
-           class="btn btn-lg btn-outline-dark btn-block">{% trans "Отмена" %}</a>
+        <div class="row justify-content-around">
+            <div class="col-xs-2">
+
+                <button type="button" class="btn btn-outline-secondary btn-lg button-image previous-icon" onclick='location.href="{% url 'sp_profile_view_page' %}?returnTo={{ sp_form.returnTo.value }"'><span class="d-none d-sm-inline-block">{% trans "Назад" %}</span></button>
             </div>
-        <div class="col-xs-12 col-sm-4 col-lg-8 text-center">
-            <h1>{{ user.username }}</h1>
-        </div>
-        <div class="col-xs-12 col-sm-4 col-lg-2 mx-auto">
-            <a href="#" role="button" class="btn btn-lg btn-dark btn-block" onclick="$('#sp-profile-form').submit();">{% trans "Применить" %}</a>
-        </div>
+            
+            <div class="col-xs-2">
+                <h1>Редактирование</h1>
+            </div>
+            <div class="col-xs-2">
+                
+                <button type="button" class="btn btn-outline-secondary btn-lg ok-icon" onclick='$("#sp-profile-form").submit();'><span class="d-none d-sm-inline-block" >{% trans "Применить" %}</span></button>
+            </div>
         </div>
     </div>
     </div>
