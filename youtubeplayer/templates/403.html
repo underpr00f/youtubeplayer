@@ -1,18 +1,22 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block headtitle %}Нет Доступа{% endblock %}
 
 {% block content %}
-    <section title="Forbidden" data-role="content" data-theme="e">
-        <h2><span class="ui-icon ui-icon-alert ui-icon-shadow" style="display:inline-block;margin-right:20px;">&nbsp;</span>Извините, у вас отсутствует доступ</h2>
-        {% if messages %}
-            {% for msg in messages %}
-                <p class="error">{{ msg.message }} ({{ msg.extra_tags }})</p>
-            {% endfor %}
-        {% endif %}
-        {% if error_msg %}
-            <p>Details:</p>
-            <p class="error">{{ error_msg }}</p>
-        {% endif %}
+    <section title="Forbidden" data-role="content" data-theme="e" style="height: 800px">
+    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img class="d-block w-100" src="{% static 'images/pyth-django-mount.jpg' %}" alt="First slide">
+        <div class="carousel-caption">
+        <div class="container text-center pt-3">
+            <h2>Извините, у вас отсутствует доступ</h2>
+            <button type="button" class="btn btn-outline-success" style="background-color: #cfef9e;" onclick="location.href='{% url "home" %}'">На главную</button>
+        </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
     </section>
 {% endblock %}

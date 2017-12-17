@@ -1,82 +1,119 @@
+@import url(https://fonts.googleapis.com/css?family=Lora:400,700%7CRusso+One:400,700&subset=latin,cyrillic);
+html *
+{
+
+   font-family: 'Lora', serif !important;
+}
 
 .sp-login-modal .ui-dialog-contain {
     max-width: 273px;
 }
 
-.ui-icon-googleplusB { 
-    background: transparent url("../images/Google-Plus.png");
+.button-image:before {
+    content: "";
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position : center center;
+    background-repeat:no-repeat;
     background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
-
+    font-size: 1.5vw;
 }
 
-.ui-icon-facebookB { 
-    background: transparent url("../images/Facebook-128.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-
+.ui-icon-googleplusB:before{
+    
+    background-image : url(../images/Google-Plus.png);
 }
 
-.ui-icon-twitterB { 
-    background: transparent url("../images/Twitter-Bird-128.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
 
+.ui-icon-facebookB:before { 
+    background-image: url("../images/Facebook-128.png");
+}
+
+.ui-icon-twitterB:before { 
+    background-image: url("../images/Twitter-Bird-128.png");
     
 }
 
-.ui-icon-VkB { 
-    background: transparent url("../images/vk-logo-of-social-network.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
+.ui-icon-VkB:before { 
+
+    background-image: url("../images/vk-logo-of-social-network.png");
+
+}
+.ui-icon-VkB:hover { 
+    
+    background-color: #395373 !important;
+
+}
+
+.ui-icon-OdnoklassnikiB:before { 
+    background-image: url("../images/odnoklassniki-logo.png");
+   
+}
+
+.ui-icon-Youtube:before { 
+    background-image: url("../images/youtube.png");
+   
+}
+
+.icon-custom {
+    width: 124px !important;
+    display: inline-block;
+    padding: 4px 0 !important;
+}
+
+.custom-checkbox .custom-control-indicator {
+  border-radius: 50%;
+  min-height: 25px;
+  min-width: 25px;
+  background-color: #fff;
+  border: 1px solid #2c2b2c;
+}
+.custom-control-description {
+  color: #2c2b2c;
+  text-transform: uppercase;
+  line-height: 2.7;
+  font-size: 14px;
+}
+/* When I remove background the icon goes back to that default size */
+.custom-control-input:checked~.custom-control-indicator {
+  background-color: #343a40!important;
+}
+
+input[type="text"],
+select.form-control {
   
-    
-}
-
-.ui-icon-OdnoklassnikiB { 
-    background: transparent url("../images/odnoklassniki-logo.png");
-    background-size: 25px 25px;
-    background-repeat: no-repeat; 
-    background-position: top 50% left 7%;
-    width: 90px;
-    float: left;
+  background: #faffbd;
+  border: 2px solid #d4edda;
+  -webkit-box-shadow: none;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 255, 8, 0.6);
+  border-radius: 2;
   
-    
+  
 }
 
-#sp-google-button .ui-icon-googleplusB {
-    
-
+input[type="text"]:focus,
+select.form-control:focus {
+  border-color: #343a40;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #3e4042;
 }
 
-#sp-facebook-button .ui-icon-facebookB {
+
+
+
+.carousel-caption {
     
-
+    width: 100%;
+    left: 0%!important;
+    top: 40% !important;
+    transform: translateY(-50%);
+    text-align: left;
+    text-shadow: 1px 1px 2px black, 0 0 25px green, 0 0 5px darkgreen;
+    bottom: initial;
 }
-
-#sp-twitter-button .ui-icon-twitterB {
-    
-}
-
-#sp-vk-button .ui-icon-VkB {
-    
-}
-
-#sp-odnoklassniki-button .ui-icon-OdnoklassnikiB {
-    
-}
-
 
 #sp-profile-form ul {
     list-style: none;
@@ -99,6 +136,21 @@
     display: inline-block;
     height: 80px;
     width: 80px;
+}
+
+.sp-profile-img-chat {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    /*padding-right: 15px;*/
+}
+
+.sp-profile-img-selfchat {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    float: right;
+    /*clear: right;*/
 }
 
 .sp-profile-name {
@@ -127,6 +179,8 @@
     color: #ff0000;
 }
 
+
+
 /*chat*/
 .empty {
     color: #666;
@@ -147,7 +201,33 @@
         border: 1px solid #35485C;
     }
 
+
+
+.us li {
+    color: black;
+    list-style-type: none;
+
+    }
+
+
+    .us li.Offline {
+
+
+    }
+
+
+    .us li.Online {
+        /*content: "\2022";
+        color: green;*/
+        list-style-image: url('../images/small-light-bulb.png');
+        
+    }
+
+
+
+
 #chats {
+
 }
     #chats .room {
         border: 1px solid #ccc;
@@ -160,18 +240,112 @@
         font-weight: bold;
     }
     #chats .messages {
-        height: 200px;
+        /*height: 200px;*/
+        /*display: inline-block;*/
         overflow: auto;
         background: #eee;
-        margin: 2px 0 5px 0;
+        margin-left: 15px;
+        /*margin: 2px 0 5px 0;*/
+        word-wrap: break-word;
+        
+
     }
-    #chats .username {
-        display: inline-block;
-        color: #C07A36;
-        width: 150px;
-        text-overflow: ellipsis;
+    /*ne rabotaet*/
+    #chats .members {
+        overflow: auto;
+        background: #92ec8c;
+           
+    }
+    /*ne rabotaet*/
+    #chats .leftmembers {
+        overflow: auto;
+        background: red;
+           
+    }
+
+
+
+    #chats .selfmessages {
+        text-align: center;
+        overflow: auto;
+        float: right;
+        /*clear: right;
+        display: inline-block;*/
+        background: #92ec8c;
+        margin-right: 15px;
+        float-right: auto;
+        /*margin-right: auto;*/
+        word-wrap: break-word;
+        
+       
+    }
+    #chats .selfusername {
+        
+        /*height: 200px;*/
+        float: right;
+        clear: right;
         font-weight: bold;
+        color: #3648C7;
+        /*margin: 2px 0 5px 0;*/
+        margin-left: 10px;
+        margin-right: 2px;
+        
+        font-size: x-small; 
+
+
+        
     }
+    #chats .clearing {
+        clear: both;
+    }
+    
+    #chats .selfdate {
+        
+        /*vertical-align: bottom;*/
+        
+        /*float: bottom;*/
+        float: right;
+        
+        font-family: Arial, sans-serif; 
+        font-size: x-small;
+         
+        
+    }    
+    
+
+    #chats .username {
+        float: left;
+        clear: left;
+        font-weight: bold;
+        /*margin-left: 10px;*/
+        margin-right: 15px;
+        font-size: x-small; 
+        color: #C08A36;
+        font-weight: bold;
+        
+        /*width: 150*/
+       
+    }
+
+    #chats .udate {
+        
+        /*vertical-align: bottom;*/
+        
+        /*float: bottom;*/
+        float: left;
+        
+        font-family: Arial, sans-serif; 
+        font-size: x-small;
+         
+        
+    } 
+    /*
+    #chats .username:after {
+        content: " ";      
+
+    }
+    */
+
     #chats .contextual-message{
         text-align: center;
         margin: 5px 5px 5px 5px;
@@ -189,3 +363,178 @@
         font-weight: bold;
         font-style: italic;
     }
+
+.controlgroup-textinput{
+    padding-top:.22em;
+    padding-bottom:.22em;
+    width: 44em;
+}
+
+h6 {
+  font-size: 1vw !important;
+}
+h5 {
+  font-size: 2vw !important;
+}
+
+h3 {
+    font-size: 3vw !important;
+    font-family: 'Russo One', serif !important;
+}       
+
+h1 {
+    font-size: 5.9vw !important;
+}     
+
+
+
+.btn {
+    border-radius: 0 !important;
+
+}
+
+.dropdown:hover>.dropdown-menu {
+  display: block;
+}
+
+hr {
+   display: inline-block;
+   width: 100px;
+   border-bottom: 2px solid #b7b7b7;
+
+
+}
+
+.card {
+    background-color: transparent !important;
+}
+
+.card-img-top {
+    width:120px !important;
+    height:120px !important;
+    border: 2px solid #b7b7b7;
+    padding: 15px;
+    transition:all 1s;
+    -webkit-transition:all 1s;
+    -moz-transition:all 1s;
+
+}
+.card-img-top:hover {
+    border-radius:35%;
+}
+
+@media (min-width: 768px) {
+
+    /* show 4 items */
+    .carousel-inner .active,
+    .carousel-inner .active + .carousel-item,
+    .carousel-inner .active + .carousel-item + .carousel-item,
+    .carousel-inner .active + .carousel-item + .carousel-item + .carousel-item
+
+    {
+        display: block;
+    }
+    
+    .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left),
+    .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item,
+    .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item, 
+    .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item + .carousel-item {
+        transition: none;
+    }
+    
+    .carousel-inner .carousel-item-next,
+    .carousel-inner .carousel-item-prev {
+      position: relative;
+      transform: translate3d(0, 0, 0);
+    }
+    
+    .carousel-inner .active.carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+        position: absolute;
+        top: 0;
+        right: -25%;
+        z-index: -1;
+        display: block;
+        visibility: visible;
+    }
+    
+    /* left or forward direction */
+    .active.carousel-item-left + .carousel-item-next.carousel-item-left,
+    .carousel-item-next.carousel-item-left + .carousel-item,
+    .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item,
+    .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item, 
+    .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+        position: relative;
+        transform: translate3d(-100%, 0, 0);
+        visibility: visible;
+    }
+    
+    /* farthest right hidden item must be abso position for animations */
+    .carousel-inner .carousel-item-prev.carousel-item-right {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        display: block;
+        visibility: visible;
+    }
+    
+    /* right or prev direction */
+    .active.carousel-item-right + .carousel-item-prev.carousel-item-right,
+    .carousel-item-prev.carousel-item-right + .carousel-item,
+    .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item,
+    .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item, 
+    .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+        position: relative;
+        transform: translate3d(100%, 0, 0);
+        visibility: visible;
+        display: block;
+        visibility: visible;
+    }
+
+
+}
+
+.carousel-control-next-icon {
+    background-image : url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%343A40' viewBox='0 0 8 8'%3E%3Cpath stroke='white' fill='red' d='M1.5 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+
+}
+.carousel-control-prev-icon {
+    background-image : url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%343A40' viewBox='0 0 8 8'%3E%3Cpath stroke='white' fill='red' d='M4 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+}
+
+
+.previous-icon {
+    background-image : url("../images/previous.svg") !important;
+    background-repeat: no-repeat; 
+}
+
+.edit-icon:after {
+    content: "";
+    background-image : url("../images/edit.svg") !important;
+    background-repeat: no-repeat; 
+    background-position: center center;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    margin-left: 5px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-size: 25px 25px;
+
+
+}
+.ok-icon:after {
+    content: "";
+    background-image : url("../images/ok-mark.svg") !important;
+    background-repeat: no-repeat; 
+    background-position: center center;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    margin-left: 5px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-size: 25px 25px;
+
+
+}

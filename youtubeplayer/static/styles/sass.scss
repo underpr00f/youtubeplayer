@@ -1,0 +1,76 @@
+@import "../bootstrap/scss/bootstrap";
+
+
+$red:#d83b2a;
+
+@mixin transition($in) {
+    transition:$in;
+    -webkit-transition:$in;
+    -moz-transition:$in;
+    -o-transition:$in;
+    -ms-transition:$in;
+}
+@mixin transform($in) {
+    transform:$in;
+    -webkit-transform:$in;
+    -moz-transform:$in;
+    -o-transform:$in;
+    -ms-transform:$in;
+}
+@mixin animation($in) {
+    animation:$in;
+    -webkit-animation:$in;
+    -moz-animation:$in;
+    -o-animation:$in;
+    -ms-animation:$in;
+}
+
+.myButt {
+    outline:none;
+    border:none;
+    padding:20px;
+    display:block;
+    margin:0px auto;
+    cursor:pointer;
+    font-size:15px;
+    background-color:$red;
+    position:relative;
+    border:2px solid #fff;
+
+    @include transition(all 0.5s ease);
+}
+
+.four {
+    overflow:hidden;
+    
+    span {
+        color:#fff;
+        display:inline-block;
+        
+        @include transition(all 0.3s ease);
+
+    }
+
+    .icon {
+        position:absolute;
+        left:-60px;
+        top:0;
+        color:#fff;
+        padding:20px;
+        background-color:$red;
+        @include transition(all 0.3s ease);
+
+    }
+
+    &:hover {
+        .icon {
+            left:0px;
+
+        }
+        span {
+            color:#fff;
+            margin-left:50px;
+
+        }
+    }
+}

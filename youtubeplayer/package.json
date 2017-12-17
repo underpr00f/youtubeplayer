@@ -1,0 +1,30 @@
+{
+  "name": "youtubeplayer",
+  "version": "1.0.0",
+  "description": "my project",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "testttt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/underpr00f/youtubeplayer.git"
+  },
+  "keywords": [
+    "youtubeplayer"
+  ],
+  "author": "underproof",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/underpr00f/youtubeplayer/issues"
+  },
+  "homepage": "https://github.com/underpr00f/youtubeplayer#readme",
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp-notify": "^3.0.0",
+    "gulp-sass": "^3.1.0",
+    "sass-loader": "^6.0.6"
+  }
+}

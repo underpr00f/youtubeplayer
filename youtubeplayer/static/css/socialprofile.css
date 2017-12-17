@@ -1,4 +1,12 @@
 
+
+@import url(https://fonts.googleapis.com/css?family=Lora:400,700%7CRusso+One:400,700&subset=latin,cyrillic);
+html *
+{
+
+   font-family: 'Lora', serif !important;
+}
+
 .sp-login-modal .ui-dialog-contain {
     max-width: 273px;
 }
@@ -37,6 +45,11 @@
     background-image: url("../images/vk-logo-of-social-network.png");
 
 }
+.ui-icon-VkB:hover { 
+    
+    background-color: #395373 !important;
+
+}
 
 .ui-icon-OdnoklassnikiB:before { 
     background-image: url("../images/odnoklassniki-logo.png");
@@ -45,6 +58,9 @@
 
 .ui-icon-Youtube:before { 
     background-image: url("../images/youtube.png");
+    border: 1px solid #fff;
+    border-radius: 25%;
+
    
 }
 
@@ -360,11 +376,15 @@ select.form-control:focus {
 }
 
 h6 {
+  font-size: 1vw !important;
+}
+h5 {
   font-size: 2vw !important;
 }
 
 h3 {
     font-size: 3vw !important;
+    font-family: 'Russo One', serif !important;
 }       
 
 h1 {
@@ -373,11 +393,44 @@ h1 {
 
 
 
+.btn {
+    border-radius: 0 !important;
 
+}
+
+.dropdown:hover>.dropdown-menu {
+  display: block;
+}
+
+hr {
+   display: inline-block;
+   width: 100px;
+   border-bottom: 2px solid #b7b7b7;
+
+
+}
+
+.card {
+    background-color: transparent !important;
+}
+
+.card-img-top {
+    width:120px !important;
+    height:120px !important;
+    border: 2px solid #b7b7b7;
+    padding: 15px;
+    transition:all 1s;
+    -webkit-transition:all 1s;
+    -moz-transition:all 1s;
+
+}
+.card-img-top:hover {
+    border-radius:35%;
+}
 
 @media (min-width: 768px) {
 
-    /* show 3 items */
+    /* show 4 items */
     .carousel-inner .active,
     .carousel-inner .active + .carousel-item,
     .carousel-inner .active + .carousel-item + .carousel-item,
@@ -457,7 +510,14 @@ h1 {
 .previous-icon {
     background-image : url("../images/previous.svg") !important;
     background-repeat: no-repeat; 
+    background-position: 5px center;
+    display: inline-block;
+    vertical-align: text-top;
+    background-size: 25px 25px;
+
 }
+
+
 
 .edit-icon:after {
     content: "";
@@ -470,6 +530,7 @@ h1 {
     margin-left: 5px;
     vertical-align: text-top;
     background-color: transparent;
+    background-size: 25px 25px;
 
 
 }
@@ -487,4 +548,20 @@ h1 {
     background-size: 25px 25px;
 
 
+}
+
+.svg {
+    width: 25px;
+    height: 25px;
+
+}
+svg path,
+svg circle {
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    -o-transition: all .5s ease;
+}
+svg:hover path {
+    fill: red;
 }
