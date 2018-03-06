@@ -19,6 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from django.conf import settings
 
+from .models import Contact
 from . import validators
 
 from django.db.models.query_utils import Q
@@ -327,4 +328,16 @@ class PasswordResetForm(forms.Form):
             )
         return self.user
 
-###Password change form
+
+#Форма обратной связи
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ('name', 'second_name', 'email', 'message')
+
+#Форма обратной связи for authorized
+class ContactAuthForm(forms.ModelForm):
+
+    class Meta:
+        model = Contact
+        fields = ('name', 'second_name', 'email','message',)

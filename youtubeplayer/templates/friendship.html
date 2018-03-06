@@ -74,7 +74,7 @@
 
     <h2>Ваши друзья</h2>
     {% for true_friend in true_friends %}
-        <li>{{ true_friend }}<a href="{% url 'friend_index:change_friends' operation='remove' pk=true_friend.pk %}" role="button" class="btn btn-outline btn-block" >Отменить дружбу</a>
+        <li>{{ true_friend }}<a href="{% url 'friend_index:change_friends' operation='remove' pk=true_friend.pk %}" role="button" class="btn btn-outline-secondary btn-block" >Отменить дружбу</a>
         </a></li>
         {% empty %}
         <p class="empty">Друзья отсутствуют</p>
@@ -82,7 +82,7 @@
 
     <h2>Подписаны на вас</h2>
     {% for drug in drugs %}
-        <li>{{ drug.username }}<a href="{% url 'friend_index:change_friends' operation='add' pk=drug.pk %}" role="button" class="btn btn-outline btn-block" >Подружиться</a>
+        <li>{{ drug.username }}<a href="{% url 'friend_index:change_friends' operation='add' pk=drug.pk %}" role="button" class="btn btn-outline-secondary btn-block" >Подружиться</a>
         </a></li>
         {% empty %}
         <p class="empty">На вас никто не подписан</p>

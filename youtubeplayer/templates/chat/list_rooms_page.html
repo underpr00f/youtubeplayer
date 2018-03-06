@@ -3,6 +3,95 @@
 {% load static %}
 {% load el_pagination_tags %}
 
+{% block content %}
+<div class="alert-success">
+    <div class="container-fluid pt-3 pb-3">
+        <div class="row justify-content-around">
+
+            <div class="col-xs-2 my-auto">
+            <button type="button" class="btn btn-outline-secondary btn-lg button-image previous-icon" onclick='location.href="{{ sp_form.returnTo.value|default:'/' }}"'><span class="d-none d-sm-inline-block">{% trans "Назад" %}</span></button>
+            </div>
+            <div class="col-xs-2 my-auto">
+            <h2>{% trans "Профиль" %}</h2>
+            </div>
+            <div class="col-xs-2 my-auto">
+            <button type="button" class="btn btn-outline-secondary btn-lg edit-icon" onclick='location.href="{% url "sp_profile_edit_page" %}?returnTo={{ sp_form.returnTo.value }}"'><span class="d-none d-sm-inline-block" >{% trans "Изменить" %}</span></button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<img src= '{% static "/images/previous.svg" %}' class="svg" />
+<script type="text/javascript">
+/*
+  * Replace all SVG images with inline SVG
+  */
+$(function() {
+	$('img.svg').each(function() {
+	         var $img = $(this);
+	         var imgID = $img.attr('id');
+	         var imgClass = $img.attr('class');
+	         var imgURL = $img.attr('src');
+
+	         //alert(imgClass);
+	         //alert(imgURL);
+	$.get(imgURL, function(data) {
+	             // Get the SVG tag, ignore the rest
+	             var $svg = $(data).find('svg');
+	// Add replaced image's ID to the new SVG
+	             if (typeof imgID !== 'undefined') {
+	                 $svg = $svg.attr('id', imgID);
+	             }
+	             // Add replaced image's classes to the new SVG
+	             if (typeof imgClass !== 'undefined') {
+	                 $svg = $svg.attr('class', imgClass + ' replaced-svg');
+	             }
+	// Remove any invalid XML tags as per http://validator.w3.org
+	             $svg = $svg.removeAttr('xmlns:a');
+	// Replace image with new SVG
+	             $img.replaceWith($svg);
+
+	}, 'xml');
+	});
+})
+
+$(function() {
+	$('button.svg').each(function() {
+	         var $img = $(this);
+	         var imgID = $img.attr('id');
+	         var imgClass = 'svg';
+	         /*var imgClass = $img.attr('class');*/
+	         var imgURL = $img.css('background-image');
+	         imgURL = imgURL.replace('url(','').replace(')','').replace(/\"/gi, "");
+
+	         //alert(imgClass);
+	         //alert(imgURL);
+
+	$.get(imgURL, function(data) {
+	             // Get the SVG tag, ignore the rest
+	             var $svg = $(data).find('svg');
+	// Add replaced image's ID to the new SVG
+	             if (typeof imgID !== 'undefined') {
+	                 $svg = $svg.attr('id', imgID);
+	             }
+	             // Add replaced image's classes to the new SVG
+	             if (typeof imgClass !== 'undefined') {
+	                 $svg = $svg.attr('class', imgClass + ' replaced-svg');
+	             }
+	// Remove any invalid XML tags as per http://validator.w3.org
+	             $svg = $svg.removeAttr('xmlns:a');
+	// Replace image with new SVG
+	             $img.replaceWith($svg);
+
+	}, 'xml');
+	});
+})
+
+</script>
+{% endblock %}
+
 
 {% paginate object_list %}
 <ul>
@@ -11,7 +100,7 @@
         <br>
     {% empty %}
         <p class="empty">No chat rooms defined</p>
-    {% endfor %}    
+    {% endfor %}
 </ul>
 {% show_more %}
 

@@ -4,5 +4,6 @@
 htmlcov/
 staticfiles/
 venv/
+youtubeplayer/social_auth.py
 *.pyc
 *.pyc

@@ -8,13 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <link rel="icon" href="{% static 'images/favicon.ico' %}" />
     <link rel="stylesheet" href="{% static 'css/socialprofile.css' %}"/>
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-
-    <!--<script src='{% static "js/jquery-1.12.1.min.js" %}'></script>
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>-->
-
-
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}"/>
+    <link href='{% static "styles/compiled/sass.css" %}' rel="stylesheet"/>
 
 
     <title>{% block title %}{% endblock %}</title>
@@ -38,16 +35,13 @@
     </script>
 
 </head>
-<body {% block body_class %}{% endblock %}>
-    <script src='{% static "js/jquery-3.2.1.min.js" %}'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-    <script src='{% static "bootstrap/js/bootstrap.js" %}'></script>
+<body>
 
-<section {% block page_role %}data-role="page"{% endblock %}>
+<section {% block page_role %}data-role="page" {% endblock %}>
 
 
-    {% if user.is_authenticated %}
-<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+{% if user.is_authenticated %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
    <div class='container'>
       <a class="navbar-brand" href="{% url 'sp_profile_view_page' %}">
         {% if user.social_profile.avatar %}
@@ -67,7 +61,7 @@
 
 
 
-      <div class='collapse navbar-collapse' id='navbarCollapseLinks'>
+      <div class='collapse navbar-collapse navbar-toggleable-md' id='navbarCollapseLinks'>
         <ul class='navbar-nav'>
           <li class='nav-item'>
             <a href='{% url "home" %}' class='nav-link'>Главная</a>
@@ -89,10 +83,10 @@
 
         </ul>
 
-        
-        <form class="form-inline ml-auto">
+
+        <form class="form-inline ml-auto" class="post-form">
           <div class="input-group">
-          <input class="form-control mr-sm-2" type="text" placeholder="Поиск по сайту" aria-label="Search">
+          <input class="form-control" type="text" placeholder="Поиск по сайту" aria-label="Search">
           <span class="input-group-btn"><button class="btn btn-outline-light my-2 my-sm-0" type="submit">Поиск</button></span>
           </div>
         </form>
@@ -100,9 +94,9 @@
   </div>
 </nav>
 
-    {% else %}
-<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
-   <div class='container'>
+{% else %}
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+      <div class='container'>
         <h4 class="navbar-brand">Здравствуйте, Аноним</h4>
 
         <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarCollapseLinks' aria-expanded='false' aria-label='Toggle Navigation'>
@@ -112,7 +106,7 @@
           <div class='collapse navbar-collapse' id='navbarCollapseLinks'>
             <ul class='navbar-nav ml-auto'>
               <li class='nav-item'>
-                <a href='{% url "auth_login" %}' class='nav-link'>Войти</a>
+                <a href='{% url "auth_login" %}' class='nav-link' id="btnModal">Войти</a>
               </li>
               <li class='nav-item'>
                 <a href='{% url "registration_register" %}' class='nav-link'>Зарегистрироваться</a>
@@ -122,7 +116,7 @@
       </div>
     </nav>
 
-    {% endif %}
+{% endif %}
 
 
     {% block title_in_body %}{% endblock %}
@@ -134,32 +128,44 @@
     {% endblock %}
     {% block footer %}
     {% if not user.is_authenticated %}
+    <section data-role="content" data-theme="e">
     <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img class="d-block w-100" src="{% static 'images/pyth-django-mount.jpg' %}" alt="First slide">
+        <img class="d-block w-100 flex" src="{% static 'images/snow2.jpg' %}" alt="First slide" >
         <div class="carousel-caption">
-          <button type="button" class="btn btn-outline-success" style="background-color: #cfef9e;" onclick="location.href='{% url "registration_register" %}'">Зарегистрироваться</button>
+          <button type="button" class="myButt two" onclick="location.href='{% url "registration_register" %}'"><h5>Зарегистрироваться</h5></button>
           <h3>Приветствую! Меня зовут underproof и я веб-разработчик.</h3>
-          <h6>Если вы хотите ознакомиться с возможностями моего сайта на Django, пожалуйста зарегистрируйтесь и осуществите вход</h6>
+          <h5>Если вы хотите ознакомиться с возможностями моего сайта на Django, пожалуйста зарегистрируйтесь и осуществите вход</h5>
 
         </div>
       </div>
     </div>
     </div>
+    </section>
+    
+
+
     {% endif %}
 
-    <hr>
+    <center><hr></center>
+
 
     {% endblock %}
     {% block afterbody %}
     <div class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
-          <h6 class="navbar-text pull-left">© 2017 - Site Built By underproof
+
+          <h6>© 2018 - Site Built By underproof
 
           </h6>
+        <button class='myButt four mr-0' onclick='location.href="https://www.youtube.com/channel/UCZ03_XaJDmYrRBrprK2-j4A"'>
+            <div class='icon button-image ui-icon-Youtube'></div>
+            <span>Me on Youtube</span>
+        </button>
 
-          <button type="button" class="btn btn-danger btn-xs button-image ui-icon-Youtube" onclick='location.href="https://www.youtube.com/channel/UCZ03_XaJDmYrRBrprK2-j4A"'><span class="d-none d-sm-inline-block">Subscribe on YouTube</span></button>
+        </div>
+
     </div>
 
     {% endblock afterbody %}
@@ -168,7 +174,13 @@
 </section>
 
 
-
+    <script src='{% static "js/jquery-3.2.1.min.js" %}'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js">
+    </script>
+    <script src='{% static "bootstrap/js/bootstrap.js" %}'></script>
+    {% block afterscripts %}
+    {% endblock %}
 
 </body>
 </html>

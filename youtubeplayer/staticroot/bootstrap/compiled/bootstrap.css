@@ -1,0 +1,83 @@
+/*
+Error: Invalid CSS after "...lor}: #{$value}": expected "{", was ";"
+        on line 4 of scss/_root.scss
+        from line 11 of scss/bootstrap.scss
+
+1: :root {
+2:   // Custom variable values only support SassScript inside `#{}`.
+3:   @each $color, $value in $colors {
+4:     --#{$color}: #{$value};
+5:   }
+6: 
+7:   @each $color, $value in $theme-colors {
+8:     --#{$color}: #{$value};
+9:   }
+
+Backtrace:
+scss/_root.scss:4
+scss/bootstrap.scss:11
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:1207:in `expected'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:1137:in `expected'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:1132:in `tok!'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:665:in `block'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:735:in `declaration_or_ruleset'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:685:in `block_child'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:674:in `block_contents'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:666:in `block'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:307:in `each_directive'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:222:in `special_directive'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:197:in `directive'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:685:in `block_child'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:674:in `block_contents'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:666:in `block'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:658:in `ruleset'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:684:in `block_child'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:674:in `block_contents'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:125:in `stylesheet'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/scss/parser.rb:41:in `parse'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/engine.rb:409:in `_to_tree'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/engine.rb:315:in `to_tree'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:327:in `block in visit_import'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/stack.rb:88:in `block in with_import'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/stack.rb:115:in `with_frame'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/stack.rb:88:in `with_import'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:326:in `visit_import'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/base.rb:36:in `visit'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:162:in `block in visit'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/stack.rb:79:in `block in with_base'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/stack.rb:115:in `with_frame'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/stack.rb:79:in `with_base'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:162:in `visit'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/base.rb:52:in `map'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/base.rb:52:in `visit_children'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:171:in `block in visit_children'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:183:in `with_environment'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:170:in `visit_children'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/base.rb:36:in `block in visit'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:190:in `visit_root'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/base.rb:36:in `visit'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:161:in `visit'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:10:in `visit'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/root_node.rb:36:in `css_tree'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/engine.rb:384:in `_render_with_sourcemap'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/engine.rb:301:in `render_with_sourcemap'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/plugin/compiler.rb:492:in `update_stylesheet'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/plugin/compiler.rb:209:in `each'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/plugin/compiler.rb:294:in `watch'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/plugin.rb:109:in `method_missing'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/exec/sass_scss.rb:360:in `watch_or_update'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/exec/sass_scss.rb:51:in `process_result'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/exec/base.rb:52:in `parse'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/lib/sass/exec/base.rb:19:in `parse!'
+/var/lib/gems/2.3.0/gems/sass-3.4.25/bin/sass:13:in `<top (required)>'
+/usr/local/bin/sass:23:in `load'
+/usr/local/bin/sass:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Invalid CSS after \"...lor}: #{$value}\": expected \"{\", was \";\"\A         on line 4 of scss/_root.scss\A         from line 11 of scss/bootstrap.scss\A \A 1: :root {\A 2:   // Custom variable values only support SassScript inside `#{}`.\A 3:   @each $color, $value in $colors {\A 4:     --#{$color}: #{$value};\A 5:   }\A 6: \A 7:   @each $color, $value in $theme-colors {\A 8:     --#{$color}: #{$value};\A 9:   }"; }

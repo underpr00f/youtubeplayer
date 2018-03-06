@@ -8,25 +8,26 @@
       Аутентификация
     </center>
   </h4>
+
 </div>
 {% endblock %}
 {% block page_role %}{% endblock %}
 {% block content %}
 
-<script type="text/javascript">
-  $(document).ready(function(){
-    $("#myModal").modal('show');
-  });
-</script>
+
+
+
+
+
 <form action="" method="post" class="post-form">
 {% csrf_token %}
 <div id="myModal" class="modal fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header alert-success">
+            <div class="modal-header alert-secondary">
                 <h4 class="modal-title">Аутентификация</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                
+
             </div>
 
             <div class="modal-body">
@@ -55,37 +56,154 @@
               </div>
               </div>
           
-            </div>
+            
               
               <div class="btn-toolbar" role="toolbar" aria-label="Basic example">
-                
-                <button type="submit" class="btn btn-dark icon-custom">Войти</button>
-                <button type="reset" class="btn btn-default icon-custom">Очистить</button>
-                <button type="button" class="btn btn-success icon-custom" onclick="location.href='../register'">Регистрация</button>
+                  
+                  <button type="submit" class="btn btn-outline-dark icon-custom">Войти</button>
+                  <button type="reset" class="btn btn-outline-dark icon-custom">Очистить</button>
+                  <button type="button" class="btn btn-outline-dark icon-custom" onclick="location.href='../register'">Регистрация</button>
+
+                  
+                 
               </div>
           
 
             </div>
             
             <div class="modal-footer">
+
                         
-            <div class="btn-toolbar" role="toolbar" aria-label="Social example">
+              <div class="btn-toolbar" role="toolbar" aria-label="Social">
+                
+                      <!-- 3-D Flip Downward-->
+                      <div class="button-container button-flip3d-vertical1">
+                          <a href="{% url 'social:begin' backend='google-oauth2' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}">
+                          <div class="flipper flipper-flip3d-vertical1">
+                              <div class="button front">
+                                   <i class="button-image ui-icon-googleplusB"></i>
+                              </div>
+                              <div class="button button-3d back">
+                                  Google
+                              </div>
+                          </div>
+                          </a>
+                      </div>
+                      
+                      <!-- 3-D Flip Upward-->
+                      <div class="button-container button-flip3d-vertical2">
+                          <a href="{% url "social:begin" 'twitter' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}">
+                          <div class="flipper flipper-flip3d-vertical2">
+                              <div class="button front">
+                                  <i class="button-image ui-icon-twitterB"></i>
+                              </div>
+                              <div class="button button-3d back">
+                                  Twitter
+                              </div>
+                          </div>
+                          </a>
+                      </div>
+                      <!-- 3-D Flip Downward-->
+                      <div class="button-container button-flip3d-vertical1">
+                          <a href="{% url "social:begin" 'facebook' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}">
+                          <div class="flipper flipper-flip3d-vertical1">
+                              <div class="button front">
+                                   <i class="button-image ui-icon-facebookB"></i>
+                              </div>
+                              <div class="button button-3d back">
+                                  Facebook
+                              </div>
+                          </div>
+                          </a>
+                      </div>
+                      
+                      <!-- 3-D Flip Upward-->
+                      <div class="button-container button-flip3d-vertical2">
+                          <a href="{% url "social:begin" 'vk-oauth2' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}">
+                          <div class="flipper flipper-flip3d-vertical2">
+                              <div class="button front">
+                                  <i class="button-image ui-icon-VkB"></i>
+                              </div>
+                              <div class="button button-3d back">
+                                  Vk
+                              </div>
+                          </div>
+                          </a>
+                      </div>
+                      <!-- 3-D Flip Downward-->
+                      <div class="button-container button-flip3d-vertical1">
+                          <a href="{% url "social:begin" 'odnoklassniki-oauth2' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}">
+                          <div class="flipper flipper-flip3d-vertical1">
+                              <div class="button front">
+                                   <i class="button-image ui-icon-OdnoklassnikiB"></i>
+                              </div>
+                              <div class="button button-3d back">
+                                  Ok
+                              </div>
+                          </div>
+                          </a>
+                      </div>
+                
 
-              <button type="button" class="btn btn-danger icon-custom btn-xs  button-image ui-icon-googleplusB" onclick='location.href="{% url 'social:begin' backend='google-oauth2' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>Google</button>
 
-              <button type="button" class="btn btn-info icon-custom btn-xs button-image ui-icon-twitterB" onclick='location.href="{% url "social:begin" 'twitter' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>Twitter</button>
-              
-              <button type="button" class="btn btn-primary icon-custom btn-xs button-image ui-icon-facebookB" onclick='location.href="{% url "social:begin" 'facebook' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>Facebook</button>              
+              </div>
 
-              <button type="button" style="background-color:#45668e; border-color: #45668e #45668e #45668e;" class="btn btn-primary icon-custom btn-xs button-image ui-icon-VkB" onclick='location.href="{% url "social:begin" 'vk-oauth2' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>VK</button>  
-
-              <button type="button" style="color:white" class="btn btn-warning icon-custom btn-xs button-image ui-icon-OdnoklassnikiB" onclick='location.href="{% url "social:begin" 'odnoklassniki-oauth2' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>OK</button> 
+                      
+                      
 
 
-            </div>
             </div>
         </div>
     </div>
 </div>
 </form>
+{% endblock %}
+
+
+{% block afterscripts %}
+<script type="text/javascript">
+
+$(document).ready(function() {
+    $("#myModal").modal('show');
+
+    
+
+    
+    $('.button-container, .switch-container').bind('touchstart mousedown', function(e){
+    });
+    
+
+    
+    slideSwitch();
+    
+});
+
+
+
+
+// Update slide switch highlight
+function slideSwitch() {
+    $('.switch-slide').on('click', function() {
+        
+    var activeSpan = $('.switch-toggle-slide .active');
+
+    if (activeSpan.css('left') == '0px') {
+        activeSpan.css('left', '50%');
+    }
+    
+    if (activeSpan.css('left') == '125px') {
+        activeSpan.css('left', '0');
+    }
+    
+    if ($(this).hasClass('active-switch')) {
+        $('.switch-slide').addClass('active-switch')
+        $(this).removeClass('active-switch');
+    }
+    else {
+        $('.switch-slide').removeClass('active-switch')
+        $(this).addClass('active-switch');
+    }
+    });
+}
+</script>
 {% endblock %}
