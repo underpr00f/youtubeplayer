@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+{% block title_in_body %}
+<div class="alert alert-success" role="alert" style="margin-bottom: 0px;">
+  <h4 class="alert-heading text-center">
+    Спасибо, Ваше сообщение отправлено.
+  </h4>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="background-color: #eee; height: 400px;">
+<h4 class='text-center'>
+	<a href="{% url 'home' %}">Вас автоматически вернет на Главную страницу</a>
+	<b><span id="time"></span></b>
+</h4>
+</div>    
+
+
+{% endblock %}
+
+{% block messages %}
+
+
+    
+<script>
+    //редиректор с счетчиком:)
+    var i = 3;//время в сек.
+
+    function time(){
+
+        document.getElementById("time").innerHTML = " через " + i + " сек.";//визуальный счетчик
+
+        i--;//уменьшение счетчика
+
+        if (i < 0) location.href = "{% url 'home' %}";//редирект
+
+    }
+
+    time();
+
+    setInterval(time, 1000);
+</script>
+{% endblock %}

@@ -2,31 +2,31 @@
 {% load i18n %}
 {% block title %}Регистрация{% endblock %}
 {% block title_in_body %}
-<div class="alert alert-success" role="alert">
+<div class="alert alert-success bg-gradient-success" role="alert">
   <h4 class="alert-heading">
     <center>
-    	Регистрация
-	</center>
+      Регистрация
+  </center>
   </h4>
 
-  
+
 
     <div class="btn-toolbar mx-auto" role="toolbar" aria-label="Social example">
-      
+
 
               <button type="button" class="btn btn-danger icon-custom btn-xs  button-image ui-icon-googleplusB" onclick='location.href="{% url 'social:begin' backend='google-oauth2' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>Google</button>
 
               <button type="button" class="btn btn-info icon-custom btn-xs button-image ui-icon-twitterB" onclick='location.href="{% url "social:begin" 'twitter' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>Twitter</button>
-              
-              <button type="button" class="btn btn-primary icon-custom btn-xs button-image ui-icon-facebookB" onclick='location.href="{% url "social:begin" 'facebook' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>Facebook</button>              
 
-              <button type="button" style="background-color:#45668e; border-color: #45668e #45668e #45668e;" class="btn btn-primary icon-custom btn-xs button-image ui-icon-VkB" onclick='location.href="{% url "social:begin" 'vk-oauth2' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>VK</button>  
+              <button type="button" class="btn btn-primary icon-custom btn-xs button-image ui-icon-facebookB" onclick='location.href="{% url "social:begin" 'facebook' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>Facebook</button>
 
-              <button type="button" style="color:white" class="btn btn-warning icon-custom btn-xs button-image ui-icon-OdnoklassnikiB" onclick='location.href="{% url "social:begin" 'odnoklassniki-oauth2' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>OK</button> 
-      
+              <button type="button" style="background-color:#45668e; border-color: #45668e #45668e #45668e;" class="btn btn-primary icon-custom btn-xs button-image ui-icon-VkB" onclick='location.href="{% url "social:begin" 'vk-oauth2' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>VK</button>
+
+              <button type="button" style="color:white" class="btn btn-warning icon-custom btn-xs button-image ui-icon-OdnoklassnikiB" onclick='location.href="{% url "social:begin" 'odnoklassniki-oauth2' %}{% if next_url and next_param %}?{{ next_param }}={{ next_url }}{% endif %}"'>OK</button>
+
 
     </div>
-  
+
 </div>
 
 {% endblock title_in_body %}
@@ -41,17 +41,17 @@
 
     <div class="row">
     <div class="form-group col-lg-6 col-xs-1">
-      <div class="container">   
+      <div class="container">
 
           <b>{{ field.label_tag }}</b>
           <br>
-          
+
           {{ field.errors }}
           {{ field }}
           {% if field.help_text %}
           <small class="form-text text-muted">{{ field.help_text|safe }}</small>
           {% endif %}
-      </div>     
+      </div>
     </div>
     </div>
 
@@ -61,9 +61,9 @@
 
 
 <div class="btn-toolbar mx-5" role="toolbar">
-	<button type="submit" class="btn btn-dark icon-custom">Регистрация</button>
-	<button type="reset" class="btn btn-default icon-custom">Очистить</button>
-	<button type="button" class="btn btn-success icon-custom" onclick="location.href='../login'">Войти</button>
+  <button type="submit" class="btn btn-dark icon-custom">Регистрация</button>
+  <button type="reset" class="btn btn-default icon-custom">Очистить</button>
+  <button type="button" class="btn btn-success icon-custom" onclick="location.href='../login'">Войти</button>
 </div>
 
 </form>

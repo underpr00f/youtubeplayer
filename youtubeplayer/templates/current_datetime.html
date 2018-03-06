@@ -11,7 +11,7 @@
     <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img class="d-block w-100" src="{% static 'images/pyth-django-mount.jpg' %}" alt="First slide">
+        <img class="d-block w-100" src="{% static 'images/snow.jpg' %}" alt="First slide">
         <div class="carousel-caption">
 
           <h3>{{ current_date }}</h3>
@@ -31,17 +31,21 @@
         <div class="row">
         <div class="card-deck">
         
-            <div class="card text-center border-0 mb-3">
-                <img class="card-img-top img-fluid mx-auto" src="{% static 'images/dressing-room.png' %}" alt="" onclick="location.href='{% url "chat_index:select_room" %}'">
+            <div class="card text-center border-0 flex">
+                <a class="bttn" href='{% url "chat_index:select_room" %}'>
+                    <i class="fa fa-home"></i>
+                </a>
                 <div class="card-body text-secondary">
                     <h4 class="card-title">Чат</h4>
-                    <p class="card-text">На этом хостинге к сожалению данный сервис не работает</p>
+                    <p class="card-text">На хостинге pythonanywhere к сожалению данный сервис не работает</p>
                 </div>
 
             </div>
                  
-            <div class="card text-center border-0 mb-3">
-                <img class="card-img-top img-fluid mx-auto" src="{% static 'images/men-shaking-hands.png' %}" alt="" onclick="location.href='{% url "friend_index:friend_index" %}'">
+            <div class="card text-center border-0 flex">
+                <a class="bttn" href='{% url "friend_index:friend_index" %}'>
+                    <i class="fa fa-user"></i>
+                </a>
                 <div class="card-body text-secondary">
                     <h4 class="card-title">Друзья</h4>
                     <p class="card-text">Ваши друзья и подписчики</p>
@@ -50,8 +54,10 @@
             
             <div class="w-100 d-none d-sm-block d-md-none"><!-- wrap every 2 on sm--></div>
 
-            <div class="card text-center border-0 mb-3">
-                <img class="card-img-top img-fluid mx-auto" src="{% static 'images/list.png' %}" alt="" onclick="location.href='{% url "chat_index:chat_list_rooms" %}'">
+            <div class="card text-center border-0 flex">
+                <a class="bttn" href='{% url "chat_index:chat_list_rooms" %}'>
+                    <i class="fa fa-list-alt"></i>
+                </a>
                 <div class="card-body text-secondary">
                     <h4 class="card-title">Список</h4>
                     <p class="card-text">Работа с длинным списком (бесконечная пагинация)</p>
@@ -60,8 +66,10 @@
             </div>
 
 
-            <div class="card text-center border-0 mb-3">
-                <img class="card-img-top img-fluid mx-auto" src="{% static 'images/televisions.png' %}" alt="" onclick="location.href='{% url "player_index:player" %}'">
+            <div class="card text-center border-0 flex">
+                <a class="bttn" href='{% url "player_index:player" %}'>
+                    <i class="fa fa-tv"></i>
+                </a>
                 <div class="card-body text-secondary">
                     <h4 class="card-title">Youtubeplayer</h4>
                     <p class="card-text">Мой плеер YouTube</p>
@@ -69,18 +77,76 @@
 
             </div>
 
-            <div class="w-100 d-none d-sm-block d-md-none"><!-- wrap every 2 on sm--></div>
         </div>
         </div>
     </div>
 </div>
+<div class="container-fluid" style="background-color: #eee">
 
+
+</div>
+
+<section class="section contact" style="background-color: #eee">
+    
+    <div class="container text-center">
+        <h3>Cвязаться со мной</h3>
+        <hr>
+    </div> 
+    <div class="container">  
+        <div class="contact-wrap">
+            <div class="contact-wrap__left">
+                <h5>Отправить мне сообщение</h5>
+
+                <div class="contact-form">
+                    <form method="post" class="post-form post-form__contact" action="">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                        <div class="form-field">
+                          <b>{{ field.label_tag }}</b>
+                          <br>
+
+                          {{ field.errors }}
+                          {{ field }}
+                          {% if field.help_text %}
+                          <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                          {% endif %}
+                        </div>
+                        {% endfor %}
+                        <input type="submit" value="submit" class="btn btn-outline-dark icon-custom">
+
+                    </form>
+                </div>
+            </div>
+            <div class="contact-wrap__right">
+                <h5>Информация о контакте</h5>
+                <p>Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio. Sed non  mauris vitae erat consequat</p>
+                <ul class="contact-list">
+                    <li class="contact-list__item">
+                        <span class="contact-list__icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                        <span>13/2 Lenina St, Stavropol, Russia</span>
+                    </li>
+                    <li class="contact-list__item">
+                        <span class="contact-list__icon"><i class="fa fa-phone" aria-hidden="true"></i></span>
+                        <a href="tel:6131468728">+61 3146 8728</a>, <a href="tel:6109876543">+61 0987 6543</a>
+                    </li>
+                    <li class="contact-list__item">
+                        <span class="contact-list__icon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                        <a href="mailto:support@goole.com">support@goole.com</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>  
+</section>
 
 <div class='container'>
     <p class="quiet" style="font-size: 1.5vw !important;">
         <code>Вы можете посетить {{ request.scheme }}://{{ request.get_host }}/chat/any-path-you-want для вступления в желаемый чат.</code>
     </p>
 </div>
+
 {% endif %}
 {% endblock %}
 
@@ -89,20 +155,21 @@
 
 
 <div class="navbar navbar-default navbar-fixed-bottom">
-    <div class="container">
-      <h6>© 2017 - Site Built By underproof
+    
 
-      </h6>
-    <button class='myButt four' onclick='location.href="https://www.youtube.com/channel/UCZ03_XaJDmYrRBrprK2-j4A"'>
+    <h6>© 2018 - Site Built By underproof</h6>
+
+      
+    
+    
+    
+    <button class='myButt four mr-0' onclick='location.href="https://www.youtube.com/channel/UCZ03_XaJDmYrRBrprK2-j4A"'>
         <div class='icon button-image ui-icon-Youtube'></div>
-        <span>Subscribe on Youtube</span>
+        <span>Me on Youtube</span>
     </button>
     
-    </div>
-    <div class="container">
+    
 
-    <!--<button type="button" class="btn btn-danger btn-xs button-image ui-icon-Youtube" onclick='location.href="https://www.youtube.com/channel/UCZ03_XaJDmYrRBrprK2-j4A"'><span class="d-none d-sm-inline-block">Subscribe on YouTube</span></button>-->
-    </div>
 </div>
 
 {% endblock %}

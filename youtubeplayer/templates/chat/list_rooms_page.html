@@ -7,8 +7,8 @@
 <div class="alert-success">
     <div class="container-fluid pt-3 pb-3">
         <div class="row justify-content-around">
-            
-            <div class="col-xs-2 my-auto">   
+
+            <div class="col-xs-2 my-auto">
             <button type="button" class="btn btn-outline-secondary btn-lg button-image previous-icon" onclick='location.href="{{ sp_form.returnTo.value|default:'/' }}"'><span class="d-none d-sm-inline-block">{% trans "Назад" %}</span></button>
             </div>
             <div class="col-xs-2 my-auto">
@@ -18,7 +18,7 @@
             <button type="button" class="btn btn-outline-secondary btn-lg edit-icon" onclick='location.href="{% url "sp_profile_edit_page" %}?returnTo={{ sp_form.returnTo.value }}"'><span class="d-none d-sm-inline-block" >{% trans "Изменить" %}</span></button>
 
             </div>
-            
+
         </div>
     </div>
 </div>
@@ -34,9 +34,9 @@ $(function() {
 	         var imgID = $img.attr('id');
 	         var imgClass = $img.attr('class');
 	         var imgURL = $img.attr('src');
-	         
-	         alert(imgClass);
-	         alert(imgURL);
+
+	         //alert(imgClass);
+	         //alert(imgURL);
 	$.get(imgURL, function(data) {
 	             // Get the SVG tag, ignore the rest
 	             var $svg = $(data).find('svg');
@@ -52,7 +52,7 @@ $(function() {
 	             $svg = $svg.removeAttr('xmlns:a');
 	// Replace image with new SVG
 	             $img.replaceWith($svg);
-	             
+
 	}, 'xml');
 	});
 })
@@ -66,8 +66,8 @@ $(function() {
 	         var imgURL = $img.css('background-image');
 	         imgURL = imgURL.replace('url(','').replace(')','').replace(/\"/gi, "");
 
-	         alert(imgClass);
-	         alert(imgURL);
+	         //alert(imgClass);
+	         //alert(imgURL);
 
 	$.get(imgURL, function(data) {
 	             // Get the SVG tag, ignore the rest
@@ -84,7 +84,7 @@ $(function() {
 	             $svg = $svg.removeAttr('xmlns:a');
 	// Replace image with new SVG
 	             $img.replaceWith($svg);
-	             
+
 	}, 'xml');
 	});
 })
@@ -100,7 +100,7 @@ $(function() {
         <br>
     {% empty %}
         <p class="empty">No chat rooms defined</p>
-    {% endfor %}    
+    {% endfor %}
 </ul>
 {% show_more %}
 

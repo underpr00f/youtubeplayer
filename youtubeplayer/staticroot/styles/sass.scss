@@ -1,0 +1,300 @@
+@import "../bootstrap/scss/bootstrap";
+
+
+$red:#d83b2a;
+
+@mixin transition($in) {
+    transition:$in;
+    -webkit-transition:$in;
+    -moz-transition:$in;
+    -o-transition:$in;
+    -ms-transition:$in;
+}
+@mixin transform($in) {
+    transform:$in;
+    -webkit-transform:$in;
+    -moz-transform:$in;
+    -o-transform:$in;
+    -ms-transform:$in;
+}
+@mixin animation($in) {
+    animation:$in;
+    -webkit-animation:$in;
+    -moz-animation:$in;
+    -o-animation:$in;
+    -ms-animation:$in;
+}
+
+.myButt {
+    outline:none;
+    border:none;
+    padding:20px;
+    display:block;
+    margin:0px auto;
+    cursor:pointer;
+    font-size:15px;
+    background-color:$red;
+    position:relative;
+    border:2px solid #fff;
+
+    @include transition(all 0.5s ease);
+}
+
+.two {
+    color:#fff;
+    background-color:transparent;
+    
+
+    &:hover {
+        border-color: rgba(50, 74, 45, 0.5);
+        text-shadow: 1px 1px 2px black, 0 0 25px green, 0 0 5px darkgreen;
+        background-color: rgba(50, 74, 45, 0.5);
+
+        @include animation(shakeThatBooty 0.3s linear 1);       
+    }
+}
+
+@keyframes shakeThatBooty {
+    33% {
+        @include transform(rotateZ(10deg));
+    }
+    67% {
+        @include transform(rotateZ(-10deg));
+    }
+    100% {
+        @include transform(rotateZ(10deg));
+    }
+}
+
+
+.four {
+    overflow:hidden;
+    
+    span {
+        color:#fff;
+        display:inline-block;
+        
+        @include transition(all 0.3s ease);
+
+    }
+
+    .icon {
+        position:absolute;
+        left:-60px;
+        top:0;
+        color:#fff;
+        padding:20px;
+        background-color:$red;
+        @include transition(all 0.3s ease);
+
+    }
+
+    &:hover {
+        .icon {
+            left:0px;
+
+        }
+        span {
+            color:#fff;
+            margin-left:50px;
+
+        }
+    }
+}
+
+$animation:0.3s all ease;
+$primary:#92dd5a;
+$secondary:rgba(190, 163, 147, 0.2);
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.flex {
+  min-height:50vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+a {
+  color:#14330c;
+  text-decoration:none;
+  transition:$animation;
+  &:hover {
+    color:$primary;
+  }
+  &:focus {
+    text-decoration:none;
+  }
+  &:active {
+    color:#FFF;
+  }
+}
+
+.bttn {
+  width:120px;
+  height:120px;
+  line-height:120px;
+  text-align:center;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  font-weight:bold;
+  position:relative;
+  &:after {
+    transition:$animation;
+    content:'';
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    right:0;
+    border-radius:3px;
+    border:3px solid $primary;
+  }
+  &:before {
+    content:'';
+    position:absolute;
+    border-radius:3px;
+    left:0;
+    top:0;
+    bottom:0;
+    right:0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    background:#fff;
+    z-index:-1;
+  }
+  &:hover {
+    &:after {
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+  }
+  &:active {
+    -webkit-transform:scale(1.1);
+    transform:scale(1.1);
+    &:before {
+      background-color:$secondary;
+    }
+    &:after {
+      border-color:$secondary;
+    }
+  }
+}
+
+/* 3D FLIP! */
+
+
+
+
+/*** General Button Styles ***/
+
+.button-container {
+  text-align: center;
+  display: inline-block;
+  margin: 10px 10px;
+  cursor: pointer;
+  font-weight: 400;
+  letter-spacing: 2px;
+  height: 45px;
+  width: 120px;
+  -webkit-perspective: 1000;
+  -ms-perspective: 1000;
+  perspective: 1000; 
+   
+  .flipper {
+    transition: all .5s ease-in-out;
+    -webkit-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    
+    position: relative;
+  }
+  
+  .button {
+    height: 45px;
+    width: 120px;
+    border-radius: 3px;
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    -webkit-box-shadow: 1px 2px 4px -1px rgba(60,60,60,0.64);
+    box-shadow: 1px 2px 4px -1px rgba(60,60,60,0.64);
+    
+    i.fa {
+      color: white;
+      font-size: 20px;
+      margin: auto;
+      text-shadow: .5px 1px 2px #3c3c3c;
+    }
+    
+    &.front {
+      z-index: 10;
+    }
+
+    &.back {
+      color: white;
+      font-size: 15px;
+      text-transform: uppercase;
+    }
+  }
+}
+
+/* -------------------------------- 
+            3D FLIP
+-------------------------------- */
+.button-flip3d-vertical1 {
+      
+    .flipper-flip3d-vertical1 {
+        transform-origin: 100% 22.5px;
+    }
+  
+    .front {
+        transform: translateZ(22.5px);
+        background-image:  linear-gradient(90deg, #000, #3c3c3c);
+    }
+  
+    .back {
+        -webkit-transform: rotateX(90deg) translateZ(22.5px);
+        -ms-transform: rotateX(90deg) translateZ(22.5px); 
+        transform: rotateX(90deg) translateZ(22.5px);
+        background-image:  linear-gradient(90deg, #000, #3c3c3c);
+    }
+    
+    &:hover .flipper-flip3d-vertical1 {
+        transform: rotateX(-90deg);
+    }
+}
+
+.button-flip3d-vertical2 {
+      
+    .flipper-flip3d-vertical2 {
+        transform-origin: 100% 22.5px;
+    }
+  
+    .front {
+        transform: translateZ(22.5px);
+        background-image:  linear-gradient(90deg, #000, #3c3c3c);
+    }
+  
+    .back {
+        -webkit-transform: rotateX(90deg) rotateZ(180deg) rotateY(180deg) translateZ(22.5px);
+        -ms-transform: rotateX(90deg) rotateZ(180deg) rotateY(180deg) translateZ(22.5px); 
+        transform: rotateX(90deg) rotateZ(180deg) rotateY(180deg) translateZ(22.5px);
+        background-image:  linear-gradient(90deg, #000, #3c3c3c);
+    }
+    
+    &:hover .flipper-flip3d-vertical2 {
+        transform: rotateX(90deg);
+    }
+}
+
+/* SIGN BUTTON */
+

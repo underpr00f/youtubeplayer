@@ -192,14 +192,86 @@ class LogoutView(View):
         # После чего, перенаправляем пользователя на главную страницу.
         return HttpResponseRedirect("/")
 
+#from django.shortcuts import render, get_object_or_404, redirect
+#from django.contrib.auth.decorators import login_required
+#from django.http import HttpResponse
+#from django.contrib import auth, messages
+from django.core.mail import BadHeaderError
+from .forms import ContactForm, ContactAuthForm
+
+from .models import Contact
+
+
+#def send_notification(self):
+    #context = {
+        #'site': self.get_site(),
+        #'user': self.user,
+        #'username': get_username(self.user),
+        #'token': signing.dumps(self.user.pk, salt=self.salt),
+        #'secure': self.request.is_secure(),
+    #}
+    #body = loader.render_to_string(self.email_template_name,
+                                   #context).strip()
+    #subject = loader.render_to_string(self.email_subject_template_name,
+                                      #context).strip()
+    #send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
+              #[self.user.email])
+
 def my_homepage_view(request,*args,**kwargs):
-    
+    form = ContactForm
     if not request.user.is_authenticated():
-        return render(request, 'current_datetime.html',)
+        if request.method == "POST":
+            form = ContactForm(request.POST)
+            if form.is_valid():
+                subject = form.cleaned_data['name']
+                second_name = form.cleaned_data['second_name']
+                email = form.cleaned_data['email']
+                message = form.cleaned_data['message']
+                recipients = settings.EMAIL_HOST_USER
+                try:
+                    send_mail(subject, message, email, [recipients,])
+                except BadHeaderError: #Защита от уязвимости
+                    return HttpResponse('Invalid header found')
+                post = form.save()
+                post.save()
+                return render(request, 'contactform/thank.html')                    
+            else:
+                form = ContactForm(initial={'name': request.user.first_name,'second_name': request.user.last_name,'email': request.user.email}, auto_id=False)
+
+        return render(request, 'current_datetime.html', {'form': form})
+
     
     else:
         now = datetime.datetime.now()
-        return render(request, 'current_datetime.html', {'current_date': now})
+        data={'name': request.user.first_name, 'second_name': request.user.last_name, 'email': request.user.email,}
+        form = ContactForm(initial=data)
+
+        if request.method == "POST":
+
+            form = ContactForm(request.POST)
+            if form.is_valid():
+                subject = request.user.first_name
+                second_name = request.user.last_name
+                email = request.user.email
+                message = form.cleaned_data['message']
+                recipients = settings.EMAIL_HOST_USER
+                try:
+                    send_mail(subject, message, email, [recipients,])
+                except BadHeaderError: #Защита от уязвимости
+                    return HttpResponse('Invalid header found')
+                then = Contact.objects.last().data
+                delta = now - then
+                if delta.seconds > 5:                    
+                    post = form.save()
+                    post.save()
+                    return render(request, 'contactform/thank.html')
+                else:
+                    form = ContactForm(initial=data)
+
+            else:
+                form = ContactForm(initial=data)
+
+        return render(request, 'current_datetime.html', {'current_date': now, 'form': form})
 
 #for change password
 class SaltMixin(object):

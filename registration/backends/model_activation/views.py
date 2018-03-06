@@ -33,6 +33,7 @@ from .utils import get_user_model, get_username
 
 from registration.views import change_password
 from registration.views import about_us
+from registration.views import my_homepage_view
 
 class RegistrationView(BaseRegistrationView):
     """
